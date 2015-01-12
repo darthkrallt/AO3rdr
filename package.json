@@ -1,0 +1,9 @@
+{
+  "name": "ao3rdr",
+  "title": "AO3rdr",
+  "id": "jid1-ayTtY9e4Iz49HA",
+  "description": "A bookmark helper and tag blacklister for Archive of Our Own.",
+  "author": "Dianne Kay",
+  "license": "MPL 2.0",
+  "version": "0.1"
+}

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>AO3rdr Settings</title>
+  <meta name="description" content="AO3 reader helper">
+  <meta name="author" content="Dianne Kay (darthkrallt)">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+
+  <!-- JS Add ons CSS -->
+  <link rel="stylesheet" type="text/css" href="jquery.tagsinput.css" />
+  <link rel="stylesheet" type="text/css" href="css/custom.css" />
+
+</head>
+<body>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="container">
+      <div class="row">
+
+        <div class="eleven columns" style="margin-top: 5%">
+          <h5>Check out your bookmarks here</h5>
+          <p>Here you can easily interact with all of the articles that you have read, skimmed liked or disliked. Any changes you make here will be reflected in any of your open tabs too!</p>
+        </div>
+
+      </div>
+
+    <div class="row">
+
+      <div class="eleven columns">
+      <form>
+        <input type="button" id="crawl-updates" class="button-primary" value="Check Works for Updates">
+        <label for="enable-autofilter" class="inline-checkbox-right">
+          <input id="enable-autofilter" type="checkbox">
+          <span class="label-body">Enable Autofilter</span>
+        </label>
+      </form>
+
+        <div id="blacklist-wrapper">
+          <label for="blacklist">Blacklisted Tags</label>
+          <input class="u-full-width" id="blacklist" />
+        </div>
+        
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="eleven columns" style="margin-top: 5%">
+        <table id="articlesTable" class="tablesorter"> 
+        <thead> 
+        <tr> 
+            <th>Rating</th> 
+            <th>Update</th>
+            <th>Unread</th>
+            <th>Author</th> 
+            <th>Title</th> 
+            <th>Last Update</th>
+            <th>Last Visit</th> 
+            <th>Read</th>
+            <th>Chapters</th>
+            <!-- If chapter data present, this links to the last chapter read -->
+            <th>Link</th> 
+        </tr> 
+        </thead> 
+        <tbody> 
+        </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>
