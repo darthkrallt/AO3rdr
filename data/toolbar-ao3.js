@@ -19,10 +19,6 @@ var emitFicData = (function(port){
         var visit = new Date().toJSON();
         // You always want to include the date of visit when a toolbar action is performed
         mutable_data['visit'] = visit;
-        // TODO: this is debugging only HERE
-        if (metadata['chapters']['published'] > 2){
-            metadata['chapters']['published'] -= 1;
-        }
         port.emit('click', {"metadata":metadata, "mutable_data":mutable_data});
     };
 })(self.port);
@@ -55,6 +51,15 @@ self.port.on('update', function(newArticle){
 function createToolbar(metadata, article){
     var newDiv = document.createElement("ul");
     newDiv.setAttribute('id', addonName+metadata['id']);
+
+    // Unread icon
+    var unread = document.createElement("img");
+    unread.setAttribute('alt', 'read');
+    unread.setAttribute('height', '25');
+    var url = images['read'];
+    unread.setAttribute('src', url);
+    unread.setAttribute('alt', 'read');
+    newDiv.appendChild(unread);
 
     // Add the buttons
     // Simple rate actions

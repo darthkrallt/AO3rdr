@@ -63,6 +63,12 @@ function setImage(html, stored_data){
         var ele = $(html).find("img[src*='bookmark']");
         $(ele).attr('src', images['bookmark-fill']);
     }
+
+    if (stored_data.read < stored_data.chapters['published']){
+        var ele = $(html).find("img[src*='read']");
+        $(ele).attr('src', images['unread']);
+        $(ele).attr('alt', 'unread');
+    }
 }
 
 function hide(parent){
