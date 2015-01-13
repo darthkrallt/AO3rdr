@@ -30,13 +30,23 @@ self.port.on('attached', function onMessage(incomming_data) {
     loadTable(tableData);
 });
 
-// HERE
 self.port.on('allcrawlscomplete', function onMessage(incomming_data) {
     // stop spinner
     if (spinner){
         spinner.stop();
     }
     // Update all the table entries
+    // If incomming_data is null, there were no entries crawled
+    if (incomming_data){
+        console.log('stuff crawled');
+        // NOTE: for now incomming_data is a complete refresh of the data
+        // TODO: for version 2.0 make this go row by row and unly update as necessary
+        tableData = incomming_data;
+        // drop the table
+        $($('#articlesTable').find('tbody')).empty();
+        // reload the table
+        loadTable(tableData);
+    }
 });
 
 var emitAutofilterToggle = (function(port){
@@ -106,10 +116,11 @@ function generateAO3Html(data){
 }
 
 function checkForUpdate(data){
-    if (Date.parse(data['visit']) < Date.parse(data['updated'])){
-        return true;
-    }
-    return false;
+    // if (Date.parse(data['visit']) < Date.parse(data['updated'])){
+    //     return true;
+    // }
+    // return false;
+    return data['hasupdate'];
 }
 
 function generateUpdateHtml(data){

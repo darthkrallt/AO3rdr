@@ -22,9 +22,10 @@ https://github.com/Caligatio/jsSHA/releases/tag/v1.5.0
 
 BUGS
 - fix "last visit" (it's undefined when you bookmark from tags page)
+    - undefined after the 4th+ crawled aticles POST crawl
+    - but it is hitting the "inside emitter crawler"
+    - visit is getting set in those entries on crawl
 
 TODO
-- repopulate the table after crawl
-- make sure that last visit vs last crawl make sense
 - does the update flag still work
 - export/import data

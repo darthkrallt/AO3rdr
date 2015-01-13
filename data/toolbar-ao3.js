@@ -16,6 +16,13 @@ var emitFicData = (function(port){
     return function(metadata, mutable_data) {
         console.log('inside emitterao3');
         console.log(metadata);
+        var visit = new Date().toJSON();
+        // You always want to include the date of visit when a toolbar action is performed
+        mutable_data['visit'] = visit;
+        // TODO: this is debugging only HERE
+        if (metadata['chapters']['published'] > 2){
+            metadata['chapters']['published'] -= 1;
+        }
         port.emit('click', {"metadata":metadata, "mutable_data":mutable_data});
     };
 })(self.port);
@@ -180,7 +187,7 @@ function onPageviewUpdater(){
     if (checkIfArticlePage()) {
         var info = parseArticlePage($('#main'));
         // Doesn't have mutable data, we are only checking the immutable
-        var visit = new Date().toJSON().slice(0,10);
+        var visit = new Date().toJSON();
         emitFicData(info, {'visit': visit});
     } else {
         // TODO: implement updating of chapter information only for multi work
