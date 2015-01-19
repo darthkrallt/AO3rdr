@@ -186,7 +186,7 @@ var processPage = (function (port){
 
 // When viewing a page, whether by a user or a crawl, we want to
 // update several fields automatically.
-// NOTE: this functions gets DUBLICATED in the crawler
+// NOTE: this functions gets DUPLICATED in the crawler
 // TODO: examine the necessity of the duplication
 function onPageviewUpdater(){
     if (checkIfArticlePage()) {

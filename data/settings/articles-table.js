@@ -184,6 +184,46 @@ function loadTable(tableData){
     $("#articlesTable").trigger("update");
 }
 
+// Handle the file upload, NOTE only for single file upload
+// Borrowed heavily from 
+// http://stackoverflow.com/questions/7346563/loading-local-json-file
+function handleFile(){
+    var fileList = this.files;
+    var file = fileList[0];
+    var reader = new FileReader();
+    reader.onload = recievedText;
+    reader.readAsText(file);
+
+    function recievedText(contents){
+        lines = contents.target.result;
+        var out = JSON.parse(lines);
+        // TODO: send this somewhere
+        // Turn the "restore data" button on
+        $('#restore-data').click(restoreData(out));
+        $('#restore-data').attr('class', 'button-primary');
+        console.log(out);
+    }
+
+}
+
+var restoreData = (function(port){
+    // This is really confusing! it returns a function to generate another function!
+    return function(data){
+        return function(){
+            // send the data somewhere
+            port.emit('restorefrombackup', data);
+            $('#restore-data').click(null);
+            $('#restore-data').attr('class', 'button');
+        }
+    }
+})(self.port);
+
+var requestBackup = (function(port){
+    return function(){
+        port.emit('exportdata');
+    }
+})(self.port);
+
 // Add tablesorter to the table
 $(document).ready(function() { 
         $("#articlesTable").tablesorter({
@@ -197,6 +237,8 @@ $(document).ready(function() {
         }); 
         // TODO: Add crawlrequest
         $('#crawl-updates').click(crawlForUpdates);
+        $('#upload-data').get(0).addEventListener('change', handleFile, false);
+        $('#export-data').click(requestBackup);
 });
 
 var crawlForUpdates = (function(port){

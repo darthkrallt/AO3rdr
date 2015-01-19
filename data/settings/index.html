@@ -48,19 +48,36 @@
     <div class="row">
 
       <div class="eleven columns">
-      <form>
-        <input type="button" id="crawl-updates" class="button-primary" value="Check Works for Updates">
-        <label for="enable-autofilter" class="inline-checkbox-right">
-          <input id="enable-autofilter" type="checkbox">
-          <span class="label-body">Enable Autofilter</span>
-        </label>
-      </form>
+        <form>
+          <input type="button" id="crawl-updates" class="button-primary" value="Check Works for Updates">
 
-        <div id="blacklist-wrapper">
-          <label for="blacklist">Blacklisted Tags</label>
-          <input class="u-full-width" id="blacklist" />
+          <label for="enable-autofilter" class="inline-checkbox-right">
+            <input id="enable-autofilter" type="checkbox">
+            <span class="label-body">Enable Autofilter</span>
+          </label>
+        </form>
+      </div>
+
+      <div class="row">
+        <div class="four columns">
+          <input type="button" id="export-data" class="button-primary" value="Download Your Data">
         </div>
-        
+            
+        <div class="seven columns">
+          <input type="button" id="restore-data" class="button" value="Restore From Backup">
+          <input type="file" id="upload-data" class="button" value="Restore from Backup">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="eleven columns">
+
+          <div id="blacklist-wrapper">
+            <label for="blacklist">Blacklisted Tags</label>
+            <input class="u-full-width" id="blacklist" />
+          </div>
+          
+        </div>
       </div>
 
     </div>
