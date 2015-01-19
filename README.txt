@@ -21,8 +21,7 @@ Other Resources to consider
 https://github.com/Caligatio/jsSHA/releases/tag/v1.5.0
 
 BUGS
-- adds when on an individual work page without user action
-- broken on bookmarks page (again... *sigh*)
+- Rating inside a work doesn't set the bookmark, but it turns on the icon
 
 TODO
 - bugsquashin'
