@@ -50,7 +50,7 @@ self.port.on('update', function(newArticle){
 // Create the toolbar
 function createToolbar(metadata, article){
     var newDiv = document.createElement("ul");
-    newDiv.setAttribute('id', addonName+metadata['id']);
+    newDiv.setAttribute('id', addonName+metadata['ao3id']);
 
     // Unread icon
     var unread = document.createElement("img");
@@ -144,7 +144,7 @@ function hideByTag(raw_html, metadata){
     console.log('hiding');
     // create a placeholder element
     var newDiv = document.createElement("ul");
-    newDiv.setAttribute('id', addonName + metadata['id'] + 'blacklisted');
+    newDiv.setAttribute('id', addonName + metadata['ao3id'] + 'blacklisted');
     var img = document.createElement("img");
     img.setAttribute('width', '25');
     img.setAttribute('src', images['hidden']);
@@ -152,7 +152,7 @@ function hideByTag(raw_html, metadata){
 
     var tmpFun = (function(metadata){
         return function() {
-            undoBlacklist(metadata['id'])
+            undoBlacklist(metadata['ao3id'])
         };
     })(metadata);
     $(img).click(

@@ -117,7 +117,7 @@ function parseArticlePage(raw_html){
     out['title'] = $.trim(raw);
 
     // id - HACK - extracting it from the hidden kudos field
-    out['id'] = $(raw_html).find('#kudo_commentable_id').val();
+    out['ao3id'] = $(raw_html).find('#kudo_commentable_id').val();
 
     // Look for Updated, then fall back on Published
     // Note that Updated can be assumed to be listed after published
@@ -158,9 +158,9 @@ function parseArticlePage(raw_html){
 function parseWorkBlurb(raw_html){
     var out = {};
     // the raw ID is in the format work_123456789, but we want just the number
-    out['id'] = raw_html.id.slice(5);
+    out['ao3id'] = raw_html.id.slice(5);
     // once we have the spliced ID, we can find the title
-    var url = '/works/' + out['id'];
+    var url = '/works/' + out['ao3id'];
     // TODO: Fix Bad escaping...
     //out['title'] = $(raw_html).find('a[href=' + url + ']').html();
     // For now, the workaround is to rely on the fact that title is 1st link
@@ -230,7 +230,7 @@ function processBrowsePage(){
         var tags = parseTags(articles[i]);
 
         // Keep track of all the id's on the page
-        idsOnPage.push(info['id']);
+        idsOnPage.push(info['ao3id']);
 
         console.log(info);
         var toolbar = createToolbar(info, false);
@@ -256,6 +256,6 @@ function processArticlePage(){
         $('ul[class="work navigation actions"]').append(toolbar);
 
         // it's only one id
-        return [info['id']];
+        return [info['ao3id']];
 }
 
