@@ -49,6 +49,21 @@ self.port.on('allcrawlscomplete', function onMessage(incomming_data) {
     }
 });
 
+self.port.on('exportcomplete', function onMessage(incomming_data) {
+    console.log('inside exportcomplete');
+    var content = JSON.stringify(incomming_data);
+    var link = document.createElement('a');
+
+    link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(content));
+    link.setAttribute('download', 'AO3rdr-backup.txt');
+    link.setAttribute('visibility', 'hidden');
+    link.setAttribute('display', 'none');
+    
+    document.body.appendChild(link);
+    link.click();
+});
+
+
 var emitAutofilterToggle = (function(port){
     return function() {
         var val = $('#enable-autofilter').is(":checked");
