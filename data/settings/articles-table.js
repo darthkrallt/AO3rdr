@@ -178,7 +178,12 @@ function generateRowHtml(data){
     for (var j in boring){
         var html = document.createElement("td");
         // html.innerHTML = data[boring[j]]; // note it is already encoded
-        var text = document.createTextNode(data[boring[j]]);
+        if (((boring[j] == 'updated') || (boring[j] == 'visit')) && (data[boring[j]])){
+            // It's a timestamp
+            var text = document.createTextNode(data[boring[j]].slice(0, 10));
+        } else {
+            var text = document.createTextNode(data[boring[j]]);
+        }
         html.appendChild(text);
         row.appendChild(html);
     }

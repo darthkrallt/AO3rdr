@@ -158,7 +158,7 @@ function parseArticlePage(raw_html){
 function parseWorkBlurb(raw_html){
     var out = {};
     var header_div = $($($(raw_html).find('div[class="header module"]')[0]).find('a')[0]);
-    
+
     out['url'] = header_div.attr('href');
     out['ao3id'] = out['url'].slice(7);
     out['title'] = header_div.html();
@@ -196,11 +196,13 @@ function matchTag(string1, string2){
 }
 
 function checkTags(taglist){
+    console.log('prefs');
+    console.log(prefs['tags'])
     for (var i in taglist){
         for (var j in prefs['tags']){
-            if (matchTag(taglist[i], prefs['tags'])){
+            if (matchTag(taglist[i], prefs['tags'][j])){
                 console.log('matched tags');
-                console.log([taglist[i], prefs['tags']]);
+                console.log([taglist[i], prefs['tags'][j]]);
                 return true;
             }
         }
@@ -235,6 +237,7 @@ function processBrowsePage(){
         console.log("processed article");
         var info = parseWorkBlurb(articles[i]);
         var tags = parseTags(articles[i]);
+        console.log(tags);
 
         // Keep track of all the id's on the page
         idsOnPage.push(info['ao3id']);
@@ -244,8 +247,8 @@ function processBrowsePage(){
         articles[i].appendChild(toolbar);
 
         // if it's a banned tag, hide it!
-        // TODO: only hide if blacklisting is on
         if (checkTags(tags)){
+            console.log('tag match found, attempting to hide');
             hideByTag(articles[i], info);
         }
     }
