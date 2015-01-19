@@ -58,7 +58,7 @@ self.port.on('exportcomplete', function onMessage(incomming_data) {
     link.setAttribute('download', 'AO3rdr-backup.txt');
     link.setAttribute('visibility', 'hidden');
     link.setAttribute('display', 'none');
-    
+
     document.body.appendChild(link);
     link.click();
 });
@@ -177,9 +177,9 @@ function generateRowHtml(data){
     var boring = ['author', 'title', 'updated', 'visit', 'read'];
     for (var j in boring){
         var html = document.createElement("td");
-        html.innerHTML = data[boring[j]]; // note it is already encoded
-        //var text = document.createTextNode(tableData[i][boring[j]]);
-        //html.appendChild(text);
+        // html.innerHTML = data[boring[j]]; // note it is already encoded
+        var text = document.createTextNode(data[boring[j]]);
+        html.appendChild(text);
         row.appendChild(html);
     }
     row.appendChild(generateChaptersHtml(data));

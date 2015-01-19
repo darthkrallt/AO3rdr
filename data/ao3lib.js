@@ -157,14 +157,8 @@ function parseArticlePage(raw_html){
 // Parse the Work ID, title, and author from each work
 function parseWorkBlurb(raw_html){
     var out = {};
-    // the raw ID is in the format work_123456789, but we want just the number
-    // out['ao3id'] = raw_html.id.slice(5);
-    // // once we have the spliced ID, we can find the title
-    // var url = '/works/' + out['ao3id'];
-    // TODO: Fix Bad escaping...
-    //out['title'] = $(raw_html).find('a[href=' + url + ']').html();
-    // For now, the workaround is to rely on the fact that title is 1st link
-    var header_div = $($($('div[class="header module"]')[0]).find('a')[0]);
+    var header_div = $($($(raw_html).find('div[class="header module"]')[0]).find('a')[0]);
+    
     out['url'] = header_div.attr('href');
     out['ao3id'] = out['url'].slice(7);
     out['title'] = header_div.html();
