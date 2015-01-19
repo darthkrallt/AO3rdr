@@ -1,6 +1,18 @@
 DK's Reader Manager - AO3rdr
 
-This is to be developed with both mobile and desktop use in mind. A secondary objective of easy porting to Chromium.
+A bookmark manager for reading on Archive of our Own (archiveofourown.org)
+Features include:
+    - Three star rating system
+    - Hide works
+    - Blacklist by tags
+    - Bookmark by chapter read
+    - Scan bookmarks for updates
+    - Keep track of last visit
+    - Backup and restore user data
+    - Open source code!
+
+This is to be developed with both mobile and desktop use in mind, so no SDK's 
+were used that are not available on Firefox's beta mobile browser.
 
 Credits
 - Skeleton: getskeleton.com
@@ -17,23 +29,25 @@ Credits
 FF Docs to consider
 https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials/Mobile_development
 
-Other Resources to consider
-https://github.com/Caligatio/jsSHA/releases/tag/v1.5.0
-
 BUGS
-- Rating inside a work doesn't set the bookmark, but it turns on the icon
+- None that I've seen lately! please report any you find!
 
 TODO
-- bugsquashin'
 - Get a nice icon
-- Read only mode for browsing in private mode
+- screenshots
+- upload to Mozilla
+- RELEASE PARTY
 
 WISHLIST (not for this release)
-- bookmark by individual line (useful for works that are 50,000+ words in a single chapter)
+- bookmark by individual line (when works are 50,000+ words in one chapter)
+    - Maybe use some fancy hashin' 
+        https://github.com/Caligatio/jsSHA/releases/tag/v1.5.0
+    - also take advantage of the (#id_ref) url strings for this
 - tests, HAHAHAHA. THESE ARE IMPORTANT. BUT ALSO AREN'T GONNA HAPPEN.
 - Add support for tumblr (I shudder to think how much work...)
 - Localization
 - Delete works from database via settings page
+- enable private browsing
 
 LICENSE
     Copyright (C) 2015  Dianne Kay
