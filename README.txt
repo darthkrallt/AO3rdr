@@ -21,11 +21,6 @@ Other Resources to consider
 https://github.com/Caligatio/jsSHA/releases/tag/v1.5.0
 
 BUGS
-- fix "last visit" (it's undefined when you bookmark from tags page)
-    - undefined after the 4th+ crawled aticles POST crawl
-    - but it is hitting the "inside emitter crawler"
-    - visit is getting set in those entries on crawl
-- randomly adds one entry when on the "works" page
 - adds when on an individual work page without user action
 - broken on bookmarks page (again... *sigh*)
 
@@ -40,3 +35,4 @@ WISHLIST (not for this release)
 - tests, HAHAHAHA. THESE ARE IMPORTANT. BUT ALSO AREN'T GONNA HAPPEN.
 - Add support for tumblr (I shudder to think how much work...)
 - Localization
+- Delete works from database via settings page
