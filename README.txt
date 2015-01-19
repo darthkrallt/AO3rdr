@@ -6,7 +6,7 @@ Credits
 - Skeleton: getskeleton.com
     Easy CSS and layout bones for settings page
 - The Noun Project: thenounproject.com
-    Icons
+    Icons (see the README in the data folder for more comprehensive list)
 - Tablesorter: tablesorter.com
     Sortable table
 - XOXCO's Tag Input plugin: xoxco.com/projects/code/tagsinput/
@@ -27,7 +27,7 @@ BUGS
 TODO
 - bugsquashin'
 - Get a nice icon
-- Credits page/area
+- Credits page/area (plus license and link to source)
 - Read only mode for browsing in private mode
 
 WISHLIST (not for this release)
@@ -36,3 +36,21 @@ WISHLIST (not for this release)
 - Add support for tumblr (I shudder to think how much work...)
 - Localization
 - Delete works from database via settings page
+
+LICENSE
+    Copyright (C) 2015  Dianne Kay
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
+    USA
