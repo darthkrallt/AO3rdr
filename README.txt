@@ -27,7 +27,6 @@ BUGS
 TODO
 - bugsquashin'
 - Get a nice icon
-- Credits page/area (plus license and link to source)
 - Read only mode for browsing in private mode
 
 WISHLIST (not for this release)
