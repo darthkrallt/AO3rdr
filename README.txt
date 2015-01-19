@@ -25,7 +25,18 @@ BUGS
     - undefined after the 4th+ crawled aticles POST crawl
     - but it is hitting the "inside emitter crawler"
     - visit is getting set in those entries on crawl
+- randomly adds one entry when on the "works" page
+- adds when on an individual work page without user action
+- broken on bookmarks page (again... *sigh*)
 
 TODO
-- does the update flag still work
-- export/import data
+- bugsquashin'
+- Get a nice icon
+- Credits page/area
+- Read only mode for browsing in private mode
+
+WISHLIST (not for this release)
+- bookmark by individual line (useful for works that are 50,000+ words in a single chapter)
+- tests, HAHAHAHA. THESE ARE IMPORTANT. BUT ALSO AREN'T GONNA HAPPEN.
+- Add support for tumblr (I shudder to think how much work...)
+- Localization
