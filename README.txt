@@ -1,6 +1,6 @@
 DK's Reader Manager - AO3rdr
 
-A bookmark manager for reading on Archive of our Own (archiveofourown.org)
+A bookmark manager for reading on Archive of Our Own (archiveofourown.org)
 Features include:
     - Three star rating system
     - Hide works

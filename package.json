@@ -4,6 +4,6 @@
   "id": "jid1-ayTtY9e4Iz49HA",
   "description": "A bookmark helper and tag blacklister for Archive of Our Own.",
   "author": "Dianne Kay",
-  "license": "MPL 2.0",
+  "license": "LGPL 2.1",
   "version": "1.0.0"
 }
