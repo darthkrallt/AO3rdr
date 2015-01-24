@@ -27,12 +27,13 @@ function checkForWork(workId){
 }
 
 function clearImage(html){
+    // Note: in the case of a "0" rating, we want to clear all filled images
     var clearMe = $(html).find("img[src*='fill']");
     for (var i = 0; i < clearMe.length; i++){
         var level = $(clearMe[i]).attr('value');
-        if (parseInt(level) > 0) {
+        if (parseInt(level) >= 0) {
             $(clearMe[i]).attr('src', images['star-'+level]);
-        } else if (parseInt(level) == -1 ){
+        } else if (parseInt(level) <= 0 ){
             $(clearMe[i]).attr('src', images['dislike']);
             show($(clearMe[i]).parent());
         }
@@ -56,6 +57,11 @@ function setImage(html, stored_data){
         var ele = $(html).find("img[src*='dislike.svg']");
         $(ele).attr('src', images['dislike-fill']);
         hide(ele.parent());
+    }
+
+    // Make sure that it's visible for positive raing (eg, undoing neg rating)
+    if (level >= 0){
+        show(ele.parent());
     }
 
     if (stored_data.chapter_id == pageChapter) {
