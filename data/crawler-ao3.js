@@ -4,7 +4,6 @@
 var emitCrawlData = (function(port){
     return function(metadata, mutable_data) {
         console.log('inside emitter crawler');
-        console.log(metadata);
         port.emit('crawlcomplete', {"metadata":metadata, "mutable_data":mutable_data});
     };
 })(self.port);

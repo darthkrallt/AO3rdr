@@ -46,13 +46,10 @@ var pageChapter = extractChapterIdFromPage();
 
 function setImage(html, stored_data){
     level = parseInt(stored_data.rating);
-    console.log('level');
-    console.log(stored_data);
 
     if (level > 0) {
         var ele = $(html).find("img[src*='star-"+level+"']");
         $(ele).attr('src', images['star-'+level+'-fill']);
-        console.log(level);
     } else if (level == -1) {
         var ele = $(html).find("img[src*='dislike.svg']");
         $(ele).attr('src', images['dislike-fill']);
@@ -82,7 +79,6 @@ function hide(parent){
 }
 
 function show(parent){
-    console.log(parent);
     $(parent).siblings().show();
 }
 
@@ -202,13 +198,9 @@ function matchTag(string1, string2){
 }
 
 function checkTags(taglist){
-    console.log('prefs');
-    console.log(prefs['tags'])
     for (var i in taglist){
         for (var j in prefs['tags']){
             if (matchTag(taglist[i], prefs['tags'][j])){
-                console.log('matched tags');
-                console.log([taglist[i], prefs['tags'][j]]);
                 return true;
             }
         }
@@ -243,12 +235,10 @@ function processBrowsePage(){
         console.log("processed article");
         var info = parseWorkBlurb(articles[i]);
         var tags = parseTags(articles[i]);
-        console.log(tags);
 
         // Keep track of all the id's on the page
         idsOnPage.push(info['ao3id']);
 
-        console.log(info);
         var toolbar = createToolbar(info, false);
         articles[i].appendChild(toolbar);
 
@@ -267,7 +257,6 @@ function processArticlePage(){
         // Processing when running on only a single article
         // Just append the tool bar!
         var info = parseArticlePage($('#main'));
-        console.log(info);
         var toolbar = createToolbar(info, true);
         $('ul[class="work navigation actions"]').append(toolbar);
 

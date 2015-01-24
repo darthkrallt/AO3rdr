@@ -15,7 +15,6 @@ self.on('message', function onMessage(incomming_data) {
 var emitFicData = (function(port){
     return function(metadata, mutable_data) {
         console.log('inside emitterao3');
-        console.log(metadata);
         var visit = new Date().toJSON();
         // You always want to include the date of visit when a toolbar action is performed
         mutable_data['visit'] = visit;
@@ -34,7 +33,6 @@ var emitSettingsClick = (function(port){
 // Listening to updates after initial load
 self.port.on('update', function(newArticle){
     console.log('caputred update');
-    console.log(newArticle);
     // check for element
     var ele = checkForWork(newArticle.ao3id);
     if (ele) {
@@ -66,7 +64,6 @@ function createShadow(button_type, top_image){
         img.setAttribute('height', '25');
     }
     var url = images[button_type+'-shadow'];
-    console.log(url);
     img.setAttribute('src', url);
 
     var onOver= (function(target){

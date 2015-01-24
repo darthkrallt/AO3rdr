@@ -25,7 +25,6 @@ self.port.on('attached', function onMessage(incomming_data) {
         'width': '100%',
     });
 
-    console.log(tableData);
     // Do the initial loading of data into tables
     loadTable(tableData);
 });
@@ -68,7 +67,6 @@ var emitAutofilterToggle = (function(port){
     return function() {
         var val = $('#enable-autofilter').is(":checked");
         $('#blacklist-wrapper').toggle();
-        console.log(val);
         port.emit('prefs', {'autofilter': val});
     };
 })(self.port);
@@ -76,7 +74,6 @@ var emitAutofilterToggle = (function(port){
 var emitTagData = (function(port){
     return function() {
         var taglist = $('#blacklist').val();
-        console.log(taglist);
         port.emit('tags', taglist);
     };
 })(self.port);
@@ -223,11 +220,9 @@ function handleFile(){
     function recievedText(contents){
         lines = contents.target.result;
         var out = JSON.parse(lines);
-        // TODO: send this somewhere
         // Turn the "restore data" button on
         $('#restore-data').click(restoreData(out));
         $('#restore-data').attr('class', 'button-primary');
-        console.log(out);
     }
 
 }
@@ -261,7 +256,6 @@ $(document).ready(function() {
                     return $(s).find('img').attr('alt');
             }
         }); 
-        // TODO: Add crawlrequest
         $('#crawl-updates').click(crawlForUpdates);
         $('#upload-data').get(0).addEventListener('change', handleFile, false);
         $('#export-data').click(requestBackup);
