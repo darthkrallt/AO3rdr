@@ -51,46 +51,43 @@ function createShadow(button_type, top_image){
     // button type is star, dislike, menu, hidden, or bookmark
     var div = document.createElement("div");
     div.style.float = 'left';
-    div.style.width = '27px';
     div.style.position = 'relative';
     div.appendChild(top_image);
+    // TODO: get this styling outta JS and into CSS! Gross!
+    top_image.style.zIndex = '1';
 
     var img = document.createElement("img");
     img.setAttribute('alt', 'shadow');
-    img.setAttribute('height', '26');
+    // NOTE: the "hidden" eye icon uses the WIDTH property instead
+    // of the height. Do'h.
+    if (button_type == 'hidden'){
+        img.setAttribute('width', '25');
+    } else {
+        img.setAttribute('height', '25');
+    }
     var url = images[button_type+'-shadow'];
     console.log(url);
     img.setAttribute('src', url);
 
-    // TODO: get this styling outta JS and into CSS! Gross!
-    img.style.visibility = 'hidden';
     var onOver= (function(target){
         return function() {
-            console.log('over');
             target.css('visibility', 'visible');
         };
     })($(img));
     var onOut= (function(target){
         return function() {
-            console.log('out');
             target.css('visibility', 'hidden');
         };
     })($(img));
-    // var onOut= function() {console.log('out')};
     $(div).hover(onOver, onOut);
 
-    var passClick = (function(target){
-        return function(){
-            top_image.click();
-        }
-    })($(top_image));
-
-    $(div).click(passClick);
-
     div.appendChild(img);
+    // TODO: get this styling outta JS and into CSS! Gross!
+    img.style.visibility = 'hidden';
     img.style.position = 'absolute';
     img.style.left = '0px';
     img.style.top = '0px';
+    img.style.zIndex = '-1';
 
     return div;
 }
@@ -212,7 +209,8 @@ function hideByTag(raw_html, metadata){
         tmpFun
     );
 
-    newDiv.appendChild(img);
+    // newDiv.appendChild(img);
+    newDiv.appendChild(createShadow('hidden', img));
 
     var par = document.createElement("li");
     var text = document.createTextNode("hidden by "+ addonName +" blacklister");
@@ -237,10 +235,9 @@ var processPage = (function (port){
     }
 })(self.port);
 
-// When viewing a page, whether by a user or a crawl, we want to
-// update several fields automatically.
-// NOTE: this functions gets DUPLICATED in the crawler
-// TODO: examine the necessity of the duplication
+// When viewing a page by a user visit
+// NOTE: this function is named the same, but slightly different from the one 
+// in the crawler
 function onPageviewUpdater(){
     if (checkIfArticlePage()) {
         var info = parseArticlePage($('#main'));
@@ -256,6 +253,5 @@ function onPageviewUpdater(){
 
 
 $(document).ready(function() { 
-    // $('head').append('<style>.ao3rdrshadow:hover img {-webkit-box-shadow: 3px 3px 1px 1px #900; box-shadow: 3px 3px 1px 1px #900;}</style>')
     onPageviewUpdater();
 }); 

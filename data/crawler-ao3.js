@@ -9,20 +9,17 @@ var emitCrawlData = (function(port){
     };
 })(self.port);
 
-// When viewing a page, whether by a user or a crawl, we want to
-// update several fields automatically.
-// NOTE: this functions gets DUPLICATED in the toolbar
-// TODO: examine the necessity of the duplication
+// When viewing a page by a crawl
+// NOTE: this function is named the same, but slightly different from the one 
+// in the toolbar
 function onPageviewUpdater(){
     if (checkIfArticlePage()) {
         var info = parseArticlePage($('#main'));
         // Doesn't have mutable data, we are only checking the immutable
-        // TODO: don't update "last visit" when crawling, use a different "crawled" timestamp
         emitCrawlData(info, null);
         console.log('emitted');
     } else {
-        // TODO: implement updating of chapter information only for multi work
-        // pages. Saves some crawl bandwidth, but a very low priority feature.
+        // TODO: Multi article "works"... looong way off
         ;
     }
 }

@@ -53,14 +53,14 @@ function setImage(html, stored_data){
         $(ele).attr('src', images['star-'+level+'-fill']);
         console.log(level);
     } else if (level == -1) {
-        var ele = $(html).find("img[src*='dislike']");
+        var ele = $(html).find("img[src*='dislike.svg']");
         $(ele).attr('src', images['dislike-fill']);
         hide(ele.parent());
     }
 
     if (stored_data.chapter_id == pageChapter) {
         // change the image
-        var ele = $(html).find("img[src*='bookmark']");
+        var ele = $(html).find("img[src*='bookmark.svg']");
         $(ele).attr('src', images['bookmark-fill']);
     }
 

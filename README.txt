@@ -47,10 +47,14 @@ WISHLIST (not for this release)
 - Add support for tumblr (I shudder to think how much work...)
 - Localization
 - Delete works from database via settings page
+    The DB not saving is there, but the UI responsiveness is not
 - enable private browsing
+- Multi article works- eg, authors that don't use the standard chapters, but
+    instead have one "chapter" per work
+- Check author for update
 
 LICENSE
-    Copyright (C) 2015  Dianne Kay
+    Copyright (C) 2015  Darthkrallt
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
