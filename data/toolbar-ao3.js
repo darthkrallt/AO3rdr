@@ -47,6 +47,54 @@ self.port.on('update', function(newArticle){
     }
 });
 
+function createShadow(button_type, top_image){
+    // button type is star, dislike, menu, hidden, or bookmark
+    var div = document.createElement("div");
+    div.style.float = 'left';
+    div.style.width = '27px';
+    div.style.position = 'relative';
+    div.appendChild(top_image);
+
+    var img = document.createElement("img");
+    img.setAttribute('alt', 'shadow');
+    img.setAttribute('height', '26');
+    var url = images[button_type+'-shadow'];
+    console.log(url);
+    img.setAttribute('src', url);
+
+    // TODO: get this styling outta JS and into CSS! Gross!
+    img.style.visibility = 'hidden';
+    var onOver= (function(target){
+        return function() {
+            console.log('over');
+            target.css('visibility', 'visible');
+        };
+    })($(img));
+    var onOut= (function(target){
+        return function() {
+            console.log('out');
+            target.css('visibility', 'hidden');
+        };
+    })($(img));
+    // var onOut= function() {console.log('out')};
+    $(div).hover(onOver, onOut);
+
+    var passClick = (function(target){
+        return function(){
+            top_image.click();
+        }
+    })($(top_image));
+
+    $(div).click(passClick);
+
+    div.appendChild(img);
+    img.style.position = 'absolute';
+    img.style.left = '0px';
+    img.style.top = '0px';
+
+    return div;
+}
+
 // Create the toolbar
 function createToolbar(metadata, article){
     var newDiv = document.createElement("ul");
@@ -83,7 +131,10 @@ function createToolbar(metadata, article){
         $(button).click(
             tmpFun
         );
-        newDiv.appendChild(button);
+        // newDiv.appendChild(button);
+        // // NOTE this is to take care of the 'star-X' cases
+        var button_type = item.name.split('-')[0];
+        newDiv.appendChild(createShadow(button_type, button));
     });
     // If on an individual article page, add a bookmark bar
     if (article){
@@ -104,7 +155,8 @@ function createToolbar(metadata, article){
         $(bookmark).click(
             tmpFun2
         );
-        newDiv.appendChild(bookmark);
+        // newDiv.appendChild(bookmark);
+        newDiv.appendChild(createShadow('bookmark', bookmark));
     }
 
     // Menu
@@ -112,7 +164,8 @@ function createToolbar(metadata, article){
     menu.setAttribute('src', images['menu']);
     menu.setAttribute('height', '25');
     $(menu).click(emitSettingsClick);
-    newDiv.appendChild(menu);
+    // newDiv.appendChild(menu);
+    newDiv.appendChild(createShadow('menu', menu));
     return newDiv;
 }
 
@@ -203,5 +256,6 @@ function onPageviewUpdater(){
 
 
 $(document).ready(function() { 
-        onPageviewUpdater();
+    // $('head').append('<style>.ao3rdrshadow:hover img {-webkit-box-shadow: 3px 3px 1px 1px #900; box-shadow: 3px 3px 1px 1px #900;}</style>')
+    onPageviewUpdater();
 }); 
