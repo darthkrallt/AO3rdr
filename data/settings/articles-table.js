@@ -91,6 +91,7 @@ function generateImageHtml(data){
     }
     var img = document.createElement("img");
     img.setAttribute('src', url);
+    img.setAttribute('height', '30');
     img.setAttribute('alt', data['rating']);
     var html = document.createElement("td");
     html.appendChild(img);
@@ -110,6 +111,7 @@ function generateUnreadHtml(data){
     var url = images['read'];
     var img = document.createElement("img");
     img.setAttribute('alt', 'read');
+    img.setAttribute('height', '30');
     if (data['read'] < data['chapters']['published']){
         url = images['unread'];
         img.setAttribute('alt', 'unread');
@@ -120,15 +122,15 @@ function generateUnreadHtml(data){
     return html;
 }
 
-function generateAO3Html(data){
-    var html = document.createElement("td");
-    var url = document.createElement('a');
-    url.setAttribute('href', generateAO3link(data));
-    var text = document.createTextNode(data['ao3id']);
-    url.appendChild(text);
-    html.appendChild(url);
-    return html;
-}
+// function generateAO3Html(data){
+//     var html = document.createElement("td");
+//     var url = document.createElement('a');
+//     url.setAttribute('href', generateAO3link(data));
+//     var text = document.createTextNode(data['ao3id']);
+//     url.appendChild(text);
+//     html.appendChild(url);
+//     return html;
+// }
 
 function checkForUpdate(data){
     // if (Date.parse(data['visit']) < Date.parse(data['updated'])){
@@ -144,6 +146,7 @@ function generateUpdateHtml(data){
         var img = document.createElement("img");
         img.setAttribute('src', images['flag']);
         img.setAttribute('alt', '1');
+        img.setAttribute('height', '30');
         html.appendChild(img);
     }
     return html;
@@ -181,6 +184,11 @@ function generateRowHtml(data){
         if (((boring[j] == 'updated') || (boring[j] == 'visit')) && (data[boring[j]])){
             // It's a timestamp
             var text = document.createTextNode(data[boring[j]].slice(0, 10));
+        } else if (boring[j] == 'title') {
+            var text = document.createElement('a');
+            text.setAttribute('href', generateAO3link(data));
+            var text_str = document.createTextNode(data['title']);
+            text.appendChild(text_str);
         } else {
             var text = document.createTextNode(data[boring[j]]);
         }
@@ -188,8 +196,6 @@ function generateRowHtml(data){
         row.appendChild(html);
     }
     row.appendChild(generateChaptersHtml(data));
-    // Now the link
-    row.appendChild(generateAO3Html(data));
     return row;
 }
 
