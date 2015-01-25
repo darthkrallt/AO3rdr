@@ -203,8 +203,6 @@ function loadTable(tableData){
         var row = generateRowHtml(tableData[i]);
         tableBody.append(row);
     }
-    // Need to let the tablesorter plugin know we made an update
-    $("#articlesTable").trigger("update");
 }
 
 // Handle the file upload, NOTE only for single file upload
@@ -245,17 +243,45 @@ var requestBackup = (function(port){
     }
 })(self.port);
 
-// Add tablesorter to the table
+// From this lovely stack overflow question, 
+// http://stackoverflow.com/a/19947532/1533252
+// since I keep getting rejected by
+// Mozilla for tablesorter's single e-v-a-l function
+// YOU DESERVE THIS FROWNEY FACE MOZILLA >:[
+$('th').click(function(){
+    var table = $(this).parents('table').eq(0)
+    var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()));
+    this.asc = !this.asc;
+    if (!this.asc){
+        rows = rows.reverse();
+    }
+    for (var i = 0; i < rows.length; i++){
+        table.append(rows[i]);
+    }
+});
+
+function comparer(index) {
+    return function(a, b) {
+        var valA = getCellValue(a, index), valB = getCellValue(b, index);
+        return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB);
+    }
+}
+
+// Since this isn't real tablesorter, you have to write your own value extractors here
+function getCellValue(row, index){
+    var out = '';
+    if ($(row).children('td').eq(index).find('img').length != 0) {
+        out = $(row).children('td').eq(index).find('img').attr('alt');
+        
+    } else if($(row).children('td').eq(index).find('a').length != 0){
+        out = $(row).children('td').eq(index).find('a').text();
+    } else {
+        out = $(row).children('td').eq(index).html();
+    }
+    return out;
+}
+
 $(document).ready(function() { 
-        $("#articlesTable").tablesorter({
-            // Custom tablesorter configs
-            // Extract alt from images for sorting them
-            textExtraction:function(s){
-            // Function from http://forum.jquery.com/topic/tablesorter-sort-image
-                if($(s).find('img').length == 0) return $(s).text();
-                    return $(s).find('img').attr('alt');
-            }
-        }); 
         $('#crawl-updates').click(crawlForUpdates);
         $('#upload-data').get(0).addEventListener('change', handleFile, false);
         $('#export-data').click(requestBackup);
