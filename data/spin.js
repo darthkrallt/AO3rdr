@@ -209,7 +209,8 @@
 
             self.opacity(el, j * o.direction + start, alpha, o)
           }
-          self.timeout = self.el && setTimeout(anim, ~~(1000/fps))
+          // Disabling this because Mozilla doesn't allow it >:[
+          //self.timeout = self.el && setTimeout(anim, ~~(1000/fps))
         })()
       }
       return self
