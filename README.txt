@@ -30,28 +30,30 @@ FF Docs to consider
 https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials/Mobile_development
 
 BUGS
-- None that I've seen lately! please report any you find!
+  - Outline doesn't work well on mobile
+  - Icons appear one line at a time on "works" view in mobile
+  - Please report any others you find!
 
 TODO
-- Get a nice icon
-- screenshots
-- upload to Mozilla
-- RELEASE PARTY
+  - Add functionality to the "mobile reading" view
 
 WISHLIST (not for this release)
-- bookmark by individual line (when works are 50,000+ words in one chapter)
+  - Add tabbed view to settings page to sort by genre
+  - Add SAD star rating
+  - bookmark by individual line (when works are 50,000+ words in one chapter)
     - Maybe use some fancy hashin' 
         https://github.com/Caligatio/jsSHA/releases/tag/v1.5.0
     - also take advantage of the (#id_ref) url strings for this
-- tests, HAHAHAHA. THESE ARE IMPORTANT. BUT ALSO AREN'T GONNA HAPPEN.
-- Add support for tumblr (I shudder to think how much work...)
-- Localization
-- Delete works from database via settings page
+  - tests, HAHAHAHA. THESE ARE IMPORTANT. BUT ALSO AREN'T GONNA HAPPEN.
+  - Add support for tumblr (I shudder to think how much work...)
+  - Localization
+  - Delete works from database via settings page
+  - enable private browsing
     The DB not saving is there, but the UI responsiveness is not
-- enable private browsing
-- Multi article works- eg, authors that don't use the standard chapters, but
-    instead have one "chapter" per work
-- Check author for update
+  - Multi article works- eg, authors that don't use the standard chapters, but
+      instead have one "chapter" per work
+  - Check author for update
+  - Sync between devices (would require a server and a license agreement)
 
 LICENSE
     Copyright (C) 2015  Darthkrallt
