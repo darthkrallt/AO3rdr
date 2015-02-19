@@ -38,6 +38,9 @@ TODO
   - Add functionality to the "mobile reading" view
 
 WISHLIST (not for this release)
+  - Add "added on" date (not visible in UI)
+  - Add some cool stats to the settings page (eg, read the equivalent of 3 LOTR
+      series in the last 90 days)
   - Add tabbed view to settings page to sort by genre
   - Add SAD star rating
   - bookmark by individual line (when works are 50,000+ words in one chapter)
