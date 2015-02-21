@@ -33,7 +33,6 @@ BUGS
   - Please report any others you find!
 
 TODO
-  - Add functionality to the "mobile reading" view
 
 WISHLIST (not for this release)
   - Add "added on" date (not visible in UI)
