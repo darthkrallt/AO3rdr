@@ -5,6 +5,8 @@
 self.on('message', function onMessage(incomming_data) {
     images = incomming_data['images'];
     prefs = incomming_data['prefs'];
+    platform = incomming_data['platform'];
+    // will be 'android', 'Linux', 'Darwin', or 'WINNT'
 
     // Run the thing!
     processPage();
@@ -91,6 +93,7 @@ function createShadow(button_type, top_image){
 
 // Create the toolbar
 function createToolbar(metadata, article){
+    var shadowOn = (platform != 'android');
     var newDiv = document.createElement("ul");
     newDiv.setAttribute('id', addonName+metadata['ao3id']);
 
@@ -125,10 +128,13 @@ function createToolbar(metadata, article){
         $(button).click(
             tmpFun
         );
-        // newDiv.appendChild(button);
         // // NOTE this is to take care of the 'star-X' cases
-        var button_type = item.name.split('-')[0];
-        newDiv.appendChild(createShadow(button_type, button));
+        if(shadowOn){
+            var button_type = item.name.split('-')[0];
+            newDiv.appendChild(createShadow(button_type, button));
+        } else {
+            newDiv.appendChild(button);
+        }
     });
     // If on an individual article page, add a bookmark bar
     if (article){
@@ -149,8 +155,11 @@ function createToolbar(metadata, article){
         $(bookmark).click(
             tmpFun2
         );
-        // newDiv.appendChild(bookmark);
-        newDiv.appendChild(createShadow('bookmark', bookmark));
+        if(shadowOn){
+            newDiv.appendChild(createShadow('bookmark', bookmark));
+        } else{
+            newDiv.appendChild(bookmark);
+        }
     }
 
     // Menu
@@ -219,9 +228,34 @@ function hideByTag(raw_html, metadata){
     hide(newDiv); // Hide the sibilings of the new div
 }
 
+function preloadImages(){
+    var div = document.createElement("div");
+    div.style.visibility = 'hidden';
+    div.style.display = 'none';
+    var preloadMe = [
+        images['star-1-fill'],
+        images['star-2-fill'],
+        images['star-3-fill'],
+        images['dislike-fill'],
+        images['bookmark-fill']
+    ];
+    for (var i in preloadMe){
+        var img = document.createElement("img");
+        console.log(preloadMe[i]);
+        var url = preloadMe[i];
+        img.setAttribute('alt', 'preloaded-img-ignore');
+        img.setAttribute('height', '25');
+        div.appendChild(img);
+        img.setAttribute('src', url);
+    }
+    // We can just remove it, since we're just tricking it to load
+    div.remove();
+}
+
 var processPage = (function (port){
     return function() {
         var ids = [];
+        preloadImages();
         // Check if it's a browsing page, or a single article page
         if (checkIfArticlePage()) {
             ids = processArticlePage();
