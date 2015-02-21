@@ -30,8 +30,6 @@ FF Docs to consider
 https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials/Mobile_development
 
 BUGS
-  - Outline doesn't work well on mobile
-  - Icons appear one line at a time on "works" view in mobile
   - Please report any others you find!
 
 TODO
