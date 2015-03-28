@@ -16,7 +16,6 @@ self.on('message', function onMessage(incomming_data) {
 // for your message passing to the main.js
 var emitFicData = (function(port){
     return function(metadata, mutable_data) {
-        console.log('inside emitterao3');
         var visit = new Date().toJSON();
         // You always want to include the date of visit when a toolbar action is performed
         mutable_data['visit'] = visit;
@@ -26,7 +25,6 @@ var emitFicData = (function(port){
 
 var emitSettingsClick = (function(port){
     return function(){
-        console.log('settings clicked');
         port.emit('settingsclick', 1);
     };
 })(self.port);
@@ -34,7 +32,6 @@ var emitSettingsClick = (function(port){
 
 // Listening to updates after initial load
 self.port.on('update', function(newArticle){
-    console.log('caputred update');
     // check for element
     var ele = checkForWork(newArticle.ao3id);
     if (ele) {
@@ -189,7 +186,6 @@ function undoBlacklist(workId){
         // if it's not blacklisted, do nothing
         return;
     }
-    console.log('undo bl');
     // reveal the siblings
     show(blDiv);
     blDiv.remove();
@@ -197,7 +193,6 @@ function undoBlacklist(workId){
 
 
 function hideByTag(raw_html, metadata){
-    console.log('hiding');
     // create a placeholder element
     var newDiv = document.createElement("ul");
     newDiv.setAttribute('id', addonName + metadata['ao3id'] + 'blacklisted');
@@ -241,7 +236,6 @@ function preloadImages(){
     ];
     for (var i in preloadMe){
         var img = document.createElement("img");
-        console.log(preloadMe[i]);
         var url = preloadMe[i];
         img.setAttribute('alt', 'preloaded-img-ignore');
         img.setAttribute('height', '25');

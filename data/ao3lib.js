@@ -18,7 +18,6 @@ function extractChapterIdFromPage(){
 }
 
 function checkForWork(workId){
-    console.log(addonName+workId);
     var ul_id = addonName+workId;
     if (!(ul_id.length)) {
         return false;
@@ -228,11 +227,9 @@ function checkIfArticlePage(){
 // Processing when running on the "browse tags" or "browse bookmarks"
 function processBrowsePage(){
     var idsOnPage = [];
-    console.log("processing page!");
     var articles = $("li[role=article]");
     for (var i=0; i< articles.length; i++){
 
-        console.log("processed article");
         var info = parseWorkBlurb(articles[i]);
         var tags = parseTags(articles[i]);
 
@@ -244,7 +241,6 @@ function processBrowsePage(){
 
         // if it's a banned tag, hide it!
         if (checkTags(tags)){
-            console.log('tag match found, attempting to hide');
             hideByTag(articles[i], info);
         }
     }

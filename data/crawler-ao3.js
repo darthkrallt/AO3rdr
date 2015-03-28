@@ -3,7 +3,6 @@
 
 var emitCrawlData = (function(port){
     return function(metadata, mutable_data) {
-        console.log('inside emitter crawler');
         port.emit('crawlcomplete', {"metadata":metadata, "mutable_data":mutable_data});
     };
 })(self.port);
@@ -16,7 +15,6 @@ function onPageviewUpdater(){
         var info = parseArticlePage($('#main'));
         // Doesn't have mutable data, we are only checking the immutable
         emitCrawlData(info, null);
-        console.log('emitted');
     } else {
         // TODO: Multi article "works"... looong way off
         ;
@@ -24,7 +22,6 @@ function onPageviewUpdater(){
 }
 
 self.port.on('restartcrawl', function(){
-    console.log('restartcrawl');
     onPageviewUpdater();
 });
 

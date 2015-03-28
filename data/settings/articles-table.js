@@ -37,7 +37,6 @@ self.port.on('allcrawlscomplete', function onMessage(incomming_data) {
     // Update all the table entries
     // If incomming_data is null, there were no entries crawled
     if (incomming_data){
-        console.log('stuff crawled');
         // NOTE: for now incomming_data is a complete refresh of the data
         // TODO: for version 2.0 make this go row by row and unly update as necessary
         tableData = incomming_data;
@@ -49,7 +48,6 @@ self.port.on('allcrawlscomplete', function onMessage(incomming_data) {
 });
 
 self.port.on('exportcomplete', function onMessage(incomming_data) {
-    console.log('inside exportcomplete');
     var content = JSON.stringify(incomming_data);
     var link = document.createElement('a');
 
