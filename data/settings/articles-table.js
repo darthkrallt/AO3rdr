@@ -198,8 +198,13 @@ function loadTable(tableData){
     // first generate the html
     var tableBody = $("#articlesTable").find('tbody');
     for (var i in tableData){
-        var row = generateRowHtml(tableData[i]);
-        tableBody.append(row);
+        try {
+            var row = generateRowHtml(tableData[i]);
+            tableBody.append(row);
+        }
+        catch (error) {
+            console.log("Bad row loading table: ", error);
+        }
     }
 }
 
@@ -281,6 +286,7 @@ function getCellValue(row, index){
 
 $(document).ready(function() { 
         $('#crawl-updates').click(crawlForUpdates);
+        // TODO: TypeError: $(...).get(...) is undefined of--v
         $('#upload-data').get(0).addEventListener('change', handleFile, false);
         $('#export-data').click(requestBackup);
 });
