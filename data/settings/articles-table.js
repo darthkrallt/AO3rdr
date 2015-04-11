@@ -203,7 +203,7 @@ function loadTable(tableData){
             tableBody.append(row);
         }
         catch (error) {
-            console.log("Bad row loading table: ", error);
+            console.log("Bad row loading table: ", tableData[i]);
         }
     }
 }
@@ -245,6 +245,56 @@ var requestBackup = (function(port){
         port.emit('exportdata');
     }
 })(self.port);
+
+/* Cloud backup */
+var tokenSyncSpinner = null;
+
+self.port.on('token-revealed', function onMessage(token) {
+    $('#token-display').val(token);
+    $('#id-token-box').fadeIn(500);
+});
+
+var revealToken = (function(port){
+    return function(){
+        port.emit('reveal-token');
+    }
+})(self.port);
+
+self.port.on('token-saved', function onMessage(incomming_data) {
+    var src = '';
+    var msg = '';
+    console.log('caught token-saved');
+    console.log(incomming_data);
+    if (incomming_data['token_status'] == 'valid'){
+        src = '../images/cloud-ok.svg';
+        msg = 'Token OK';
+        // Trigger a refresh of table data
+        tableData = incomming_data['data'];
+        // drop the table
+        $($('#articlesTable').find('tbody')).empty();
+        // reload the table
+        loadTable(tableData);
+    } else {
+        src = '../images/cloud-offline.svg';
+        msg = 'Token Invalid, try again.';
+    }
+    $('#token-check').children('.icon').attr('src', src);
+    $('#token-check').children('p').text(msg);
+    tokenSyncSpinner.stop();
+});
+
+var saveToken = (function(port){
+    return function(){
+        var token = $("#token-display").val();
+        console.log(token);
+        port.emit('save-token', token);
+    }
+})(self.port);
+
+/* end Cloud backup */
+
+
+/* Table sorting */
 
 // From this lovely stack overflow question, 
 // http://stackoverflow.com/a/19947532/1533252
@@ -289,6 +339,31 @@ $(document).ready(function() {
         // TODO: TypeError: $(...).get(...) is undefined of--v
         $('#upload-data').get(0).addEventListener('change', handleFile, false);
         $('#export-data').click(requestBackup);
+
+        // Attach click function to close buttons
+        $( ".boxclose" ).each( function( index, element ){
+            // Do something
+            $(this).click(
+                function(){
+                    // clicking the close span causes the closest ancestor modal to fadeout
+                    $(this).closest('.box').fadeOut(500);
+                }
+            );
+        });
+        // Arrach the click functions
+        $('#reveal-token').click(
+            function() {
+                revealToken();
+                //$('#id-token-box').fadeIn(500);
+            }
+        );
+        $('#save-token').click(
+            function() {
+                tokenSyncSpinner = new Spinner({position: 'relative'}).spin();
+                $('#id-token-box').append(tokenSyncSpinner.el);
+                saveToken();
+            }
+        );
 });
 
 var crawlForUpdates = (function(port){

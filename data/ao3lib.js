@@ -131,7 +131,7 @@ function parseArticlePage(raw_html){
             raw_date =  $(stats[i+1]).html() || raw_date;
         }
     }
-    out['updated'] = Date.parse(raw_date);
+    out['updated'] = new Date(Date.parse(raw_date)).toJSON();
 
     out['chapters'] = parseChapters(raw_html);
     // Assume we've read up to this page if we are adding the bookmark from it.
@@ -167,7 +167,7 @@ function parseWorkBlurb(raw_html){
     out['title'] = $(raw_html).find('a').html();
     out['author'] = $(raw_html).find('a[rel=author]').html();
     var raw = $(raw_html).find('p[class=datetime]').html();
-    out['updated'] = Date.parse(raw);
+    out['updated'] = new Date(Date.parse(raw)).toJSON();
 
     out['chapters'] = parseChapters(raw_html);
     // Assume we've not read anything if adding from

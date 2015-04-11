@@ -32,6 +32,9 @@ var emitSettingsClick = (function(port){
 
 // Listening to updates after initial load
 self.port.on('update', function(newArticle){
+    if (!newArticle){
+        return;
+    }
     // check for element
     var ele = checkForWork(newArticle.ao3id);
     if (ele) {

@@ -47,6 +47,40 @@
       </div>
     </div>
 
+<!-- cloud sync status boxes -->
+    <div class="row box" id="cloud-sync-box" style="display:visible">
+      <input type="image" alt="close" src="../images/close.svg" class="boxclose">
+      <h6 class="docs-header">Cloud Sync Status</h6>
+
+      <div class="six columns" id="cloud-sync-status">
+           <img src='../images/cloud-ok.svg' class='icon inside'>
+          <p id="last-sync">Last Sync: Not yet synced</p>
+      </div>
+
+      <div class="five columns">
+        <input class="button-primary" id="reveal-token" type="submit" value="Reveal Token">
+      </div>
+    </div>  
+
+    <div class="row box" id="id-token-box" style="display:none">
+        <input type="image" alt="close" src="../images/close.svg" class="boxclose">
+        <h6 class="docs-header">Show ID Token</h6>
+        
+        <div class="six columns">
+          <label for="token-display">ID Token</label>
+          <input type="text" class="u-full-width" id= "token-display" placeholder="12a34b56-7cd8-9e01-fg23-h45678912345"></input>
+          <input class="button-primary" id="save-token" type="submit" value="Save Token">
+        </div>
+        <div class="five columns" id="token-check">
+            <img src='../images/cloud-ok.svg' class='icon inside'>
+            <p id="token-status">Token Valid</p>
+            <!-- <input class="button-primary" type="submit" value="Get New Token"> -->
+        </div>
+    </div>
+
+<!-- end cloud sync status boxes -->
+
+
     <div class="row">
 
       <div class="twelve columns">
