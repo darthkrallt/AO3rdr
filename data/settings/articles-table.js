@@ -294,9 +294,9 @@ $(document).ready(function() {
 var crawlForUpdates = (function(port){
     return function(){
         // Ugly global...
-        spinner = new Spinner().spin();
+        spinner = new Spinner({position: 'relative'}).spin();
 
-        $('#crawl-updates').parent().append(spinner.el);
+        $('#crawl-spinner').parent().append(spinner.el);
         port.emit('crawlrequest');
     }
 })(self.port);

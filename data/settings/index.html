@@ -36,30 +36,34 @@
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div class="container">
+   <div class="row">
+      <div class="twelve columns" style="margin-top: 5%">
       <div class="row">
 
-        <div class="eleven columns" style="margin-top: 5%">
           <h5>Check out your bookmarks here</h5>
           <p>Here you can easily interact with all of the articles that you have read, skimmed liked or disliked. <a href="credits.html"> Credits Page</a></p>
         </div>
 
       </div>
+    </div>
 
     <div class="row">
 
-      <div class="eleven columns">
+      <div class="twelve columns">
         <form>
           <input type="button" id="crawl-updates" class="button-primary" value="Check Works for Updates">
+          <div id="crawl-spinner"></div>
 
           <label for="enable-autofilter" class="inline-checkbox-right">
             <input id="enable-autofilter" type="checkbox">
             <span class="label-body">Enable Autofilter</span>
           </label>
         </form>
+
       </div>
 
       <div class="row">
-        <div class="four columns">
+        <div class="five columns">
           <input type="button" id="export-data" class="button-primary" value="Download Your Data">
         </div>
             
@@ -69,8 +73,9 @@
         </div>
       </div>
 
+
       <div class="row">
-        <div class="eleven columns">
+        <div class="twelve columns">
 
           <div id="blacklist-wrapper">
             <label for="blacklist">Blacklisted Tags</label>
@@ -80,10 +85,11 @@
         </div>
       </div>
 
+
     </div>
 
     <div class="row">
-      <div class="eleven columns" style="margin-top: 5%">
+      <div class="twelve columns" style="margin-top: 5%">
         <table id="articlesTable"> 
         <thead> 
         <tr> 
