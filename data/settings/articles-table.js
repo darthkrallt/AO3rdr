@@ -15,6 +15,7 @@ self.port.on('attached', function onMessage(incomming_data) {
         $('#blacklist-wrapper').hide();
 
     $('#blacklist').val(incomming_data['prefs']['tags']);
+    lastSyncUpdate();
 
     // Add the tag cloud function - it's important to set this AFTER 
     // we put the data in for the first time
@@ -178,7 +179,17 @@ function generateRowHtml(data){
         // html.innerHTML = data[boring[j]]; // note it is already encoded
         if (((boring[j] == 'updated') || (boring[j] == 'visit')) && (data[boring[j]])){
             // It's a timestamp
-            var text = document.createTextNode(data[boring[j]].slice(0, 10));
+            var text = '?';
+            if (boring['j'] == 'visit'){
+                // NOTE the visit is UTC, since we set it
+                var d = new Date(data[boring[j]]);
+                // epochConverterLocaleString returns MM/DD/YYYY. Yuck. Fix that.
+                text = new Date(d.epochConverterLocaleString()).toJSON().slice(0, 10);
+            } else {
+                // However the others are crawled, assume AO3 has the right timezone
+                text = data[boring[j]].slice(0, 10);
+            }
+            var text = document.createTextNode(text);
         } else if (boring[j] == 'title') {
             var text = document.createElement('a');
             text.setAttribute('href', generateAO3link(data));
@@ -274,6 +285,7 @@ self.port.on('token-saved', function onMessage(incomming_data) {
         $($('#articlesTable').find('tbody')).empty();
         // reload the table
         loadTable(tableData);
+        lastSyncUpdate();
     } else {
         src = '../images/cloud-offline.svg';
         msg = 'Token Invalid, try again.';
@@ -282,6 +294,23 @@ self.port.on('token-saved', function onMessage(incomming_data) {
     $('#token-check').children('p').text(msg);
     tokenSyncSpinner.stop();
 });
+
+function lastSyncUpdate(){
+    console.log(prefs['last_sync']);
+    var utcSeconds = prefs['last_sync'];
+    var msg = 'Last Sync: Not yet synced';
+    var src = '../images/cloud-offline.svg';
+    if (utcSeconds){
+        var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
+        d.setUTCSeconds(utcSeconds);
+        msg = d.toLocaleString();
+        src = '../images/cloud-ok.svg';
+    }
+    $('#cloud-sync-status').children('.icon').attr('src', src);
+    $('#cloud-sync-status').children('p').text(msg);
+
+    $('#last-sync').text(msg);
+}
 
 var saveToken = (function(port){
     return function(){
