@@ -9,6 +9,7 @@ Features include:
     - Scan bookmarks for updates
     - Keep track of last visit
     - Backup and restore user data
+    - Cloud Sync for multiple browsers
     - Open source code!
 
 This is to be developed with both mobile and desktop use in mind, so no SDK's 
