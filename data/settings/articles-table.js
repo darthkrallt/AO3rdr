@@ -10,6 +10,10 @@ self.port.on('attached', function onMessage(incomming_data) {
     prefs = incomming_data['prefs'];
     $('#enable-autofilter').attr('checked', prefs['autofilter']);
     $('#enable-autofilter').change(emitAutofilterToggle);
+
+    $('#enable-cloud-sync').attr('checked', prefs['sync_enabled']);
+    $('#enable-cloud-sync').change(emitCloudSyncToggle);
+
     // Hide the tags if the blacklist is disabled
     if (!prefs['autofilter'])
         $('#blacklist-wrapper').hide();
@@ -61,6 +65,13 @@ self.port.on('exportcomplete', function onMessage(incomming_data) {
     link.click();
 });
 
+
+var emitCloudSyncToggle = (function(port){
+    return function() {
+        var val = $('#enable-cloud-sync').is(":checked");
+        port.emit('prefs', {'sync_enabled': val});
+    };
+})(self.port);
 
 var emitAutofilterToggle = (function(port){
     return function() {
@@ -300,7 +311,10 @@ function lastSyncUpdate(){
     var utcSeconds = prefs['last_sync'];
     var msg = 'Last Sync: Not yet synced';
     var src = '../images/cloud-offline.svg';
-    if (utcSeconds){
+    if (!prefs['sync_enabled']){
+        msg = 'Sync Disabled';
+    }
+    else if (utcSeconds){
         var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
         d.setUTCSeconds(utcSeconds);
         msg = d.toLocaleString();
