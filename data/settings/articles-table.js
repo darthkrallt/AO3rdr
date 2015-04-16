@@ -285,8 +285,6 @@ var revealToken = (function(port){
 self.port.on('token-saved', function onMessage(incomming_data) {
     var src = '';
     var msg = '';
-    console.log('caught token-saved');
-    console.log(incomming_data);
     if (incomming_data['token_status'] == 'valid'){
         src = '../images/cloud-ok.svg';
         msg = 'Token OK';
@@ -307,7 +305,6 @@ self.port.on('token-saved', function onMessage(incomming_data) {
 });
 
 function lastSyncUpdate(){
-    console.log(prefs['last_sync']);
     var utcSeconds = prefs['last_sync'];
     var msg = 'Last Sync: Not yet synced';
     var src = '../images/cloud-offline.svg';
@@ -329,7 +326,6 @@ function lastSyncUpdate(){
 var saveToken = (function(port){
     return function(){
         var token = $("#token-display").val();
-        console.log(token);
         port.emit('save-token', token);
     }
 })(self.port);
