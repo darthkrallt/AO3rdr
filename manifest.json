@@ -5,15 +5,15 @@
   "permissions": [
     "activeTab"
   ],
-  // "background": {
-  //   "scripts": ["background.js"],
-  //   "persistent": false
-  // },
+  "background": {
+    "scripts": ["src/background.js"],
+    "persistent": false
+  },
   "content_scripts": [
     {
-      "matches": ["http://www.archiveofourown.org/*"],
+      "matches": ["http://archiveofourown.org/*"],
       //"css": ["mystyles.css"],
-      "js": ["data/jquery-1.11.2.min.js", "data/ao3lib.js", "data/toolbar-ao3.js"],
+      "js": ["lib/jquery-1.11.2.min.js", "src/ao3lib.js", "src/toolbar-ao3.js"],
       "all_frames": true
     }
   ],
@@ -21,5 +21,10 @@
   "browser_action": {
     "default_title": "AO3rdr"
   },
-  "manifest_version": 2
+  "manifest_version": 2,
+
+  "web_accessible_resources": [
+    "data/images/*",
+    "data/settings/*"
+  ]
 }
