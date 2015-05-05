@@ -10,7 +10,7 @@ function processPage(){
     } else {
         ids = processBrowsePage();
     }
-    // TODO: send message on complete
+    return ids;
 }
 
 // TODO: incomming data
@@ -40,17 +40,27 @@ var images = {
 
 var prefs = {};
 
+function createButton(src, alt, value, fun){
+    var img = document.createElement("img");
+    img.setAttribute('src', src);
+    img.setAttribute('alt', alt);
+    img.setAttribute('class', addonName + '-button');
+    if (typeof value !== 'undefined') {
+        img.setAttribute('value', value);
+    }
+    if (typeof fun !== 'undefined'){
+        $(img).click(fun);
+    }
+    return img;
+}
+
 // Create the toolbar
 function createToolbar(metadata, article){
     var newDiv = document.createElement("ul");
     newDiv.setAttribute('id', addonName+metadata['ao3id']);
 
     // Unread icon
-    var unread = document.createElement("img");
-    unread.setAttribute('alt', 'read');
-    var url = images['read'];
-    unread.setAttribute('src', url);
-    unread.setAttribute('alt', 'read');
+    var unread = createButton(images['read'], 'read');
     newDiv.appendChild(unread);
 
     // Add the buttons
@@ -63,24 +73,18 @@ function createToolbar(metadata, article){
     ];
 
     buttonData.map(function(item){
-        var button = document.createElement("img");
-        button.setAttribute('src', item.src);
-        button.setAttribute('value', item.value);
         var tmpFun = (function(metadata, mutable_data){
             return function() {
                 emitFicData(metadata, mutable_data)
             };
         })(metadata, {'rating': item.value});
-        $(button).click(
-            tmpFun
-        );
+
+        var button = createButton(item.src, 'rate work '+item.value, item.value, tmpFun);
         newDiv.appendChild(button);
 
     });
     // If on an individual article page, add a bookmark bar
     if (article){
-        var bookmark = document.createElement('img');
-        bookmark.setAttribute('src', images['bookmark']);
 
         var bookmark_data = {
             'chapters_read': metadata['chapters_read'], 
@@ -92,29 +96,21 @@ function createToolbar(metadata, article){
             };
         })(metadata, bookmark_data);
 
-        $(bookmark).click(
-            tmpFun2
-        );
+        var bookmark = createButton(images['bookmark'], 'set chapter bookmark', tmpFun2);
         newDiv.appendChild(bookmark);
     }
 
     // Menu
-    var menu = document.createElement("img");
-    menu.setAttribute('src', images['menu']);
-    $(menu).click(emitSettingsClick);
+    var menu = createButton(images['menu'], 'open settings page', '', emitSettingsClick);
+
     newDiv.appendChild(menu);
     return newDiv;
 }
 
-function emitFicData(metadata, mutable_data){
-    // TODO: implement this
-    console.log(metadata, mutable_data);
-}
-
-function emitSettingsClick(){
-    // TODO: implement this
-    console.log('settings clicked');
-}
+// function emitFicData(metadata, mutable_data){
+//     // TODO: implement this
+//     console.log(metadata, mutable_data);
+// }
 
 function checkForBlacklistedArticle(workId){
     var ul_id = addonName + workId + 'blacklisted';
@@ -168,6 +164,22 @@ function hideByTag(raw_html, metadata){
     hide(newDiv); // Hide the sibilings of the new div
 }
 
+function updateImage(newArticle){
+    if (!newArticle){
+        return;
+    }
+    // check for element
+    var ele = checkForWork(newArticle.ao3id);
+    if (ele) {
+        // Clear any selected
+        clearImage(ele);
+        // swap out the images
+        setImage(ele, newArticle);
+        // Also check if it was blacklisted, if so we want to undo it
+        undoBlacklist(newArticle.ao3id);
+    }
+}
+
 // When viewing a page by a user visit
 // NOTE: this function is named the same, but slightly different from the one 
 // in the crawler
@@ -185,9 +197,9 @@ function onPageviewUpdater(){
     }
 }
 
-
 $(document).ready(function() { 
     console.log('here');
     onPageviewUpdater();
-    processPage(); // TODO: run this post data fetching instead of document on load
+    var ids = processPage();
+    toolbar_onload(ids); // TODO: implement this for FF
 }); 
