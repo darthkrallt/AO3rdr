@@ -3,23 +3,30 @@
   "description": "Rating system and block by tag system for Archive of Our Own",
   "version": "1.0.5",
   "permissions": [
-    "activeTab"
+    "activeTab",
+    "storage"
   ],
   "background": {
-    "scripts": ["src/background.js"],
+    "scripts": ["src/background.js", "src/article.js"],
     "persistent": false
   },
   "content_scripts": [
     {
       "matches": ["http://archiveofourown.org/*"],
-      //"css": ["mystyles.css"],
-      "js": ["lib/jquery-1.11.2.min.js", "src/ao3lib.js", "src/toolbar-ao3.js"],
+      "css": ["data/style.css"],
+      "js": [
+        "lib/jquery-1.11.2.min.js", "src/ao3lib.js", 
+        "src/toolbar-ao3.js", "src/toolbar-chrome.js",
+        "src/article.js"
+      ],
       "all_frames": true
     }
   ],
+  "options_page": "data/settings/index.html",
 
   "browser_action": {
-    "default_title": "AO3rdr"
+    "default_title": "AO3rdr",
+    "default_icon": "data/images/icon.svg"
   },
   "manifest_version": 2,
 

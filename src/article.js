@@ -1,0 +1,85 @@
+function Article(metadata, mutable_data) {
+/* Article Object. As it gets stored in memory.
+*/
+    var currentTime = new Date().getTime() / 1000; // ms to seconds
+    this.ao3id = metadata.ao3id;
+    this.author = unescape(metadata.author);
+    this.title = unescape(metadata.title);
+    this.crawled = new Date().toJSON();
+    this.crawled__ts = currentTime;
+    this.updated = new Date(metadata.updated).toJSON();
+    this.updated__ts = currentTime;
+    this.chapters = metadata['chapters'];
+    this.chapters__ts = currentTime;
+
+    if (mutable_data) {
+        this.rating = mutable_data['rating'];
+        this.rating__ts = currentTime;
+        this.read = mutable_data['chapters_read'] || 0;
+        this.read__ts = currentTime;
+        this.chapter_id = mutable_data['chapter_id'];
+        this.chapter_id__ts = currentTime;
+        this.visit = mutable_data['visit'];
+        this.visit__ts = currentTime;
+    }
+
+}
+
+function updateArticle(old_article, new_article, is_private){
+/* Update an existing article.
+       WARNING! MODIFIES the old_article!
+       used by function handleNewFic
+*/
+    var currentTime = new Date().getTime() / 1000;
+    if (is_private){
+        // console.log('Private mode. Not saving.');
+        return null;
+    }
+    // There will always be a crawled timestamp
+    old_article.crawled = new_article.crawled;
+    old_article.crawled__ts = new_article.crawled__ts;
+
+    if (new_article.rating){
+        // The dislike button is a special case, because it's value 
+        // becomes "0" when we want to undo it.
+        if (old_article.rating == -1){
+            new_article.rating = 0;
+        }
+        old_article.rating = new_article.rating;
+        old_article.rating__ts = new_article.rating__ts;
+    }
+
+    if (new_article.chapters){
+        // If we found a new chapter, there was an update!
+        if (new_article.chapters['published'] > old_article.chapters['published']){
+            old_article.hasupdate = true;
+            old_article.hasupdate__ts = currentTime;
+        }
+        old_article.chapters = new_article.chapters;
+        old_article.chapters__ts = new_article.chapters__ts;
+    }
+
+    if (new_article.visit){
+        old_article.visit = new_article.visit;
+        old_article.visit__ts = new_article.visit__ts;
+        // Clear the hasupdate flag when you've visited
+        old_article.hasupdate = false;
+        old_article.hasupdate__ts = currentTime;
+    }
+
+    // Important! We need to always update these both together!
+    if (new_article.read || !(old_article.read)) {
+        old_article.read = new_article.read;
+        old_article.read__ts = new_article.read__ts;
+        old_article.chapter_id = new_article.chapter_id;
+        old_article.chapter_id__ts = new_article.chapter_id__ts;
+    }
+    syncWork(old_article);
+    return old_article;
+}
+
+// from
+// http://stackoverflow.com/questions/6229197/how-to-know-if-two-arrays-have-the-same-values
+function arrayCompare(array1, array2){
+    return JSON.stringify(array1.sort()) === JSON.stringify(array2.sort());
+}

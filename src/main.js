@@ -35,194 +35,201 @@ function detachWorker(worker, workerArray) {
     }
 }
 
-// Initialize the storage if none exists
-if (!simpleStorage.storage.ficdict)
-    simpleStorage.storage.ficdict = {};
+// // Initialize the storage if none exists
+// if (!simpleStorage.storage.ficdict)
+//     simpleStorage.storage.ficdict = {};
 
-if (!simpleStorage.storage.prefs)
-    // autofilter is enabled by default
-    simpleStorage.storage.prefs = {
-        'autofilter': true, 
-        'tags': [], 
-        'last_sync':0, 
-        'sync_enabled':true
-    };
+// if (!simpleStorage.storage.prefs)
+//     // autofilter is enabled by default
+//     simpleStorage.storage.prefs = {
+//         'autofilter': true, 
+//         'tags': [], 
+//         'last_sync':0, 
+//         'sync_enabled':true
+//     };
 
-// from
-// http://stackoverflow.com/questions/6229197/how-to-know-if-two-arrays-have-the-same-values
-function arrayCompare(array1, array2){
-    return JSON.stringify(array1.sort()) === JSON.stringify(array2.sort());
-}
-
-
-function handleNewFic(metadata, mutable_data, is_private) {
-/* Take in the data and rating, and store or update as necessary. Returns
-   the new object.
-*/
-    if (!metadata['ao3id']){
-        // Must have a vailid ID!
-        return null;
-    }
-    var newArticle = new Article(metadata, mutable_data);
-    if (!(newArticle.ao3id in simpleStorage.storage.ficdict)) {
-        // If there's no mutable data coming in or the only mutable data coming in is a 
-        // page view, and no old entry, skip it.
-        if (!mutable_data){
-            // No work changed - only view data, this is not in our DB
-            return null;
-        } else {
-            //var mutable_keys = $.map(mutable_data, function(element,index) {return index});
-            var mutable_keys = Object.keys(mutable_data);
-            if (arrayCompare(mutable_keys, ['visit'])){
-                // No work changed - crawled, ERROR sending visit data
-                return null;
-            }
-        }
-        saveArticle(newArticle, is_private);
-    } else {
-        // Update only
-        updateArticle(simpleStorage.storage.ficdict[newArticle.ao3id], newArticle, is_private);
-    }
-    return simpleStorage.storage.ficdict[newArticle.ao3id];
-}
-
-function saveArticle(newArticle, is_private){
-    if (!is_private){
-        // TODO: this is a bug!  Why does it happen?
-        if (newArticle['ao3id'] == 'undefined'){
-            return;
-        }
-        simpleStorage.storage.ficdict[newArticle.ao3id] = newArticle;
-        syncWork(newArticle);
-    } else {
-        // console.log('Private mode. Not saving.');
-    }
-}
-
-function updateArticle(old_article, new_article, is_private){
-/* Update an existing article.
-       WARNING! MODIFIES the old_article!
-       used by function handleNewFic
-*/
-    var currentTime = new Date().getTime() / 1000;
-    if (is_private){
-        // console.log('Private mode. Not saving.');
-        return null;
-    }
-    // There will always be a crawled timestamp
-    old_article.crawled = new_article.crawled;
-    old_article.crawled__ts = new_article.crawled__ts;
-
-    if (new_article.rating){
-        // The dislike button is a special case, because it's value 
-        // becomes "0" when we want to undo it.
-        if (old_article.rating == -1){
-            new_article.rating = 0;
-        }
-        old_article.rating = new_article.rating;
-        old_article.rating__ts = new_article.rating__ts;
-    }
-
-    if (new_article.chapters){
-        // If we found a new chapter, there was an update!
-        if (new_article.chapters['published'] > old_article.chapters['published']){
-            old_article.hasupdate = true;
-            old_article.hasupdate__ts = currentTime;
-        }
-        old_article.chapters = new_article.chapters;
-        old_article.chapters__ts = new_article.chapters__ts;
-    }
-
-    if (new_article.visit){
-        old_article.visit = new_article.visit;
-        old_article.visit__ts = new_article.visit__ts;
-        // Clear the hasupdate flag when you've visited
-        old_article.hasupdate = false;
-        old_article.hasupdate__ts = currentTime;
-    }
-
-    // Important! We need to always update these both together!
-    if (new_article.read || !(old_article.read)) {
-        old_article.read = new_article.read;
-        old_article.read__ts = new_article.read__ts;
-        old_article.chapter_id = new_article.chapter_id;
-        old_article.chapter_id__ts = new_article.chapter_id__ts;
-    }
-    syncWork(old_article);
-}
-
-function Article(metadata, mutable_data) {
-/* Article Object. As it gets stored in memory.
-*/
-    var currentTime = new Date().getTime() / 1000; // ms to seconds
-    this.ao3id = metadata.ao3id;
-    this.author = unescape(metadata.author);
-    this.title = unescape(metadata.title);
-    this.crawled = new Date().toJSON();
-    this.crawled__ts = currentTime;
-    this.updated = new Date(metadata.updated).toJSON();
-    this.updated__ts = currentTime;
-    this.chapters = metadata['chapters'];
-    this.chapters__ts = currentTime;
-
-    if (mutable_data) {
-        this.rating = mutable_data['rating'];
-        this.rating__ts = currentTime;
-        this.read = mutable_data['chapters_read'] || 0;
-        this.read__ts = currentTime;
-        this.chapter_id = mutable_data['chapter_id'];
-        this.chapter_id__ts = currentTime;
-        this.visit = mutable_data['visit'];
-        this.visit__ts = currentTime;
-    }
-
-}
-
-function fetchTableData(){
-/* Fetch all article data for the table.
-*/
-    return simpleStorage.storage.ficdict;
-}
-
-function exportData(){
-    var out = {
-        'article_data': fetchTableData(),
-        'version': '1.0.0',
-        'prefs': fetchPrefs(),
-    };
-    return out;
-}
-
-function fetchTableDataId(seenIds){
-/* Fetch article data by list of IDs
-*/
-    var out = {};
-    for (var i in seenIds) {
-        if (seenIds[i] in simpleStorage.storage.ficdict) {
-            out[seenIds[i]] = simpleStorage.storage.ficdict[seenIds[i]];
-        }
-    }
-    return out;
-}
+// // from
+// // http://stackoverflow.com/questions/6229197/how-to-know-if-two-arrays-have-the-same-values
+// function arrayCompare(array1, array2){
+//     return JSON.stringify(array1.sort()) === JSON.stringify(array2.sort());
+// }
 
 
-function fetchPrefs(){
-    return simpleStorage.storage.prefs;
-}
+// function handleNewFic(metadata, mutable_data, is_private) {
+// /* Take in the data and rating, and store or update as necessary. Returns
+//    the new object.
+// */
+//     if (!metadata['ao3id']){
+//         // Must have a vailid ID!
+//         return null;
+//     }
+//     var newArticle = new Article(metadata, mutable_data);
+//     if (!articleExists(newArticle.ao3id)) {
+//         // If there's no mutable data coming in or the only mutable data coming in is a 
+//         // page view, and no old entry, skip it.
+//         if (!mutable_data){
+//             // No work changed - only view data, this is not in our DB
+//             return null;
+//         } else {
+//             var mutable_keys = Object.keys(mutable_data);
+//             if (arrayCompare(mutable_keys, ['visit'])){
+//                 // No work changed - crawled, ERROR sending visit data
+//                 return null;
+//             }
+//         }
+//         saveArticle(newArticle, is_private);
+//     } else {
+//         // Update only
+//         updateArticle(getArticle(ao3id), newArticle, is_private);
+//     }
+//     return getArticle(ao3id);
+// }
 
-function savePrefs(prefs){
-    for (var key in prefs){
-        simpleStorage.storage.prefs[key] = prefs[key];
-    }
-}
+// function articleExists(ao3id){
+//     return newArticle.ao3id in simpleStorage.storage.ficdict;
+// }
 
-function fetchTags(){
-    return fetchPrefs['tags'];
-}
+// function getArticle(ao3id){
+//     return simpleStorage.storage.ficdict[newArticle.ao3id];
+// }
 
-function saveTags(tags){
-    savePrefs({'tags': tags.split(',')});
-}
+// function saveArticle(newArticle, is_private){
+//     if (!is_private){
+//         // TODO: this is a bug!  Why does it happen?
+//         if (newArticle['ao3id'] == 'undefined'){
+//             return;
+//         }
+//         simpleStorage.storage.ficdict[newArticle.ao3id] = newArticle;
+//         syncWork(newArticle);
+//     } else {
+//         // console.log('Private mode. Not saving.');
+//     }
+// }
+
+// function updateArticle(old_article, new_article, is_private){
+// /* Update an existing article.
+//        WARNING! MODIFIES the old_article!
+//        used by function handleNewFic
+// */
+//     var currentTime = new Date().getTime() / 1000;
+//     if (is_private){
+//         // console.log('Private mode. Not saving.');
+//         return null;
+//     }
+//     // There will always be a crawled timestamp
+//     old_article.crawled = new_article.crawled;
+//     old_article.crawled__ts = new_article.crawled__ts;
+
+//     if (new_article.rating){
+//         // The dislike button is a special case, because it's value 
+//         // becomes "0" when we want to undo it.
+//         if (old_article.rating == -1){
+//             new_article.rating = 0;
+//         }
+//         old_article.rating = new_article.rating;
+//         old_article.rating__ts = new_article.rating__ts;
+//     }
+
+//     if (new_article.chapters){
+//         // If we found a new chapter, there was an update!
+//         if (new_article.chapters['published'] > old_article.chapters['published']){
+//             old_article.hasupdate = true;
+//             old_article.hasupdate__ts = currentTime;
+//         }
+//         old_article.chapters = new_article.chapters;
+//         old_article.chapters__ts = new_article.chapters__ts;
+//     }
+
+//     if (new_article.visit){
+//         old_article.visit = new_article.visit;
+//         old_article.visit__ts = new_article.visit__ts;
+//         // Clear the hasupdate flag when you've visited
+//         old_article.hasupdate = false;
+//         old_article.hasupdate__ts = currentTime;
+//     }
+
+//     // Important! We need to always update these both together!
+//     if (new_article.read || !(old_article.read)) {
+//         old_article.read = new_article.read;
+//         old_article.read__ts = new_article.read__ts;
+//         old_article.chapter_id = new_article.chapter_id;
+//         old_article.chapter_id__ts = new_article.chapter_id__ts;
+//     }
+//     syncWork(old_article);
+// }
+
+// function Article(metadata, mutable_data) {
+// /* Article Object. As it gets stored in memory.
+// */
+//     var currentTime = new Date().getTime() / 1000; // ms to seconds
+//     this.ao3id = metadata.ao3id;
+//     this.author = unescape(metadata.author);
+//     this.title = unescape(metadata.title);
+//     this.crawled = new Date().toJSON();
+//     this.crawled__ts = currentTime;
+//     this.updated = new Date(metadata.updated).toJSON();
+//     this.updated__ts = currentTime;
+//     this.chapters = metadata['chapters'];
+//     this.chapters__ts = currentTime;
+
+//     if (mutable_data) {
+//         this.rating = mutable_data['rating'];
+//         this.rating__ts = currentTime;
+//         this.read = mutable_data['chapters_read'] || 0;
+//         this.read__ts = currentTime;
+//         this.chapter_id = mutable_data['chapter_id'];
+//         this.chapter_id__ts = currentTime;
+//         this.visit = mutable_data['visit'];
+//         this.visit__ts = currentTime;
+//     }
+
+// }
+
+// function fetchTableData(){
+//     // Fetch all article data for the table.
+
+//     return simpleStorage.storage.ficdict;
+// }
+
+// function exportData(){
+//     var out = {
+//         'article_data': fetchTableData(),
+//         'version': '1.0.0',
+//         'prefs': fetchPrefs(),
+//     };
+//     return out;
+// }
+
+// function fetchTableDataId(seenIds){
+// // Fetch article data by list of IDs
+
+//     var out = {};
+//     for (var i in seenIds) {
+//         if (seenIds[i] in simpleStorage.storage.ficdict) {
+//             out[seenIds[i]] = simpleStorage.storage.ficdict[seenIds[i]];
+//         }
+//     }
+//     return out;
+// }
+
+
+// function fetchPrefs(){
+//     return simpleStorage.storage.prefs;
+// }
+
+// function savePrefs(prefs){
+//     for (var key in prefs){
+//         simpleStorage.storage.prefs[key] = prefs[key];
+//     }
+// }
+
+// function fetchTags(){
+//     return fetchPrefs['tags'];
+// }
+
+// function saveTags(tags){
+//     savePrefs({'tags': tags.split(',')});
+// }
 // Functions for listening to incomming message data
 
 // All the scripts for running the settings page need are attached here because
