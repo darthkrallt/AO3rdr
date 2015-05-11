@@ -4,10 +4,6 @@ function emitSettingsClick(){
     chrome.runtime.sendMessage({message: 'settingsclick'});
 }
 
-function requestData (argument) {
-    // body...
-}
-
 function emitFicData(metadata, mutable_data){
     var visit = new Date().toJSON();
     // You always want to include the date of visit when a toolbar action is performed

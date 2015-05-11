@@ -1,13 +1,10 @@
-// Note that this is a contentScript, so it gets attached by the main.js
 var tableData = {};
 var images = {};
 var ao3baseLink = 'http://archiveofourown.org/works/';
 var spinner = null;
+var tokenSyncSpinner = null;
 
-self.port.on('attached', function onMessage(incomming_data) {
-    tableData = incomming_data['data'];
-    images = incomming_data['images'];
-    prefs = incomming_data['prefs'];
+function onAttach(tableData, prefs){
     $('#enable-autofilter').attr('checked', prefs['autofilter']);
     $('#enable-autofilter').change(emitAutofilterToggle);
 
@@ -32,9 +29,9 @@ self.port.on('attached', function onMessage(incomming_data) {
 
     // Do the initial loading of data into tables
     loadTable(tableData);
-});
+}
 
-self.port.on('allcrawlscomplete', function onMessage(incomming_data) {
+function crawlsComplete (incomming_data) {
     // stop spinner
     if (spinner){
         spinner.stop();
@@ -50,44 +47,7 @@ self.port.on('allcrawlscomplete', function onMessage(incomming_data) {
         // reload the table
         loadTable(tableData);
     }
-});
-
-self.port.on('exportcomplete', function onMessage(incomming_data) {
-    var content = JSON.stringify(incomming_data);
-    var link = document.createElement('a');
-
-    link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(content));
-    link.setAttribute('download', 'AO3rdr-backup.txt');
-    link.setAttribute('visibility', 'hidden');
-    link.setAttribute('display', 'none');
-
-    document.body.appendChild(link);
-    link.click();
-});
-
-
-var emitCloudSyncToggle = (function(port){
-    return function() {
-        var val = $('#enable-cloud-sync').is(":checked");
-        port.emit('prefs', {'sync_enabled': val});
-    };
-})(self.port);
-
-var emitAutofilterToggle = (function(port){
-    return function() {
-        var val = $('#enable-autofilter').is(":checked");
-        $('#blacklist-wrapper').toggle();
-        port.emit('prefs', {'autofilter': val});
-    };
-})(self.port);
-
-var emitTagData = (function(port){
-    return function() {
-        var taglist = $('#blacklist').val();
-        port.emit('tags', taglist);
-    };
-})(self.port);
-
+}
 
 function generateImageHtml(data){
     var url = images['star-0'];
@@ -128,16 +88,6 @@ function generateUnreadHtml(data){
     html.appendChild(img);
     return html;
 }
-
-// function generateAO3Html(data){
-//     var html = document.createElement("td");
-//     var url = document.createElement('a');
-//     url.setAttribute('href', generateAO3link(data));
-//     var text = document.createTextNode(data['ao3id']);
-//     url.appendChild(text);
-//     html.appendChild(url);
-//     return html;
-// }
 
 function checkForUpdate(data){
     // if (Date.parse(data['visit']) < Date.parse(data['updated'])){
@@ -230,80 +180,6 @@ function loadTable(tableData){
     }
 }
 
-// Handle the file upload, NOTE only for single file upload
-// Borrowed heavily from 
-// http://stackoverflow.com/questions/7346563/loading-local-json-file
-function handleFile(){
-    var fileList = this.files;
-    var file = fileList[0];
-    var reader = new FileReader();
-    reader.onload = recievedText;
-    reader.readAsText(file);
-
-    function recievedText(contents){
-        lines = contents.target.result;
-        var out = JSON.parse(lines);
-        // Turn the "restore data" button on
-        $('#restore-data').click(restoreData(out));
-        $('#restore-data').attr('class', 'button-primary');
-    }
-
-}
-
-var restoreData = (function(port){
-    // This is really confusing! it returns a function to generate another function!
-    return function(data){
-        return function(){
-            // send the data somewhere
-            port.emit('restorefrombackup', data);
-            $('#restore-data').click(null);
-            $('#restore-data').attr('class', 'button');
-        }
-    }
-})(self.port);
-
-var requestBackup = (function(port){
-    return function(){
-        port.emit('exportdata');
-    }
-})(self.port);
-
-/* Cloud backup */
-var tokenSyncSpinner = null;
-
-self.port.on('token-revealed', function onMessage(token) {
-    $('#token-display').val(token);
-    $('#id-token-box').fadeIn(500);
-});
-
-var revealToken = (function(port){
-    return function(){
-        port.emit('reveal-token');
-    }
-})(self.port);
-
-self.port.on('token-saved', function onMessage(incomming_data) {
-    var src = '';
-    var msg = '';
-    if (incomming_data['token_status'] == 'valid'){
-        src = '../images/cloud-ok.svg';
-        msg = 'Token OK';
-        // Trigger a refresh of table data
-        tableData = incomming_data['data'];
-        // drop the table
-        $($('#articlesTable').find('tbody')).empty();
-        // reload the table
-        loadTable(tableData);
-        lastSyncUpdate();
-    } else {
-        src = '../images/cloud-offline.svg';
-        msg = 'Token Invalid, try again.';
-    }
-    $('#token-check').children('.icon').attr('src', src);
-    $('#token-check').children('p').text(msg);
-    tokenSyncSpinner.stop();
-});
-
 function lastSyncUpdate(){
     var utcSeconds = prefs['last_sync'];
     var msg = 'Last Sync: Not yet synced';
@@ -323,57 +199,8 @@ function lastSyncUpdate(){
     $('#last-sync').text(msg);
 }
 
-var saveToken = (function(port){
-    return function(){
-        var token = $("#token-display").val();
-        port.emit('save-token', token);
-    }
-})(self.port);
-
-/* end Cloud backup */
-
-
-/* Table sorting */
-
-// From this lovely stack overflow question, 
-// http://stackoverflow.com/a/19947532/1533252
-// since I keep getting rejected by
-// Mozilla for tablesorter's single e-v-a-l function
-// YOU DESERVE THIS FROWNEY FACE MOZILLA >:[
-$('th').click(function(){
-    var table = $(this).parents('table').eq(0)
-    var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()));
-    this.asc = !this.asc;
-    if (!this.asc){
-        rows = rows.reverse();
-    }
-    for (var i = 0; i < rows.length; i++){
-        table.append(rows[i]);
-    }
-});
-
-function comparer(index) {
-    return function(a, b) {
-        var valA = getCellValue(a, index), valB = getCellValue(b, index);
-        return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB);
-    }
-}
-
-// Since this isn't real tablesorter, you have to write your own value extractors here
-function getCellValue(row, index){
-    var out = '';
-    if ($(row).children('td').eq(index).find('img').length != 0) {
-        out = $(row).children('td').eq(index).find('img').attr('alt');
-        
-    } else if($(row).children('td').eq(index).find('a').length != 0){
-        out = $(row).children('td').eq(index).find('a').text();
-    } else {
-        out = $(row).children('td').eq(index).html();
-    }
-    return out;
-}
-
 $(document).ready(function() { 
+        console.log('on ready articles-table');
         $('#crawl-updates').click(crawlForUpdates);
         // TODO: TypeError: $(...).get(...) is undefined of--v
         $('#upload-data').get(0).addEventListener('change', handleFile, false);
@@ -389,13 +216,15 @@ $(document).ready(function() {
                 }
             );
         });
+        console.log('on ready articles-table 2');
         // Arrach the click functions
         $('#reveal-token').click(
             function() {
-                revealToken();
+                revealToken('token-revealed');
                 //$('#id-token-box').fadeIn(500);
             }
         );
+        console.log('on ready articles-table 3');
         $('#save-token').click(
             function() {
                 tokenSyncSpinner = new Spinner({position: 'relative'}).spin();
@@ -404,13 +233,3 @@ $(document).ready(function() {
             }
         );
 });
-
-var crawlForUpdates = (function(port){
-    return function(){
-        // Ugly global...
-        spinner = new Spinner({position: 'relative'}).spin();
-
-        $('#crawl-spinner').parent().append(spinner.el);
-        port.emit('crawlrequest');
-    }
-})(self.port);
