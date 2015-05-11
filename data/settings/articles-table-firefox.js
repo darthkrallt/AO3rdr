@@ -8,7 +8,11 @@ self.port.on('attached', function onMessage(incomming_data) {
 
 });
 
-
+function onAttach(tableData, prefs){
+    onPrefs(prefs);
+    // Do the initial loading of data into tables
+    loadTable(tableData);
+}
 
 self.port.on('allcrawlscomplete', function onMessage(incomming_data) {
     crawlsComplete(incomming_data);

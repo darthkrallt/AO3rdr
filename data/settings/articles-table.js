@@ -4,7 +4,7 @@ var ao3baseLink = 'http://archiveofourown.org/works/';
 var spinner = null;
 var tokenSyncSpinner = null;
 
-function onAttach(tableData, prefs){
+function onPrefs(prefs){
     $('#enable-autofilter').attr('checked', prefs['autofilter']);
     $('#enable-autofilter').change(emitAutofilterToggle);
 
@@ -15,7 +15,7 @@ function onAttach(tableData, prefs){
     if (!prefs['autofilter'])
         $('#blacklist-wrapper').hide();
 
-    $('#blacklist').val(incomming_data['prefs']['tags']);
+    $('#blacklist').val(prefs['tags']);
     lastSyncUpdate();
 
     // Add the tag cloud function - it's important to set this AFTER 
@@ -27,8 +27,6 @@ function onAttach(tableData, prefs){
         'width': '100%',
     });
 
-    // Do the initial loading of data into tables
-    loadTable(tableData);
 }
 
 function crawlsComplete (incomming_data) {

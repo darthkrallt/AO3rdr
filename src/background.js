@@ -122,11 +122,13 @@ var callbackMessage = (function(port){
 chrome.runtime.onConnect.addListener(function(port) {
     console.assert(port.name == "articles-table");
     port.onMessage.addListener(function(request) {
-        console.log('articles table port');
+        console.log('articles table port'+JSON.stringify(request));
         if (request.message == "reveal-token"){
             console.log('reveal-token');
 
             getUser(callbackMessage(port));
+        } else {
+            fetchDataRequest(request, port);
         }
     });
 });
@@ -135,41 +137,50 @@ chrome.runtime.onConnect.addListener(function(port) {
     console.assert(port.name == "toolbar");
 
     port.onMessage.addListener(function(request) {
-
-        if (request.message == "fetchdata"){
-            var storage = chrome.storage.local;
-            var pdd_fun = callbackMessage(port);
-            if (request.data.prefs){
-                storage.get("prefs", function (items){
-                    pdd_fun("datadump", items, "prefs");
-                });
-            }
-            if (request.data.ficdict){
-                storage.get("ficdict", function (items){
-                    pdd_fun("datadump", items, "ficdict");
-                });
-            }
-            if (request.data.ficdict_ids){
-                storage.get("ficdict", function (items){
-                    var data = {};
-                    console.log('ficdict requester listener'+ JSON.stringify(items));
-                    // NOTE: we stringify the nested list
-                    var ficdict_ids = JSON.parse(request.data.ficdict_ids);
-                    for (var key in ficdict_ids) {
-                        var fd_id = ficdict_ids[key];
-                        if (items.ficdict[fd_id]) {
-                            console.log(fd_id);
-                            data[fd_id] = items.ficdict[fd_id];
-                        }
-                    }
-                    pdd_fun("datadump", data, "ficdict");
-                });
-            }
+        fetchDataRequest(request, port);
+        if (request.message == 'foo'){
+            //
         }
+
     });
 
 
 });
+
+function fetchDataRequest(request, port){
+    console.log('FDR'+port.name+JSON.stringify(port));
+    if (request.message == "fetchdata"){
+        console.log(port.name+': '+JSON.stringify(request));
+        var storage = chrome.storage.local;
+        var pdd_fun = callbackMessage(port);
+        if (request.data.prefs){
+            storage.get("prefs", function (items){
+                pdd_fun("datadump", items, "prefs");
+            });
+        }
+        if (request.data.ficdict){
+            storage.get("ficdict", function (items){
+                pdd_fun("datadump", items, "ficdict");
+            });
+        }
+        if (request.data.ficdict_ids){
+            storage.get("ficdict", function (items){
+                var data = {};
+                console.log('ficdict requester listener'+ JSON.stringify(items));
+                // NOTE: we stringify the nested list
+                var ficdict_ids = JSON.parse(request.data.ficdict_ids);
+                for (var key in ficdict_ids) {
+                    var fd_id = ficdict_ids[key];
+                    if (items.ficdict[fd_id]) {
+                        console.log(fd_id);
+                        data[fd_id] = items.ficdict[fd_id];
+                    }
+                }
+                pdd_fun("datadump", data, "ficdict");
+            });
+        }
+    }
+}
 
 
 
