@@ -49,7 +49,10 @@ port.onMessage.addListener(function(request, sender, sendResponse) {
                 }
             }
         }
-
+        if (request.data_type == 'images'){
+            console.log("HEHHHHHHH");
+            images = request.data;
+        }
         // can reply with port.postMessage()
     } else if (request.message == "update"){
         var newArticle = request.data;
@@ -68,5 +71,6 @@ port.onMessage.addListener(function(request, sender, sendResponse) {
 
 function toolbar_onload(ids) {
     console.log(JSON.stringify(ids));
+    // port.postMessage({message: 'fetchdata', data: {images: true}});
     port.postMessage({message:'fetchdata', data: {ficdict_ids: JSON.stringify(ids)} });
 }

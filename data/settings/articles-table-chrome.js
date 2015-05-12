@@ -31,10 +31,14 @@ port.onMessage.addListener(function(request, sender, sendResponse) {
             tableData = request.data.ficdict;
             loadTable(tableData);
         }
+        if (request.data_type == 'images'){
+            images = request.data;
+        }
     }
 });
 
 $(document).ready(function() { 
     console.log('articles-table-chrome onready');
+    port.postMessage({message: 'fetchdata', data: {images:true}});
     port.postMessage({message: 'fetchdata', data: {prefs: true, ficdict: true}});
 });

@@ -163,6 +163,10 @@ function fetchDataRequest(request, port){
                 pdd_fun("datadump", items, "ficdict");
             });
         }
+        if (request.data.images){
+            console.log('requesting images');
+            pdd_fun("datadump", images, "images");
+        }
         if (request.data.ficdict_ids){
             storage.get("ficdict", function (items){
                 var data = {};
