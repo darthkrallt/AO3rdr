@@ -4,9 +4,29 @@ var port = chrome.runtime.connect({name: "articles-table"});
 function crawlForUpdates() {}
 function requestBackup() {}
 function handleFile() {}
-function emitAutofilterToggle() {}
-function emitCloudSyncToggle() {}
-function emitTagData() {}
+
+var emitCloudSyncToggle = (function(port){
+    return function() {
+        var val = $('#enable-cloud-sync').is(":checked");
+        port.postMessage({message: 'prefs', data: {'sync_enabled': val}});
+    };
+})(port);
+
+var emitAutofilterToggle = (function(port){
+    return function() {
+        var val = $('#enable-autofilter').is(":checked");
+        $('#blacklist-wrapper').toggle();
+        port.postMessage({message: 'prefs', data: {'autofilter': val}});
+    };
+})(port);
+
+var emitTagData = (function(port){
+    return function() {
+        var taglist = $('#blacklist').val();
+        port.postMessage({message: 'prefs', data: {'tags': taglist}});
+    };
+})(port);
+
 
 var revealToken = (function(port){
     return function(){

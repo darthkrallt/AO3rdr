@@ -101,17 +101,17 @@ function savePrefs(prefs){
     storage.get("prefs", function (items){
         console.log(JSON.stringify(items));
         for (var key in prefs){
-            items.prefs[key] = prefs[key];
+            if ((key == 'tags') && prefs[key] instanceof String) {
+                items.prefs[key] = prefs[key].split(',');
+            } else {
+                items.prefs[key] = prefs[key];
+            }
             console.log(key);
         }
         chrome.storage.local.set( items );
     });
 }
 
-
-function saveTags(tags){
-    savePrefs({'tags': tags.split(',')});
-}
 
 // NOTE! You have to call this twice to get it to send
 // first with the port, then with the data you want to send.
@@ -129,7 +129,12 @@ chrome.runtime.onConnect.addListener(function(port) {
             console.log('reveal-token');
 
             getUser(callbackMessage(port));
-        } else {
+        } 
+        if (request.message == 'prefs') {
+            console.log(JSON.stringify(request));
+            savePrefs(request.data);
+        }
+        if (request.message == 'fetchdata') {
             fetchDataRequest(request, port);
         }
     });
@@ -139,7 +144,9 @@ chrome.runtime.onConnect.addListener(function(port) {
     console.assert(port.name == "toolbar");
 
     port.onMessage.addListener(function(request) {
-        fetchDataRequest(request, port);
+        
+        if (request.message == 'fetchdata')
+            fetchDataRequest(request, port);
         if (request.message == 'foo'){
             //
         }
@@ -150,6 +157,7 @@ chrome.runtime.onConnect.addListener(function(port) {
 });
 
 function fetchDataRequest(request, port){
+    // Responds to 'fetchdata'
     console.log('FDR'+port.name+JSON.stringify(port));
     if (request.message == "fetchdata"){
         console.log(port.name+': '+JSON.stringify(request));
