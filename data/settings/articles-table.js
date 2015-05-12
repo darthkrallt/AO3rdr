@@ -202,6 +202,7 @@ function lastSyncUpdate(){
 
 $(document).ready(function() { 
         console.log('on ready articles-table');
+        addTablesorter();
         $('#crawl-updates').click(crawlForUpdates);
         // TODO: TypeError: $(...).get(...) is undefined of--v
         $('#upload-data').get(0).addEventListener('change', handleFile, false);
