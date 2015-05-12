@@ -167,6 +167,8 @@ function generateRowHtml(data){
 function loadTable(tableData){
     // first generate the html
     var tableBody = $("#articlesTable").find('tbody');
+    // Empty it first
+    $(tableBody).empty();
     for (var i in tableData){
         try {
             var row = generateRowHtml(tableData[i]);
@@ -174,6 +176,7 @@ function loadTable(tableData){
         }
         catch (error) {
             console.log("Bad row loading table: ", tableData[i]);
+            console.log(error);
         }
     }
 }

@@ -7,7 +7,7 @@
     "storage"
   ],
   "background": {
-    "scripts": ["src/background.js", "src/article.js"],
+    "scripts": ["src/background.js", "src/article.js", "src/images.js"],
     "persistent": false
   },
   "content_scripts": [
@@ -17,7 +17,7 @@
       "js": [
         "lib/jquery-1.11.2.min.js", "src/ao3lib.js", 
         "src/toolbar-ao3.js", "src/toolbar-chrome.js",
-        "src/article.js"
+        "src/article.js", "src/images.js"
       ],
       "all_frames": true
     }
