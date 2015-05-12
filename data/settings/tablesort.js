@@ -2,17 +2,20 @@
 // http://stackoverflow.com/a/19947532/1533252
 // since I keep getting rejected by
 // Mozilla for tablesorter's e-v-a-l function
-$('th').click(function(){
-    var table = $(this).parents('table').eq(0)
-    var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()));
-    this.asc = !this.asc;
-    if (!this.asc){
-        rows = rows.reverse();
-    }
-    for (var i = 0; i < rows.length; i++){
-        table.append(rows[i]);
-    }
-});
+
+function addTablesorter(){
+    $('th').click(function(){
+        var table = $(this).parents('table').eq(0)
+        var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()));
+        this.asc = !this.asc;
+        if (!this.asc){
+            rows = rows.reverse();
+        }
+        for (var i = 0; i < rows.length; i++){
+            table.append(rows[i]);
+        }
+    });
+}
 
 function comparer(index) {
     return function(a, b) {

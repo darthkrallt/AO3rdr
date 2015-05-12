@@ -10,7 +10,9 @@ chrome.runtime.onMessage.addListener(
     if (request.message == 'settingsclick'){
         // open new tab
         // chrome.tabs.create(object createProperties, function callback);
-        chrome.tabs.create({url: chrome.extension.getURL('data/settings/index.html')});
+        chrome.tabs.create(
+            {url: chrome.extension.getURL('data/settings/index.html')}
+        );
     }
     if (request.message == 'ficdata'){
         newArticle = handleNewFic(request.data.metadata, request.data.mutable_data);
