@@ -31,7 +31,11 @@ port.onMessage.addListener(function(request, sender, sendResponse) {
             images = request.data;
         }
         if (request.data_type == 'prefs'){
-            prefs = request.data;
+            prefs = request.data['prefs'];
+            // Re-do blacklisting
+            console.log('prefs');
+            console.log(prefs);
+            blacklistBrowsePage(prefs);
         }
         if (request.data_type == 'ficdict'){
             console.log(JSON.stringify(request));
@@ -50,7 +54,6 @@ port.onMessage.addListener(function(request, sender, sendResponse) {
             }
         }
         if (request.data_type == 'images'){
-            console.log("HEHHHHHHH");
             images = request.data;
         }
         // can reply with port.postMessage()
@@ -72,5 +75,5 @@ port.onMessage.addListener(function(request, sender, sendResponse) {
 function toolbar_onload(ids) {
     console.log(JSON.stringify(ids));
     // port.postMessage({message: 'fetchdata', data: {images: true}});
-    port.postMessage({message:'fetchdata', data: {ficdict_ids: JSON.stringify(ids)} });
+    port.postMessage({message:'fetchdata', data: {ficdict_ids: JSON.stringify(ids), prefs: true} });
 }

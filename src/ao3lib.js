@@ -196,10 +196,12 @@ function matchTag(string1, string2){
     return false;
 }
 
-function checkTags(taglist){
+function checkTags(taglist, blacklist_tags){
+    console.log('checkTags');
     for (var i in taglist){
-        for (var j in prefs['tags']){
-            if (matchTag(taglist[i], prefs['tags'][j])){
+        for (var j in blacklist_tags){
+            if (matchTag(taglist[i], blacklist_tags[j])){
+                console.log('match tag: '+taglist[i]+' '+blacklist_tags[j]);
                 return true;
             }
         }
@@ -229,9 +231,7 @@ function processBrowsePage(){
     var idsOnPage = [];
     var articles = $("li[role=article]");
     for (var i=0; i< articles.length; i++){
-
         var info = parseWorkBlurb(articles[i]);
-        var tags = parseTags(articles[i]);
 
         // Keep track of all the id's on the page
         idsOnPage.push(info['ao3id']);
@@ -239,12 +239,30 @@ function processBrowsePage(){
         var toolbar = createToolbar(info, false);
         articles[i].appendChild(toolbar);
 
+    }
+    // Note that having a global "prefs" is FF only. TODO: fix
+    if (prefs)
+        blacklistBrowsePage(prefs);
+    return idsOnPage;
+}
+
+function blacklistBrowsePage(prefs){
+    var articles = $("li[role=article]");
+    var blacklist_tags = prefs['tags'];
+
+    if (typeof blacklist_tags === 'string')
+        blacklist_tags = blacklist_tags.split(',');
+    console.log(blacklist_tags);
+
+    for (var i=0; i< articles.length; i++){
+        var info = parseWorkBlurb(articles[i]);
+        var tags = parseTags(articles[i]);
+
         // if it's a banned tag, hide it!
-        if (checkTags(tags)){
+        if (checkTags(tags, blacklist_tags)){
             hideByTag(articles[i], info);
         }
     }
-    return idsOnPage;
 }
 
 

@@ -14,7 +14,11 @@ function onPrefs(prefs){
 
     lastSyncUpdate();
 
-    $('#blacklist').importTags(prefs['tags']);
+    var tags = prefs['tags'];
+    if (Array.isArray(tags))
+        tags = tags.join(',');
+
+    $('#blacklist').importTags(tags);
 
 }
 

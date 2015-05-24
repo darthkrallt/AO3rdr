@@ -101,9 +101,9 @@ function savePrefs(prefs){
     var storage = chrome.storage.local;
 
     storage.get("prefs", function (items){
-        console.log(JSON.stringify(items));
+        console.log(items);
         for (var key in prefs){
-            if ((key == 'tags') && prefs[key] instanceof String) {
+            if ((key == 'tags') && typeof prefs[key] === 'string') {
                 items.prefs[key] = prefs[key].split(',');
             } else {
                 items.prefs[key] = prefs[key];
