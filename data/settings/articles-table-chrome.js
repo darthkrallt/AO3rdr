@@ -40,6 +40,13 @@ var revealToken = (function(port){
     }
 })(port);
 
+var saveToken = (function(port){
+    return function(){
+        var token = $("#token-display").val();
+        port.postMessage({message: 'save-token', data:token});
+    }
+})(port);
+
 var restoreData = (function(port){
     // This is really confusing! it returns a function to generate another function!
     return function(fileData){
@@ -78,6 +85,8 @@ port.onMessage.addListener(function(request, sender, sendResponse) {
         onExportComplete(incomming_data);
     } else if (request.message == 'newfic') {
         updateTableRow(request.data);
+    } else if (request.message == 'token-saved') {
+        onTokenSave(request.data['token_status']);
     };
 });
 

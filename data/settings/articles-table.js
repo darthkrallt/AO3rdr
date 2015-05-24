@@ -22,6 +22,22 @@ function onPrefs(prefs){
 
 }
 
+function onTokenSave(token_status, token){
+    var src = '';
+    var msg = '';
+    if (token_status == 'valid'){
+        src = '../images/cloud-ok.svg';
+        msg = 'Token OK';
+    } else {
+        src = '../images/cloud-offline.svg';
+        msg = 'Token Invalid, try again.';
+    }
+    $('#token-check').children('.icon').attr('src', src);
+    $('#token-check').children('p').text(msg);
+    tokenSyncSpinner.stop();
+}
+
+
 function crawlsComplete (incomming_data) {
     // stop spinner
     if (spinner){

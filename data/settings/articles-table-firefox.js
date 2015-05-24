@@ -76,11 +76,9 @@ var revealToken = (function(port){
 })(self.port);
 
 self.port.on('token-saved', function onMessage(incomming_data) {
-    var src = '';
-    var msg = '';
+    onTokenSave(incomming_data['token_status']);
+
     if (incomming_data['token_status'] == 'valid'){
-        src = '../images/cloud-ok.svg';
-        msg = 'Token OK';
         // Trigger a refresh of table data
         tableData = incomming_data['data'];
         // drop the table
@@ -88,13 +86,7 @@ self.port.on('token-saved', function onMessage(incomming_data) {
         // reload the table
         loadTable(tableData);
         lastSyncUpdate();
-    } else {
-        src = '../images/cloud-offline.svg';
-        msg = 'Token Invalid, try again.';
     }
-    $('#token-check').children('.icon').attr('src', src);
-    $('#token-check').children('p').text(msg);
-    tokenSyncSpinner.stop();
 });
 
 var saveToken = (function(port){
