@@ -188,14 +188,20 @@ function fetchDataRequest(request, port){
                 pdd_fun("datadump", items, "prefs");
             });
         }
-        if (request.data.ficdict){
+        if (request.data.ficdict || request.data.exportdata){
             storage.get(function (data){
                 var items = {"ficdict": {}};
                 for (var key in data){
                     if (data.hasOwnProperty(key) && data[key]['ao3id'])
                         items.ficdict[key] = data[key];
                 }
-                pdd_fun("datadump", items, "ficdict");
+                if (request.data.ficdict)
+                    pdd_fun("datadump", items, "ficdict");
+                else {
+                    items['prefs'] = data['prefs'];
+                    items['version'] = '1.0.0';
+                    pdd_fun("datadump", items, "exportdata");
+                }
             });
         }
         if (request.data.images){
