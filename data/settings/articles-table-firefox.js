@@ -19,16 +19,7 @@ self.port.on('allcrawlscomplete', function onMessage(incomming_data) {
 });
 
 self.port.on('exportcomplete', function onMessage(incomming_data) {
-    var content = JSON.stringify(incomming_data);
-    var link = document.createElement('a');
-
-    link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(content));
-    link.setAttribute('download', 'AO3rdr-backup.txt');
-    link.setAttribute('visibility', 'hidden');
-    link.setAttribute('display', 'none');
-
-    document.body.appendChild(link);
-    link.click();
+    onExportComplete(incomming_data);
 });
 
 
@@ -53,26 +44,6 @@ var emitTagData = (function(port){
         port.emit('tags', taglist);
     };
 })(self.port);
-
-// Handle the file upload, NOTE only for single file upload
-// Borrowed heavily from 
-// http://stackoverflow.com/questions/7346563/loading-local-json-file
-function handleFile(){
-    var fileList = this.files;
-    var file = fileList[0];
-    var reader = new FileReader();
-    reader.onload = recievedText;
-    reader.readAsText(file);
-
-    function recievedText(contents){
-        lines = contents.target.result;
-        var out = JSON.parse(lines);
-        // Turn the "restore data" button on
-        $('#restore-data').click(restoreData(out));
-        $('#restore-data').attr('class', 'button-primary');
-    }
-
-}
 
 var restoreData = (function(port){
     // This is really confusing! it returns a function to generate another function!

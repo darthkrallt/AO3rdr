@@ -65,32 +65,34 @@ function handleNewFic(metadata, mutable_data) {
         var mutable_keys = Object.keys(mutable_data);
         create_if_ne = !arrayCompare(mutable_keys, ['visit']);
     }
-    saveArticle(newArticle, mutable_data, create_if_ne);
+    saveArticle(newArticle, create_if_ne);
 
     // WARNING! This is misleading in the case of crawls
     return newArticle;
 }
 
-function saveArticle(newArticle, create_if_ne){
+function saveArticle(newArticle, create_if_ne, port){
     var storage = chrome.storage.local;
 
-    storage.get("ficdict", function (items){
-        console.log(JSON.stringify(items));
-        var old_article = items.ficdict[newArticle.ao3id];
+    storage.get(newArticle.ao3id, function (data){
+        var old_article = data[newArticle.ao3id];
         if (!old_article){
             if (!create_if_ne){
                 return null;
             }
-            items.ficdict[newArticle.ao3id] = newArticle;
-            chrome.storage.local.set( items );
+            data[newArticle.ao3id] = newArticle;
         } else {
             var updated_article = updateArticle(old_article, newArticle);
             if (updated_article){
-                items.ficdict[updated_article.ao3id] = updated_article;
-                chrome.storage.local.set( items );
+                data[updated_article.ao3id] = updated_article;
             }
         }
+        // Save the data
+        chrome.storage.local.set( data );
+        console.log(data);
         
+        if (port)
+            port.postMessage({message: 'newfic', data: data[newArticle.ao3id]});
     });
 }
 
@@ -137,6 +139,24 @@ chrome.runtime.onConnect.addListener(function(port) {
         if (request.message == 'fetchdata') {
             fetchDataRequest(request, port);
         }
+        if (request.message == 'restorefrombackup'){
+            console.log('restorefrombackup');
+
+            // Update the DB data
+            var version = request.data['version'];
+            var article_data = request.data['article_data'];
+
+            // TODO: this is bad. Should have a bulk updater do it in one pass
+            for (var key in article_data){
+                if (article_data.hasOwnProperty(key) && article_data[key]['ao3id']) {
+                    console.log(article_data[key]);
+                    saveArticle(article_data[key], true, port);
+                    console.log('saving article');
+                }
+            }
+            savePrefs(request.data['prefs']);
+
+        }
     });
 });
 
@@ -144,7 +164,7 @@ chrome.runtime.onConnect.addListener(function(port) {
     console.assert(port.name == "toolbar");
 
     port.onMessage.addListener(function(request) {
-        
+
         if (request.message == 'fetchdata')
             fetchDataRequest(request, port);
         if (request.message == 'foo'){
@@ -169,7 +189,12 @@ function fetchDataRequest(request, port){
             });
         }
         if (request.data.ficdict){
-            storage.get("ficdict", function (items){
+            storage.get(function (data){
+                var items = {"ficdict": {}};
+                for (var key in data){
+                    if (data.hasOwnProperty(key) && data[key]['ao3id'])
+                        items.ficdict[key] = data[key];
+                }
                 pdd_fun("datadump", items, "ficdict");
             });
         }
@@ -178,16 +203,16 @@ function fetchDataRequest(request, port){
             pdd_fun("datadump", images, "images");
         }
         if (request.data.ficdict_ids){
-            storage.get("ficdict", function (items){
+            storage.get(function (items){
                 var data = {};
                 console.log('ficdict requester listener'+ JSON.stringify(items));
                 // NOTE: we stringify the nested list
                 var ficdict_ids = JSON.parse(request.data.ficdict_ids);
                 for (var key in ficdict_ids) {
                     var fd_id = ficdict_ids[key];
-                    if (items.ficdict[fd_id]) {
+                    if (items[fd_id]) {
                         console.log(fd_id);
-                        data[fd_id] = items.ficdict[fd_id];
+                        data[fd_id] = items[fd_id];
                     }
                 }
                 pdd_fun("datadump", data, "ficdict");
@@ -228,35 +253,6 @@ var test = (function(port){
 
 
 // Stuff below this line is broken, 'cuz async foo!
-
-function fetchTableData(){
-    // Fetch all article data for the table.
-
-    //return chrome.storage.local.get('ficdict');
-}
-
-function fetchTableDataId(seenIds){
-    // Fetch article data by list of IDs
-
-    // var out = {};
-    // var ficdic = chrome.storage.local.get('ficdict');
-    // for (var i in seenIds) {
-    //     if (seenIds[i] in ficdict) {
-    //         out[seenIds[i]] = ficdic[seenIds[i]];
-    //     }
-    // }
-    // return out;
-}
-
-
-function fetchPrefs(){
-    //return chrome.storage.local.get('prefs');
-}
-
-
-function fetchTags(){
-    //return chrome.storage.local.get('prefs')['tags'];
-}
 
 function syncWork(){
 
