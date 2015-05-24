@@ -18,6 +18,7 @@ var emitCloudSyncToggle = (function(port){
 
 var emitAutofilterToggle = (function(port){
     return function() {
+        console.log('toggling');
         var val = $('#enable-autofilter').is(":checked");
         $('#blacklist-wrapper').toggle();
         port.postMessage({message: 'prefs', data: {'autofilter': val}});
