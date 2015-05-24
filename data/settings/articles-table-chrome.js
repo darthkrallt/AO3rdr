@@ -2,7 +2,12 @@ var port = chrome.runtime.connect({name: "articles-table"});
 
 
 function crawlForUpdates() {};
-function requestBackup() {};
+
+var requestBackup = (function(port){
+    return function(){
+        port.postMessage({message:'fetchdata', data: {'exportdata': true}});
+    }
+})(port);
 
 var emitCloudSyncToggle = (function(port){
     return function() {
@@ -64,6 +69,9 @@ port.onMessage.addListener(function(request, sender, sendResponse) {
         }
         if (request.data_type == 'images'){
             images = request.data;
+        }
+        if (request.data_type == 'exportdata'){
+            onExportComplete(request.data);
         }
     } else if (request.message == 'exportcomplete') {
         onExportComplete(incomming_data);
