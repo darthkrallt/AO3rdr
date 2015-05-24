@@ -237,46 +237,46 @@ function onExportComplete(incomming_data){
 }
 
 $(document).ready(function() { 
-        console.log('on ready articles-table');
-        addTablesorter();
-        $('#crawl-updates').click(crawlForUpdates);
-        // TODO: TypeError: $(...).get(...) is undefined of--v
-        $('#upload-data').get(0).addEventListener('change', handleFile, false);
-        $('#export-data').click(requestBackup);
+    console.log('on ready articles-table');
+    addTablesorter();
+    $('#crawl-updates').click(crawlForUpdates);
+    // TODO: TypeError: $(...).get(...) is undefined of--v
+    $('#upload-data').get(0).addEventListener('change', handleFile, false);
+    $('#export-data').click(requestBackup);
 
-        $('#enable-autofilter').change(emitAutofilterToggle);
-        $('#enable-cloud-sync').change(emitCloudSyncToggle);
+    $('#enable-autofilter').change(emitAutofilterToggle);
+    $('#enable-cloud-sync').change(emitCloudSyncToggle);
 
-        // Attach click function to close buttons
-        $( ".boxclose" ).each( function( index, element ){
-            // Do something
-            $(this).click(
-                function(){
-                    // clicking the close span causes the closest ancestor modal to fadeout
-                    $(this).closest('.box').fadeOut(500);
-                }
-            );
-        });
-        console.log('on ready articles-table 2');
-        // Arrach the click functions
-        $('#reveal-token').click(
-            function() {
-                revealToken('token-revealed');
-                //$('#id-token-box').fadeIn(500);
+    // Attach click function to close buttons
+    $( ".boxclose" ).each( function( index, element ){
+        // Do something
+        $(this).click(
+            function(){
+                // clicking the close span causes the closest ancestor modal to fadeout
+                $(this).closest('.box').fadeOut(500);
             }
         );
-        console.log('on ready articles-table 3');
-        $('#save-token').click(
-            function() {
-                tokenSyncSpinner = new Spinner({position: 'relative'}).spin();
-                $('#id-token-box').append(tokenSyncSpinner.el);
-                saveToken();
-            }
-        );
-        $('#blacklist').tagsInput({
-            // my parameters here
-            'onChange' : emitTagData,
-            'height': '75px',
-            'width': '100%',
-        });
+    });
+    console.log('on ready articles-table 2');
+    // Arrach the click functions
+    $('#reveal-token').click(
+        function() {
+            revealToken('token-revealed');
+            //$('#id-token-box').fadeIn(500);
+        }
+    );
+    console.log('on ready articles-table 3');
+    $('#save-token').click(
+        function() {
+            tokenSyncSpinner = new Spinner({position: 'relative'}).spin();
+            $('#id-token-box').append(tokenSyncSpinner.el);
+            saveToken();
+        }
+    );
+    $('#blacklist').tagsInput({
+        // my parameters here
+        'onChange' : emitTagData,
+        'height': '75px',
+        'width': '100%',
+    });
 });
