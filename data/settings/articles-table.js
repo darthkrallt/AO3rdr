@@ -6,26 +6,15 @@ var tokenSyncSpinner = null;
 
 function onPrefs(prefs){
     $('#enable-autofilter').attr('checked', prefs['autofilter']);
-    $('#enable-autofilter').change(emitAutofilterToggle);
-
     $('#enable-cloud-sync').attr('checked', prefs['sync_enabled']);
-    $('#enable-cloud-sync').change(emitCloudSyncToggle);
 
     // Hide the tags if the blacklist is disabled
     if (!prefs['autofilter'])
         $('#blacklist-wrapper').hide();
 
-    $('#blacklist').val(prefs['tags']);
     lastSyncUpdate();
 
-    // Add the tag cloud function - it's important to set this AFTER 
-    // we put the data in for the first time
-    $('#blacklist').tagsInput({
-        // my parameters here
-        'onChange' : emitTagData,
-        'height': '75px',
-        'width': '100%',
-    });
+    $('#blacklist').importTags(prefs['tags']);
 
 }
 
@@ -185,7 +174,7 @@ function updateTableRow(rowData){
     var tableBody = $("#articlesTable").find('tbody');
     var ele = $('#' + rowData['ao3id']);
     var row = generateRowHtml(rowData);
-    
+
     if (ele.length){
         ele.replaceWith(row);
     }
@@ -255,6 +244,9 @@ $(document).ready(function() {
         $('#upload-data').get(0).addEventListener('change', handleFile, false);
         $('#export-data').click(requestBackup);
 
+        $('#enable-autofilter').change(emitAutofilterToggle);
+        $('#enable-cloud-sync').change(emitCloudSyncToggle);
+
         // Attach click function to close buttons
         $( ".boxclose" ).each( function( index, element ){
             // Do something
@@ -281,4 +273,10 @@ $(document).ready(function() {
                 saveToken();
             }
         );
+        $('#blacklist').tagsInput({
+            // my parameters here
+            'onChange' : emitTagData,
+            'height': '75px',
+            'width': '100%',
+        });
 });
