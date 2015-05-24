@@ -131,7 +131,10 @@ chrome.runtime.onConnect.addListener(function(port) {
             console.log('reveal-token');
 
             getUser(callbackMessage(port));
-        } 
+        }
+        if (request.message == 'save-token'){
+            validateAndSaveToken(request.data, port);
+        }
         if (request.message == 'prefs') {
             console.log(JSON.stringify(request));
             savePrefs(request.data);
@@ -259,6 +262,7 @@ var test = (function(port){
 
 
 // Stuff below this line is broken, 'cuz async foo!
+var backendUrl = 'https://boiling-caverns-2782.herokuapp.com/api/v1.0/';
 
 function syncWork(){
 
@@ -268,3 +272,60 @@ function newUser(){
     // TODO: actually talk to server
     savePrefs({'user_id': 'testuser'});
 }
+
+
+function newUser(){
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", backendUrl + "user", true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 201){
+                var resp = JSON.parse(xhr.responseText);
+                var user_id = resp['user_id'];
+                savePrefs({'user_id': user_id});
+            }
+        }
+    }
+    xhr.send();
+
+}
+
+function validateAndSaveToken(token, port){
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", backendUrl + "user/" + token, true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200){
+                var resp = JSON.parse(xhr.responseText);
+                if ('user_id' in resp){
+                    var user_id = resp['user_id'];
+                    savePrefs({'user_id': user_id });
+                    port.postMessage({
+                        message: 'token-saved', 
+                        data: {'token_status': 'valid', user_id: user_id}
+                    });
+                }
+            } else {
+                port.postMessage({
+                    message: 'token-saved', 
+                    data: {'token_status': 'invalid'}
+                });
+            }
+        }
+    }
+    xhr.send();
+
+}
+
+
+// var xhr = new XMLHttpRequest();
+// xhr.open("GET", "http://api.example.com/data.json", true);
+// xhr.onreadystatechange = function() {
+//   if (xhr.readyState == 4) {
+//     // JSON.parse does not evaluate the attacker's scripts.
+//     var resp = JSON.parse(xhr.responseText);
+//   }
+// }
+// xhr.send();

@@ -12,7 +12,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://archiveofourown.org/*"],
+      "matches": ["http://archiveofourown.org/*", "https://archiveofourown.org/*", "https://boiling-caverns-2782.herokuapp.com/*"],
       "css": ["data/style.css"],
       "js": [
         "lib/jquery-1.11.2.min.js", "src/ao3lib.js", 
