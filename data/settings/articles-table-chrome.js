@@ -1,9 +1,8 @@
 var port = chrome.runtime.connect({name: "articles-table"});
 
 
-function crawlForUpdates() {}
-function requestBackup() {}
-function handleFile() {}
+function crawlForUpdates() {};
+function requestBackup() {};
 
 var emitCloudSyncToggle = (function(port){
     return function() {
@@ -35,6 +34,18 @@ var revealToken = (function(port){
     }
 })(port);
 
+var restoreData = (function(port){
+    // This is really confusing! it returns a function to generate another function!
+    return function(fileData){
+        return function(){
+            // send the data somewhere
+            port.postMessage({message: 'restorefrombackup', data: fileData});
+            $('#restore-data').click(null);
+            $('#restore-data').attr('class', 'button');
+        }
+    }
+})(port);
+
 
 port.onMessage.addListener(function(request, sender, sendResponse) {
     console.log(JSON.stringify(request));
@@ -54,8 +65,13 @@ port.onMessage.addListener(function(request, sender, sendResponse) {
         if (request.data_type == 'images'){
             images = request.data;
         }
-    }
+    } else if (request.message == 'exportcomplete') {
+        onExportComplete(incomming_data);
+    } else if (request.message == 'newfic') {
+        updateTableRow(request.data);
+    };
 });
+
 
 $(document).ready(function() { 
     console.log('articles-table-chrome onready');
