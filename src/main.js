@@ -596,9 +596,8 @@ function syncWork(data){
             // Merge data here
             if ((response.status == 200) || (response.status == 201)){
                 var diff = response.json['diff'];
-                // Iterate through the dictionary of changed articles and update our DB
-                // the key is the work ID
-                // Also contains the settings!
+                // This will only contain one work. Even then, only if there 
+                // was a diff on the server.
                 for (var key in diff) {
                     if (dictionary.hasOwnProperty(key)) {
                         var article = diff[key];
