@@ -20,11 +20,11 @@ function emitFicData(metadata, mutable_data){
     console.log( JSON.stringify(metadata));
 }
 
-var port = chrome.runtime.connect({name: "toolbar"});
+var toolPort = chrome.runtime.connect({name: "toolbar"});
 
-// port.postMessage({message:'fetchdata'});
+// toolPort.postMessage({message:'fetchdata'});
 
-port.onMessage.addListener(function(request, sender, sendResponse) {
+toolPort.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.message == 'datadump'){
         console.log('datadump listner:'+JSON.stringify(Object.keys(request.data)));
         if (request.data_type == 'images'){
@@ -56,7 +56,7 @@ port.onMessage.addListener(function(request, sender, sendResponse) {
         if (request.data_type == 'images'){
             images = request.data;
         }
-        // can reply with port.postMessage()
+        // can reply with toolPort.postMessage()
     } else if (request.message == "update"){
         var newArticle = request.data;
         // check for element
@@ -74,6 +74,7 @@ port.onMessage.addListener(function(request, sender, sendResponse) {
 
 function toolbar_onload(ids) {
     console.log(JSON.stringify(ids));
-    // port.postMessage({message: 'fetchdata', data: {images: true}});
-    port.postMessage({message:'fetchdata', data: {ficdict_ids: JSON.stringify(ids), prefs: true} });
+    toolPort.postMessage({message: 'runsync'});
+    toolPort.postMessage({message: 'fetchdata', data: {images: true}});
+    toolPort.postMessage({message:'fetchdata', data: {ficdict_ids: JSON.stringify(ids), prefs: true} });
 }

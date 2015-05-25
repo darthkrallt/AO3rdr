@@ -190,6 +190,9 @@ function parseTags(raw_html){
 }
 
 function matchTag(string1, string2){
+    if (!string1 || !string2){
+        return false;
+    }
     if (string1.toLowerCase().indexOf(string2.toLowerCase()) != -1){
         return true;
     }

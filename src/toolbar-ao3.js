@@ -82,10 +82,6 @@ function createToolbar(metadata, article){
     return newDiv;
 }
 
-// function emitFicData(metadata, mutable_data){
-//     // TODO: implement this
-//     console.log(metadata, mutable_data);
-// }
 
 function checkForBlacklistedArticle(workId){
     var ul_id = addonName + workId + 'blacklisted';
@@ -174,7 +170,6 @@ function onPageviewUpdater(){
 
 $(document).ready(function() { 
     console.log('here');
-    port.postMessage({message: 'fetchdata', data: {images: true}});
     onPageviewUpdater();
     var ids = processPage();
     toolbar_onload(ids); // TODO: implement this for FF
