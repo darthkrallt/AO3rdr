@@ -49,10 +49,15 @@ FF Docs to consider
 https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials/Mobile_development
 
 BUGS
+<<<<<<< HEAD:README.md
 ----
   - Please report any others you find!
+=======
+  - Firefox memory is unstable. Please regularly back up.
+>>>>>>> Removed crawl for updates feature. Fixed bug in sync logic.:README.txt
 
 TODO
+  - Check works for update on server
 
 WISHLIST (not for this release)
 -------------------------------
@@ -74,7 +79,6 @@ WISHLIST (not for this release)
   - Multi article works- eg, authors that don't use the standard chapters, but
       instead have one "chapter" per work
   - Check author for update
-  - Sync between devices (would require a server and a license agreement)
 
 LICENSE
 -------

@@ -37,25 +37,6 @@ function onTokenSave(token_status, token){
     tokenSyncSpinner.stop();
 }
 
-
-function crawlsComplete (incomming_data) {
-    // stop spinner
-    if (spinner){
-        spinner.stop();
-    }
-    // Update all the table entries
-    // If incomming_data is null, there were no entries crawled
-    if (incomming_data){
-        // NOTE: for now incomming_data is a complete refresh of the data
-        // TODO: for version 2.0 make this go row by row and unly update as necessary
-        tableData = incomming_data;
-        // drop the table
-        $($('#articlesTable').find('tbody')).empty();
-        // reload the table
-        loadTable(tableData);
-    }
-}
-
 function generateImageHtml(data){
     var url = images['star-0'];
     if (parseInt(data['rating']) > 0){
@@ -96,26 +77,6 @@ function generateUnreadHtml(data){
     return html;
 }
 
-function checkForUpdate(data){
-    // if (Date.parse(data['visit']) < Date.parse(data['updated'])){
-    //     return true;
-    // }
-    // return false;
-    return data['hasupdate'];
-}
-
-function generateUpdateHtml(data){
-    var html = document.createElement("td");
-    if (checkForUpdate(data)){
-        var img = document.createElement("img");
-        img.setAttribute('src', images['flag']);
-        img.setAttribute('alt', '1');
-        img.setAttribute('height', '30');
-        html.appendChild(img);
-    }
-    return html;
-}
-
 function generateChaptersHtml(data){
     var html = document.createElement("td");
     html.setAttribute('status', data['chapters']['complete']);
@@ -133,9 +94,6 @@ function generateRowHtml(data){
     row.setAttribute('id', data['ao3id']);
     // First generate the image
     row.appendChild(generateImageHtml(data));
-
-    // Check if updated since user's last visit
-    row.appendChild(generateUpdateHtml(data));
 
     // Check if there are unread chapters
     row.appendChild(generateUnreadHtml(data));
