@@ -6,7 +6,6 @@ Features include:
     - Hide works
     - Blacklist by tags
     - Bookmark by chapter read
-    - Scan bookmarks for updates
     - Keep track of last visit
     - Backup and restore user data
     - Cloud Sync for multiple browsers
@@ -31,9 +30,10 @@ FF Docs to consider
 https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials/Mobile_development
 
 BUGS
-  - Please report any others you find!
+  - Firefox memory is unstable. Please regularly back up.
 
 TODO
+  - Check works for update on server
 
 WISHLIST (not for this release)
   - Add "added on" date (not visible in UI)
@@ -54,7 +54,6 @@ WISHLIST (not for this release)
   - Multi article works- eg, authors that don't use the standard chapters, but
       instead have one "chapter" per work
   - Check author for update
-  - Sync between devices (would require a server and a license agreement)
 
 LICENSE
     Copyright (C) 2015  Darthkrallt

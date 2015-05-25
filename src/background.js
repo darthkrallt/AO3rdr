@@ -358,7 +358,7 @@ function syncWork(data){
                     // This will only contain one work. Even then, only if there 
                     // was a diff on the server.
                     for (var key in diff) {
-                        if (dictionary.hasOwnProperty(key)) {
+                        if (diff.hasOwnProperty(key) && 'ao3id' in diff[key]) {
                             console.log('sync '+key);
                             var article = diff[key];
                             if ('user_id' in article){
@@ -422,7 +422,7 @@ function syncData(user_id_override){
                 // the key is the work ID
                 // Also contains the settings!
                 for (var key in diff) {
-                    if (diff.hasOwnProperty(key)) {
+                    if (diff.hasOwnProperty(key) && 'ao3id' in diff[key]) {
                         if (key == 'settings'){
                             // TODO: update the settings
                         } else if (key == 'user_id'){
