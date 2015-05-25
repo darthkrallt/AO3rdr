@@ -1,66 +1,66 @@
-var port = chrome.runtime.connect({name: "articles-table"});
+var artPort = chrome.runtime.connect({name: "articles-table"});
 
 
 function crawlForUpdates() {};
 
-var requestBackup = (function(port){
+var requestBackup = (function(artPort){
     return function(){
-        port.postMessage({message:'fetchdata', data: {'exportdata': true}});
+        artPort.postMessage({message:'fetchdata', data: {'exartPortdata': true}});
     }
-})(port);
+})(artPort);
 
-var emitCloudSyncToggle = (function(port){
+var emitCloudSyncToggle = (function(artPort){
     return function() {
         var val = $('#enable-cloud-sync').is(":checked");
-        port.postMessage({message: 'prefs', data: {'sync_enabled': val}});
+        artPort.postMessage({message: 'prefs', data: {'sync_enabled': val}});
     };
-})(port);
+})(artPort);
 
-var emitAutofilterToggle = (function(port){
+var emitAutofilterToggle = (function(artPort){
     return function() {
         console.log('toggling');
         var val = $('#enable-autofilter').is(":checked");
         $('#blacklist-wrapper').toggle();
-        port.postMessage({message: 'prefs', data: {'autofilter': val}});
+        artPort.postMessage({message: 'prefs', data: {'autofilter': val}});
     };
-})(port);
+})(artPort);
 
-var emitTagData = (function(port){
+var emitTagData = (function(artPort){
     return function() {
         var taglist = $('#blacklist').val();
-        port.postMessage({message: 'prefs', data: {'tags': taglist}});
+        artPort.postMessage({message: 'prefs', data: {'tags': taglist}});
     };
-})(port);
+})(artPort);
 
 
-var revealToken = (function(port){
+var revealToken = (function(artPort){
     return function(){
         console.log('revealToken');
-        port.postMessage({message:'reveal-token'});
+        artPort.postMessage({message:'reveal-token'});
     }
-})(port);
+})(artPort);
 
-var saveToken = (function(port){
+var saveToken = (function(artPort){
     return function(){
         var token = $("#token-display").val();
-        port.postMessage({message: 'save-token', data:token});
+        artPort.postMessage({message: 'save-token', data:token});
     }
-})(port);
+})(artPort);
 
-var restoreData = (function(port){
+var restoreData = (function(artPort){
     // This is really confusing! it returns a function to generate another function!
     return function(fileData){
         return function(){
             // send the data somewhere
-            port.postMessage({message: 'restorefrombackup', data: fileData});
+            artPort.postMessage({message: 'restorefrombackup', data: fileData});
             $('#restore-data').click(null);
             $('#restore-data').attr('class', 'button');
         }
     }
-})(port);
+})(artPort);
 
 
-port.onMessage.addListener(function(request, sender, sendResponse) {
+artPort.onMessage.addListener(function(request, sender, sendResponse) {
     console.log(JSON.stringify(request));
     if (request.message == 'token-revealed'){
         console.log(JSON.stringify(request));
@@ -78,11 +78,11 @@ port.onMessage.addListener(function(request, sender, sendResponse) {
         if (request.data_type == 'images'){
             images = request.data;
         }
-        if (request.data_type == 'exportdata'){
-            onExportComplete(request.data);
+        if (request.data_type == 'exartPortdata'){
+            onExartPortComplete(request.data);
         }
-    } else if (request.message == 'exportcomplete') {
-        onExportComplete(incomming_data);
+    } else if (request.message == 'exartPortcomplete') {
+        onExartPortComplete(incomming_data);
     } else if (request.message == 'newfic') {
         updateTableRow(request.data);
     } else if (request.message == 'token-saved') {
@@ -93,6 +93,6 @@ port.onMessage.addListener(function(request, sender, sendResponse) {
 
 $(document).ready(function() { 
     console.log('articles-table-chrome onready');
-    port.postMessage({message: 'fetchdata', data: {images:true}});
-    port.postMessage({message: 'fetchdata', data: {prefs: true, ficdict: true}});
+    artPort.postMessage({message: 'fetchdata', data: {images:true}});
+    artPort.postMessage({message: 'fetchdata', data: {prefs: true, ficdict: true}});
 });

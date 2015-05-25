@@ -17,10 +17,8 @@ chrome.runtime.onMessage.addListener(
     if (request.message == 'ficdata'){
         newArticle = handleNewFic(request.data.metadata, request.data.mutable_data);
         // TODO: send out 'update' message
-        return newArticle; // TODO: does this work?
     }
-  }
-);
+});
 
 // TODO: use storage.sync for the cloud sync key!!!
 // use storage.local for everything else
@@ -41,7 +39,6 @@ storage.get("prefs", function (items){
     if (!items.prefs)
         chrome.storage.local.set({'prefs': default_prefs});
 });
-
 
 function handleNewFic(metadata, mutable_data) {
 /* Take in the data and rating, and store or update as necessary. Returns
@@ -168,8 +165,10 @@ chrome.runtime.onConnect.addListener(function(port) {
 
         if (request.message == 'fetchdata')
             fetchDataRequest(request, port);
-        if (request.message == 'foo'){
-            //
+        if (request.message == 'runsync'){
+            console.log('runsync message');
+            // TODO: is this the best place for this?
+            runSync();
         }
 
     });
@@ -294,7 +293,8 @@ function validateAndSaveToken(token, port){
                         message: 'token-saved', 
                         data: {'token_status': 'valid', user_id: user_id}
                     });
-                    syncData();
+                    // Pass in new token to be sure against race conditions
+                    syncData(resp['user_id']);
                 }
             } else {
                 port.postMessage({
@@ -382,10 +382,31 @@ function syncWork(data){
 
 }
 
-function syncData(){
+function runSync(){
+    var storage = chrome.storage.local;
+    console.log('runsync');
+
+    storage.get('prefs', function (items){
+        // No sync without user OR explicit permission
+        if ('user_id' in items.prefs && items.prefs.sync_enabled){
+            var minSyncWait = 6 * 1;  // 10 Minutes for full sync
+            if (Date.now() -  minSyncWait < items.prefs['last_sync']){
+                return;
+            }
+
+            syncData();
+        }
+    });
+
+}
+
+function syncData(user_id_override){
+    /* Use the user_id_override when saving a new user_id/"token" and storage hasn't caught up. */
     // Grab all data
     console.log('syncData');
     var callbk = function(user_id, data){
+        if (user_id_override)
+            user_id = user_id_override;
         console.log('inside syncData callback');
         var xhr = new XMLHttpRequest();
         var url = backendUrl + 'user/' + user_id + "/collection";
