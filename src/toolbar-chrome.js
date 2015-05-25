@@ -4,25 +4,19 @@ function emitSettingsClick(){
     chrome.runtime.sendMessage({message: 'settingsclick'});
 }
 
+var toolPort = chrome.runtime.connect({name: "toolbar"});
+
 function emitFicData(metadata, mutable_data){
     var visit = new Date().toJSON();
     // You always want to include the date of visit when a toolbar action is performed
     mutable_data['visit'] = visit;
     // used to be 'click' as msg emitted
-    chrome.runtime.sendMessage(
+    toolPort.postMessage(
         {message: 'ficdata', data: {"metadata": metadata, "mutable_data": mutable_data}}
     );
 
-    // WARNING: this doesn't wait for confirm save (unlike FF)
-    updateImage(new Article(metadata, mutable_data));
-
-    // TODO: implement this
     console.log( JSON.stringify(metadata));
 }
-
-var toolPort = chrome.runtime.connect({name: "toolbar"});
-
-// toolPort.postMessage({message:'fetchdata'});
 
 toolPort.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.message == 'datadump'){
@@ -57,18 +51,9 @@ toolPort.onMessage.addListener(function(request, sender, sendResponse) {
             images = request.data;
         }
         // can reply with toolPort.postMessage()
-    } else if (request.message == "update"){
-        var newArticle = request.data;
-        // check for element
-        var ele = checkForWork(newArticle.ao3id);
-        if (ele) {
-            // Clear any selected
-            clearImage(ele);
-            // swap out the images
-            setImage(ele, newArticle);
-            // Also check if it was blacklisted, if so we want to undo it
-            undoBlacklist(newArticle.ao3id);
-        }
+    } else if (request.message == 'newfic') {
+        // update images
+        updateImage(request.data);
     }
 });
 

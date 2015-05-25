@@ -14,10 +14,6 @@ chrome.runtime.onMessage.addListener(
             {url: chrome.extension.getURL('data/settings/index.html')}
         );
     }
-    if (request.message == 'ficdata'){
-        newArticle = handleNewFic(request.data.metadata, request.data.mutable_data);
-        // TODO: send out 'update' message
-    }
 });
 
 // TODO: use storage.sync for the cloud sync key!!!
@@ -40,7 +36,7 @@ storage.get("prefs", function (items){
         chrome.storage.local.set({'prefs': default_prefs});
 });
 
-function handleNewFic(metadata, mutable_data) {
+function handleNewFic(metadata, mutable_data, port) {
 /* Take in the data and rating, and store or update as necessary. Returns
    the new object.
 */
@@ -56,14 +52,20 @@ function handleNewFic(metadata, mutable_data) {
         var mutable_keys = Object.keys(mutable_data);
         create_if_ne = !arrayCompare(mutable_keys, ['visit']);
     }
-    saveArticle(newArticle, create_if_ne);
-
-    // WARNING! This is misleading in the case of crawls
-    return newArticle;
+    saveArticle(newArticle, create_if_ne, port, true);
 }
 
-function saveArticle(newArticle, create_if_ne, port, skip_sync){
+function saveArticle(newArticle, create_if_ne, port, do_sync){
     var storage = chrome.storage.local;
+    // WARNING: CHECK FOR VAILD ao3id
+    // ASKING FOR undefined IN LOCALSTORAGE RETURNS EVERYTHING
+    console.assert(newArticle.ao3id);
+    if (!newArticle.ao3id){
+        return;
+    }
+
+    console.log('saveArticle');
+    console.log(newArticle);
 
     storage.get(newArticle.ao3id, function (data){
         var old_article = data[newArticle.ao3id];
@@ -81,13 +83,18 @@ function saveArticle(newArticle, create_if_ne, port, skip_sync){
         // Save the data
         chrome.storage.local.set( data );
         console.log(data);
+        console.log('skip sync '+ do_sync);
 
         // Sync to server (the function handles checking for permission)
-        if (!skip_sync)
-            syncWork(data);
+        if (do_sync){
+            console.log('inside sync work');
+            console.log(data);
+            syncWork(data[newArticle.ao3id]);
+        }
         
-        if (port)
+        if (port){
             port.postMessage({message: 'newfic', data: data[newArticle.ao3id]});
+        }
     });
 }
 
@@ -119,7 +126,9 @@ var callbackMessage = (function(port){
 });
 
 chrome.runtime.onConnect.addListener(function(port) {
-    console.assert(port.name == "articles-table");
+    if (!(port.name == "articles-table")){
+        return;
+    }
     port.onMessage.addListener(function(request) {
         console.log('articles table port'+JSON.stringify(request));
         if (request.message == "reveal-token"){
@@ -148,19 +157,23 @@ chrome.runtime.onConnect.addListener(function(port) {
             for (var key in article_data){
                 if (article_data.hasOwnProperty(key) && article_data[key]['ao3id']) {
                     console.log(article_data[key]);
-                    saveArticle(article_data[key], true, port);
+                    saveArticle(article_data[key], true, port, true);
                     console.log('saving article');
                 }
             }
             savePrefs(request.data['prefs']);
 
         }
+        if (request.message == 'ficdata'){
+            handleNewFic(request.data.metadata, request.data.mutable_data, port);
+        }
     });
 });
 
 chrome.runtime.onConnect.addListener(function(port) {
-    console.assert(port.name == "toolbar");
-
+    if (!(port.name == "toolbar")){
+        return;
+    }
     port.onMessage.addListener(function(request) {
 
         if (request.message == 'fetchdata')
@@ -170,7 +183,6 @@ chrome.runtime.onConnect.addListener(function(port) {
             // TODO: is this the best place for this?
             runSync();
         }
-
     });
 
 
@@ -211,9 +223,10 @@ function fetchDataRequest(request, port){
         if (request.data.ficdict_ids){
             storage.get(function (items){
                 var data = {};
-                console.log('ficdict requester listener'+ JSON.stringify(items));
                 // NOTE: we stringify the nested list
                 var ficdict_ids = JSON.parse(request.data.ficdict_ids);
+                console.log('ficdict requester listener'+ ficdict_ids);
+                
                 for (var key in ficdict_ids) {
                     var fd_id = ficdict_ids[key];
                     if (items[fd_id]) {
@@ -341,6 +354,9 @@ function getDataForSync(callbk){
 
 function syncWork(data){
     console.log('syncWork');
+    if (!data.ao3id){
+        return;
+    }
 
     var callbk = (function(data){
         return function(user_id) {
@@ -354,22 +370,16 @@ function syncWork(data){
             xhr.onreadystatechange = function() {
                 if ((xhr.readyState == 4) && (xhr.status == 200 || xhr.status == 201)) {
                     var diff = JSON.parse(xhr.responseText)['diff'];
+                    console.log('diff');
+                    console.log(diff);
 
-                    // This will only contain one work. Even then, only if there 
-                    // was a diff on the server.
-                    for (var key in diff) {
-                        if (diff.hasOwnProperty(key) && 'ao3id' in diff[key]) {
-                            console.log('sync '+key);
-                            var article = diff[key];
-                            if ('user_id' in article){
-                                delete article['user_id'];
-                            }
-                            console.log('save diff');
-                            console.log(article);
-                            // last "true" skips syncing with server
-                            saveArticle(article, true, null, true);
-                        }
-
+                    // This will only contain the diff of one work.
+                    // If there was no difference, it will be empty.
+                    if ('user_id' in diff)
+                        delete diff['user_id'];
+                    if (Object.keys(diff).length === 0){
+                        diff['ao3id'] = data['ao3id'];
+                        saveArticle(diff, true, null, false);
                     }
                 }
             }
@@ -389,8 +399,10 @@ function runSync(){
     storage.get('prefs', function (items){
         // No sync without user OR explicit permission
         if ('user_id' in items.prefs && items.prefs.sync_enabled){
-            var minSyncWait = 6 * 1;  // 10 Minutes for full sync
-            if (Date.now() -  minSyncWait < items.prefs['last_sync']){
+            var minSyncWait = 60 * 60 * 10;  // 10 Minutes for full sync
+            console.log((Date.now()/1000) -  minSyncWait);
+            console.log(items.prefs['last_sync']);
+            if ((Date.now()/1000) -  minSyncWait < items.prefs['last_sync']){
                 return;
             }
 
@@ -417,12 +429,14 @@ function syncData(user_id_override){
             if ((xhr.readyState == 4) && (xhr.status == 200 || xhr.status == 201)) {
                 var diff = JSON.parse(xhr.responseText)['diff'];
                 console.log(xhr.responseText);
+                console.log('diff');
+                console.log(diff);
 
                 // Iterate through the dictionary of changed articles and update our DB
                 // the key is the work ID
                 // Also contains the settings!
                 for (var key in diff) {
-                    if (diff.hasOwnProperty(key) && 'ao3id' in diff[key]) {
+                    if (diff.hasOwnProperty(key)) {
                         if (key == 'settings'){
                             // TODO: update the settings
                         } else if (key == 'user_id'){
@@ -432,7 +446,12 @@ function syncData(user_id_override){
                             if ('user_id' in article){
                                 delete article['user_id'];
                             }
-                            saveArticle(article, true, null, true)
+                            if (!(Object.keys(article).length === 0)){
+                                console.log('syncData');
+                                console.log(article);
+                                article['ao3id'] = key;
+                                saveArticle(article, true, null, false)
+                            }
                         }
                     }
                 }

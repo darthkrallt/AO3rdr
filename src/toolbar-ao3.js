@@ -71,7 +71,8 @@ function createToolbar(metadata, article){
             };
         })(metadata, bookmark_data);
 
-        var bookmark = createButton(images['bookmark'], 'set chapter bookmark', tmpFun2);
+        var bookmark = createButton(
+            images['bookmark'], 'set chapter bookmark', metadata['chapter_id'], tmpFun2);
         newDiv.appendChild(bookmark);
     }
 

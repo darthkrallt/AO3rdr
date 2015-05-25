@@ -545,7 +545,7 @@ function syncData(){
                 // the key is the work ID
                 // Also contains the settings!
                 for (var key in diff) {
-                    if (diff.hasOwnProperty(key) && 'ao3id' in diff[key]) {
+                    if (diff.hasOwnProperty(key) && diff[key].ao3id) {
                         if (key == 'settings'){
                             // TODO: update the settings
                         } else if (key == 'user_id'){
@@ -570,8 +570,8 @@ function runSync(){
     var prefs = fetchPrefs();
     if (prefs['sync_enabled']){
         // Don't sync too often
-        var minSyncWait = 60 * 10;  // 10 Minutes for full sync
-        if (Date.now() -  minSyncWait < prefs['last_sync']){
+        var minSyncWait = 60 * 60 * 10;  // 10 Minutes for full sync
+        if ((Date.now()/1000) -  minSyncWait < prefs['last_sync']){
             return;
         }
         if (getUser()){
@@ -596,16 +596,14 @@ function syncWork(data){
             // Merge data here
             if ((response.status == 200) || (response.status == 201)){
                 var diff = response.json['diff'];
-                // This will only contain one work. Even then, only if there 
-                // was a diff on the server.
-                for (var key in diff) {
-                    if (dictionary.hasOwnProperty(key)  && 'ao3id' in diff[key]) {
-                        var article = diff[key];
-                        if ('user_id' in article){
-                            delete article['user_id'];
-                        }
-                        handleFicSync(article);
-                    }
+                // This will only contain the diff of one work.
+                // If there was no difference, it will be empty.
+                if ('user_id' in diff){
+                    delete diff['user_id'];
+                }
+                if (Object.keys(diff).length === 0){
+                    diff['ao3id'] = data['ao3id'];
+                    handleFicSync(diff);
                 }
             }
         }
