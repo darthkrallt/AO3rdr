@@ -43,12 +43,6 @@ storage.get("prefs", function (items){
 });
 
 
-storage.get("ficdict", function (items){
-    console.log(JSON.stringify(items));
-    if (!items.ficdict)
-        chrome.storage.local.set({'ficdict': {}});
-});
-
 function handleNewFic(metadata, mutable_data) {
 /* Take in the data and rating, and store or update as necessary. Returns
    the new object.
@@ -71,7 +65,7 @@ function handleNewFic(metadata, mutable_data) {
     return newArticle;
 }
 
-function saveArticle(newArticle, create_if_ne, port){
+function saveArticle(newArticle, create_if_ne, port, skip_sync){
     var storage = chrome.storage.local;
 
     storage.get(newArticle.ao3id, function (data){
@@ -90,6 +84,10 @@ function saveArticle(newArticle, create_if_ne, port){
         // Save the data
         chrome.storage.local.set( data );
         console.log(data);
+
+        // Sync to server (the function handles checking for permission)
+        if (!skip_sync)
+            syncWork(data);
         
         if (port)
             port.postMessage({message: 'newfic', data: data[newArticle.ao3id]});
@@ -264,16 +262,6 @@ var test = (function(port){
 // Stuff below this line is broken, 'cuz async foo!
 var backendUrl = 'https://boiling-caverns-2782.herokuapp.com/api/v1.0/';
 
-function syncWork(){
-
-}
-
-function newUser(){
-    // TODO: actually talk to server
-    savePrefs({'user_id': 'testuser'});
-}
-
-
 function newUser(){
 
     var xhr = new XMLHttpRequest();
@@ -306,6 +294,7 @@ function validateAndSaveToken(token, port){
                         message: 'token-saved', 
                         data: {'token_status': 'valid', user_id: user_id}
                     });
+                    syncData();
                 }
             } else {
                 port.postMessage({
@@ -320,12 +309,130 @@ function validateAndSaveToken(token, port){
 }
 
 
+function getUserForSync(callbk){
+    var storage = chrome.storage.local;
+
+    storage.get("prefs", function (items){
+        // No sync without user OR explicit permission
+        if ('user_id' in items.prefs && items.prefs.sync_enabled){
+            callbk(items.prefs.user_id);
+        }
+    });
+
+}
+
+function getDataForSync(callbk){
+    var storage = chrome.storage.local;
+
+    storage.get(function (items){
+        // No sync without user OR explicit permission
+        if ('user_id' in items.prefs && items.prefs.sync_enabled){
+            var article_data = {};
+            for (var key in items){
+                if (items.hasOwnProperty(key) && items[key]['ao3id'])
+                    article_data[key] = items[key];
+            }
+            var data = {article_data: article_data, prefs: items.prefs};
+            callbk(items.prefs.user_id, data);
+        }
+    });
+
+}
+
+function syncWork(data){
+    console.log('syncWork');
+
+    var callbk = (function(data){
+        return function(user_id) {
+            console.log('inside syncWork callback');
+            console.log(data);
+
+            var xhr = new XMLHttpRequest();
+            var url = backendUrl + 'user/' + user_id + "/work/" + data['ao3id'];
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.onreadystatechange = function() {
+                if ((xhr.readyState == 4) && (xhr.status == 200 || xhr.status == 201)) {
+                    var diff = JSON.parse(xhr.responseText)['diff'];
+
+                    // This will only contain one work. Even then, only if there 
+                    // was a diff on the server.
+                    for (var key in diff) {
+                        if (dictionary.hasOwnProperty(key)) {
+                            console.log('sync '+key);
+                            var article = diff[key];
+                            if ('user_id' in article){
+                                delete article['user_id'];
+                            }
+                            console.log('save diff');
+                            console.log(article);
+                            // last "true" skips syncing with server
+                            saveArticle(article, true, null, true);
+                        }
+
+                    }
+                }
+            }
+            xhr.send(data);
+
+        };
+    })(JSON.stringify(data));
+
+    getUserForSync(callbk);
+
+}
+
+function syncData(){
+    // Grab all data
+    console.log('syncData');
+    var callbk = function(user_id, data){
+        console.log('inside syncData callback');
+        var xhr = new XMLHttpRequest();
+        var url = backendUrl + 'user/' + user_id + "/collection";
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.onreadystatechange = function() {
+            console.log(xhr.status);
+            if ((xhr.readyState == 4) && (xhr.status == 200 || xhr.status == 201)) {
+                var diff = JSON.parse(xhr.responseText)['diff'];
+                console.log(xhr.responseText);
+
+                // Iterate through the dictionary of changed articles and update our DB
+                // the key is the work ID
+                // Also contains the settings!
+                for (var key in diff) {
+                    if (diff.hasOwnProperty(key)) {
+                        if (key == 'settings'){
+                            // TODO: update the settings
+                        } else if (key == 'user_id'){
+                            ; // You can safely ignore
+                        } else {
+                            var article = diff[key];
+                            if ('user_id' in article){
+                                delete article['user_id'];
+                            }
+                            saveArticle(article, true, null, true)
+                        }
+                    }
+                }
+                savePrefs({'last_sync': new Date().getTime() / 1000});
+
+            }
+        }
+        xhr.send(JSON.stringify(data));
+    }
+
+    getDataForSync(callbk);
+}
+
+
 // var xhr = new XMLHttpRequest();
-// xhr.open("GET", "http://api.example.com/data.json", true);
+// xhr.open("GET", backendUrl, true);
 // xhr.onreadystatechange = function() {
-//   if (xhr.readyState == 4) {
-//     // JSON.parse does not evaluate the attacker's scripts.
-//     var resp = JSON.parse(xhr.responseText);
-//   }
+//     if (xhr.readyState == 4) {
+//         if (xhr.status == 200){
+//             var resp = JSON.parse(xhr.responseText);
+//         }
+//     }
 // }
 // xhr.send();
