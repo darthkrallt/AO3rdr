@@ -227,8 +227,6 @@ function onExportComplete(incomming_data){
 }
 
 $(document).ready(function() { 
-    console.log('on ready articles-table');
-    // addTablesorter();
     $('#crawl-updates').click(crawlForUpdates);
 
     $('#upload-data').get(0).addEventListener('change', handleFile, false);
@@ -245,7 +243,6 @@ $(document).ready(function() {
                 // clicking the close span causes the closest ancestor modal to fadeout
                 var buttonId = $(this).closest('.box')[0].id + '-button';
                 $(this).closest('.box').fadeOut(500);
-                console.log(buttonId);
                 $('#'+buttonId).fadeIn(500);
             }
         );
@@ -256,11 +253,9 @@ $(document).ready(function() {
             $(this).fadeOut(500);
             var boxId = this.id.split('-button')[0];
             $('#'+boxId).fadeIn(500);
-            console.log(boxId);
         });
     });
 
-    console.log('on ready articles-table 2');
     // Arrach the click functions
     $('#reveal-token').click(
         function() {
@@ -268,7 +263,6 @@ $(document).ready(function() {
             //$('#id-token-box').fadeIn(500);
         }
     );
-    console.log('on ready articles-table 3');
     $('#save-token').click(
         function() {
             tokenSyncSpinner = new Spinner({position: 'relative'}).spin();

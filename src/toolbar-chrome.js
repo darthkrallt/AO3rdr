@@ -15,24 +15,19 @@ function emitFicData(metadata, mutable_data){
         {message: 'ficdata', data: {"metadata": metadata, "mutable_data": mutable_data}}
     );
 
-    console.log( JSON.stringify(metadata));
 }
 
 toolPort.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.message == 'datadump'){
-        console.log('datadump listner:'+JSON.stringify(Object.keys(request.data)));
         if (request.data_type == 'images'){
             images = request.data;
         }
         if (request.data_type == 'prefs'){
             prefs = request.data['prefs'];
             // Re-do blacklisting
-            console.log('prefs');
-            console.log(prefs);
             blacklistBrowsePage(prefs);
         }
         if (request.data_type == 'ficdict'){
-            console.log(JSON.stringify(request));
             for (key in request.data){
                 var newArticle = request.data[key];
                 // check for element
@@ -58,7 +53,6 @@ toolPort.onMessage.addListener(function(request, sender, sendResponse) {
 });
 
 function toolbar_onload(ids) {
-    console.log(JSON.stringify(ids));
     toolPort.postMessage({message: 'runsync'});
     toolPort.postMessage({message: 'fetchdata', data: {images: true}});
     toolPort.postMessage({message:'fetchdata', data: {ficdict_ids: JSON.stringify(ids), prefs: true} });

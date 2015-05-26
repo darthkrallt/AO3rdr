@@ -18,7 +18,6 @@ var emitCloudSyncToggle = (function(artPort){
 
 var emitAutofilterToggle = (function(artPort){
     return function() {
-        console.log('toggling');
         var val = $('#enable-autofilter').is(":checked");
         $('#blacklist-wrapper').toggle();
         artPort.postMessage({message: 'prefs', data: {'autofilter': val}});
@@ -35,7 +34,6 @@ var emitTagData = (function(artPort){
 
 var revealToken = (function(artPort){
     return function(){
-        console.log('revealToken');
         artPort.postMessage({message:'reveal-token'});
     }
 })(artPort);
@@ -61,9 +59,7 @@ var restoreData = (function(artPort){
 
 
 artPort.onMessage.addListener(function(request, sender, sendResponse) {
-    console.log(JSON.stringify(request));
     if (request.message == 'token-revealed'){
-        console.log(JSON.stringify(request));
         $('#token-display').val(request.data);
         $('#id-token-box').fadeIn(500);
     } else if (request.message == 'datadump') {
@@ -92,7 +88,6 @@ artPort.onMessage.addListener(function(request, sender, sendResponse) {
 
 
 $(document).ready(function() { 
-    console.log('articles-table-chrome onready');
     artPort.postMessage({message: 'fetchdata', data: {images:true}});
     artPort.postMessage({message: 'fetchdata', data: {prefs: true, ficdict: true}});
 });

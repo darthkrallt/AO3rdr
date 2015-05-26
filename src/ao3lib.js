@@ -200,11 +200,9 @@ function matchTag(string1, string2){
 }
 
 function checkTags(taglist, blacklist_tags){
-    console.log('checkTags');
     for (var i in taglist){
         for (var j in blacklist_tags){
             if (matchTag(taglist[i], blacklist_tags[j])){
-                console.log('match tag: '+taglist[i]+' '+blacklist_tags[j]);
                 return true;
             }
         }
@@ -253,9 +251,9 @@ function blacklistBrowsePage(prefs){
     var articles = $("li[role=article]");
     var blacklist_tags = prefs['tags'];
 
-    if (typeof blacklist_tags === 'string')
+    if (typeof blacklist_tags === 'string'){
         blacklist_tags = blacklist_tags.split(',');
-    console.log(blacklist_tags);
+    }
 
     for (var i=0; i< articles.length; i++){
         var info = parseWorkBlurb(articles[i]);

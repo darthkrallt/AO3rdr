@@ -158,7 +158,6 @@ function updateImage(newArticle){
 function onPageviewUpdater(){
     if (checkIfArticlePage()) {
         var info = parseArticlePage($('#main'));
-        console.log(info);
         // Doesn't have mutable data, we are only checking the immutable
         var visit = new Date().toJSON();
         emitFicData(info, {'visit': visit});
@@ -170,7 +169,6 @@ function onPageviewUpdater(){
 }
 
 $(document).ready(function() { 
-    console.log('here');
     onPageviewUpdater();
     var ids = processPage();
     toolbar_onload(ids); // TODO: implement this for FF
