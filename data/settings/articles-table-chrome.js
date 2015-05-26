@@ -5,7 +5,7 @@ function crawlForUpdates() {};
 
 var requestBackup = (function(artPort){
     return function(){
-        artPort.postMessage({message:'fetchdata', data: {'exartPortdata': true}});
+        artPort.postMessage({message:'fetchdata', data: {'exportdata': true}});
     }
 })(artPort);
 
@@ -78,11 +78,11 @@ artPort.onMessage.addListener(function(request, sender, sendResponse) {
         if (request.data_type == 'images'){
             images = request.data;
         }
-        if (request.data_type == 'exartPortdata'){
-            onExartPortComplete(request.data);
+        if (request.data_type == 'exportdata'){
+            onExportComplete(request.data);
         }
-    } else if (request.message == 'exartPortcomplete') {
-        onExartPortComplete(incomming_data);
+    } else if (request.message == 'exportcomplete') {
+        onExportComplete(incomming_data);
     } else if (request.message == 'newfic') {
         updateTableRow(request.data);
     } else if (request.message == 'token-saved') {

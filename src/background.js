@@ -126,9 +126,9 @@ var callbackMessage = (function(port){
 });
 
 chrome.runtime.onConnect.addListener(function(port) {
-    if (!(port.name == "articles-table")){
-        return;
-    }
+    // if (!(port.name == "articles-table")){
+    //     return;
+    // }
     port.onMessage.addListener(function(request) {
         console.log('articles table port'+JSON.stringify(request));
         if (request.message == "reveal-token"){
@@ -153,7 +153,6 @@ chrome.runtime.onConnect.addListener(function(port) {
             var version = request.data['version'];
             var article_data = request.data['article_data'];
 
-            // TODO: this is bad. Should have a bulk updater do it in one pass
             for (var key in article_data){
                 if (article_data.hasOwnProperty(key) && article_data[key]['ao3id']) {
                     console.log(article_data[key]);
@@ -167,26 +166,27 @@ chrome.runtime.onConnect.addListener(function(port) {
         if (request.message == 'ficdata'){
             handleNewFic(request.data.metadata, request.data.mutable_data, port);
         }
-    });
-});
-
-chrome.runtime.onConnect.addListener(function(port) {
-    if (!(port.name == "toolbar")){
-        return;
-    }
-    port.onMessage.addListener(function(request) {
-
-        if (request.message == 'fetchdata')
-            fetchDataRequest(request, port);
         if (request.message == 'runsync'){
             console.log('runsync message');
             // TODO: is this the best place for this?
             runSync();
         }
     });
-
-
 });
+
+// chrome.runtime.onConnect.addListener(function(port) {
+//     // if (!(port.name == "toolbar")){
+//     //     return;
+//     // }
+//     port.onMessage.addListener(function(request) {
+
+//         if (request.message == 'fetchdata')
+//             fetchDataRequest(request, port);
+
+//     });
+
+
+// });
 
 function fetchDataRequest(request, port){
     // Responds to 'fetchdata'
@@ -307,7 +307,7 @@ function validateAndSaveToken(token, port){
                         data: {'token_status': 'valid', user_id: user_id}
                     });
                     // Pass in new token to be sure against race conditions
-                    syncData(resp['user_id']);
+                    syncData(resp['user_id'], port);
                 }
             } else {
                 port.postMessage({
@@ -412,7 +412,7 @@ function runSync(){
 
 }
 
-function syncData(user_id_override){
+function syncData(user_id_override, port){
     /* Use the user_id_override when saving a new user_id/"token" and storage hasn't caught up. */
     // Grab all data
     console.log('syncData');
@@ -450,7 +450,7 @@ function syncData(user_id_override){
                                 console.log('syncData');
                                 console.log(article);
                                 article['ao3id'] = key;
-                                saveArticle(article, true, null, false)
+                                saveArticle(article, true, port, false)
                             }
                         }
                     }
