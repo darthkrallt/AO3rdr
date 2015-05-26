@@ -107,3 +107,8 @@ var crawlForUpdates = (function(port){
         port.emit('crawlrequest');
     }
 })(self.port);
+
+
+$(document).ready(function() { 
+    addTablesorter();
+});

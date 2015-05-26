@@ -146,6 +146,12 @@ function loadTable(tableData){
             console.log(error);
         }
     }
+    // Datatables is chrome only because of "dangerous" functions
+    $('#articlesTable').dataTable({
+        columnDefs: [
+            { type: 'alt-string', targets: 0 }
+        ]
+    });
 }
 
 function updateTableRow(rowData){
@@ -159,6 +165,12 @@ function updateTableRow(rowData){
     else{
         tableBody.append(row);
     }
+    // Datatables is chrome only because of "dangerous" functions
+    $('#articlesTable').dataTable({
+        columnDefs: [
+            { type: 'alt-string', targets: [0, 1] },
+        ]
+    });
 }
 
 function lastSyncUpdate(){
@@ -216,7 +228,7 @@ function onExportComplete(incomming_data){
 
 $(document).ready(function() { 
     console.log('on ready articles-table');
-    addTablesorter();
+    // addTablesorter();
     $('#crawl-updates').click(crawlForUpdates);
 
     $('#upload-data').get(0).addEventListener('change', handleFile, false);
