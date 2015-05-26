@@ -149,12 +149,15 @@ function loadTable(tableData){
     // Datatables is chrome only because of "dangerous" functions
     $('#articlesTable').dataTable({
         columnDefs: [
-            { type: 'alt-string', targets: 0 }
+            { type: 'alt-string', targets: [0, 1] },
+            { type: 'html', targets: 3 }
         ]
     });
 }
 
 function updateTableRow(rowData){
+    $('#articlesTable').DataTable().destroy();
+
     var tableBody = $("#articlesTable").find('tbody');
     var ele = $('#' + rowData['ao3id']);
     var row = generateRowHtml(rowData);
@@ -165,12 +168,26 @@ function updateTableRow(rowData){
     else{
         tableBody.append(row);
     }
-    // Datatables is chrome only because of "dangerous" functions
     $('#articlesTable').dataTable({
         columnDefs: [
             { type: 'alt-string', targets: [0, 1] },
+            { type: 'html', targets: 3 }
         ]
     });
+
+    // TODO: adding the elements with the API would be better, but I couldn't get it working.
+
+    // var columns = $('#articlesTable').DataTable().columns();
+    // var rowContents = []; 
+    // $(row).find('td').each(function(idx, ele){rowContents.push(JSON.stringify($(this).html()));})
+    // console.log(rowContents);
+
+    // var addMe = {};
+    // for (var i in columns){
+    //     addMe[columns[i]] = rowContents[i];
+    // }
+
+    // $('#articlesTable').DataTable().rows.add(rowContents).draw();
 }
 
 function lastSyncUpdate(){
