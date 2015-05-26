@@ -44,21 +44,32 @@
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div class="container">
-   <div class="row">
+    <div class="row">
       <div class="twelve columns" style="margin-top: 5%">
-      <div class="row">
-
-          <h5>Bookmarks and Prefrences</h5>
-          <p><a href="credits.html"> Credits Page</a></p>
-        </div>
-
+        <h5>Prefrences and Bookmarks</h5>
       </div>
+
+    </div>
+
+    <div class="row">
+      <div class="eleven columns">
+        
+        <input class="boxopen" type="button" id="cloud-sync-box-button" value="Cloud Sync and Backup">
+        <input class="boxopen" type="button" id="download-data-box-button" value="Data Export and Import">
+        <input class="boxopen" type="button" id="blacklist-box-button" value="Tag Blacklisting">
+
+
+        <form action="credits.html" style="display: inline">
+          <input class="button-primary" type="submit" value="Credits Page">
+        </form>
+      </div>
+
     </div>
 
 <!-- cloud sync status boxes -->
-    <div class="row box" id="cloud-sync-box" style="display:visible">
+    <div class="row box" id="cloud-sync-box"  style="display: none;">
       <input type="image" alt="close" src="../images/close.svg" class="boxclose">
-      <h6 class="docs-header">Cloud Sync</h6>
+      <h6 class="docs-header">Cloud Sync and Backup</h6>
 
       <div class="four columns" id="cloud-sync-status">
            <img src='../images/cloud-ok.svg' class='icon inside'>
@@ -72,7 +83,7 @@
       <div class="three columns">
         <label for="enable-cloud-sync">
           <input id="enable-cloud-sync" type="checkbox">
-          <span class="label-body">Enable</span>
+          <span class="label-body">Enabled</span>
         </label>
       </div>
     </div>  
@@ -96,7 +107,7 @@
 <!-- end cloud sync status boxes -->
 
 
-    <div class="row box" id="download-data-box" style="display:visible">
+    <div class="row box" id="download-data-box"  style="display: none;">
       <input type="image" alt="close" src="../images/close.svg" class="boxclose">
       <h6 class="docs-header">Data Export and Import</h6>
 
@@ -111,7 +122,7 @@
 
     </div>
 
-    <div class="row box" id="blacklist-box" style="display:visible">
+    <div class="row box" id="blacklist-box"  style="display: none;">
       <input type="image" alt="close" src="../images/close.svg" class="boxclose">
       <h6 class="docs-header">Tag Blacklisting</h6>
 
@@ -123,7 +134,7 @@
         <form>
           <label for="enable-autofilter" class="inline-checkbox-right">
             <input id="enable-autofilter" type="checkbox">
-            <span class="label-body">Enable</span>
+            <span class="label-body">Enabled</span>
           </label>
         </form>
 
@@ -161,6 +172,7 @@
         </table>
       </div>
     </div>
+
   </div>
 
 <!-- End Document

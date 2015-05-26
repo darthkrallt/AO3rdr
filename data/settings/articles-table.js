@@ -231,10 +231,23 @@ $(document).ready(function() {
         $(this).click(
             function(){
                 // clicking the close span causes the closest ancestor modal to fadeout
+                var buttonId = $(this).closest('.box')[0].id + '-button';
                 $(this).closest('.box').fadeOut(500);
+                console.log(buttonId);
+                $('#'+buttonId).fadeIn(500);
             }
         );
     });
+    // Attach click function to "reopen" buttons
+    $( ".boxopen" ).each( function(index, element){
+        $(this).click(function(){
+            $(this).fadeOut(500);
+            var boxId = this.id.split('-button')[0];
+            $('#'+boxId).fadeIn(500);
+            console.log(boxId);
+        });
+    });
+
     console.log('on ready articles-table 2');
     // Arrach the click functions
     $('#reveal-token').click(
