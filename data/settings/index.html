@@ -48,8 +48,8 @@
       <div class="twelve columns" style="margin-top: 5%">
       <div class="row">
 
-          <h5>Check out your bookmarks here</h5>
-          <p>Here you can easily interact with all of the articles that you have read, skimmed liked or disliked. <a href="credits.html"> Credits Page</a></p>
+          <h5>Bookmarks and Prefrences</h5>
+          <p><a href="credits.html"> Credits Page</a></p>
         </div>
 
       </div>
@@ -58,21 +58,21 @@
 <!-- cloud sync status boxes -->
     <div class="row box" id="cloud-sync-box" style="display:visible">
       <input type="image" alt="close" src="../images/close.svg" class="boxclose">
-      <h6 class="docs-header">Cloud Sync Status</h6>
+      <h6 class="docs-header">Cloud Sync</h6>
 
       <div class="four columns" id="cloud-sync-status">
            <img src='../images/cloud-ok.svg' class='icon inside'>
           <p id="last-sync">Last Sync: Not yet synced</p>
       </div>
 
-      <div class="three columns">
-        <input class="button-primary" id="reveal-token" type="submit" value="Reveal Token">
+      <div class="seven columns">
+        <input class="button-primary" id="reveal-token" type="submit" value="Show Token for cross-Device Sync">
       </div>
 
-      <div class="four columns">
+      <div class="three columns">
         <label for="enable-cloud-sync">
           <input id="enable-cloud-sync" type="checkbox">
-          <span class="label-body">Enable Cloud Sync</span>
+          <span class="label-body">Enable</span>
         </label>
       </div>
     </div>  
@@ -96,39 +96,46 @@
 <!-- end cloud sync status boxes -->
 
 
-    <div class="row">
+    <div class="row box" id="download-data-box" style="display:visible">
+      <input type="image" alt="close" src="../images/close.svg" class="boxclose">
+      <h6 class="docs-header">Data Export and Import</h6>
 
-      <div class="twelve columns">
+      <div class="three columns">
+        <input type="button" id="export-data" class="button-primary" value="Download Your Data">
+      </div>
+          
+      <div class="eight columns">
+        <input type="button" id="restore-data" class="button" value="Import from File">
+        <input type="file" id="upload-data" class="button" value="Import from File">
+      </div>
+
+    </div>
+
+    <div class="row box" id="blacklist-box" style="display:visible">
+      <input type="image" alt="close" src="../images/close.svg" class="boxclose">
+      <h6 class="docs-header">Tag Blacklisting</h6>
+
+      <div class = "eight columns">
+        <p>Hide works by tag. The blackist tag "foo" will match the AO3 tags "<b>foo</b>", "<b>foo</b>lish", "<b>FOO</b>L", "bare<b>foo</b>t", etc.</p>
+      </div>
+
+      <div class="three columns">
         <form>
           <label for="enable-autofilter" class="inline-checkbox-right">
             <input id="enable-autofilter" type="checkbox">
-            <span class="label-body">Enable Tag Blacklister</span>
+            <span class="label-body">Enable</span>
           </label>
         </form>
 
       </div>
 
-      <div class="row">
-        <div class="five columns">
-          <input type="button" id="export-data" class="button-primary" value="Download Your Data">
-        </div>
-            
-        <div class="seven columns">
-          <input type="button" id="restore-data" class="button" value="Restore From Backup">
-          <input type="file" id="upload-data" class="button" value="Restore from Backup">
-        </div>
-      </div>
+      <div class="eleven columns">
 
-
-      <div class="row">
-        <div class="twelve columns">
-
-          <div id="blacklist-wrapper">
-            <label for="blacklist">Blacklisted Tags</label>
-            <input class="u-full-width" id="blacklist" />
-          </div>
-          
+        <div id="blacklist-wrapper">
+          <!-- <label for="blacklist">Blacklisted Tags</label> -->
+          <input class="u-full-width" id="blacklist" />
         </div>
+        
       </div>
 
 
