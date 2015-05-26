@@ -25,16 +25,13 @@ function Article(metadata, mutable_data) {
 
 }
 
-function updateArticle(old_article, new_article, is_private){
-/* Update an existing article.
-       WARNING! MODIFIES the old_article!
-       used by function handleNewFic
-*/
+function updateArticle(old_article, new_article){
+    /* Update an existing article.
+           WARNING! MODIFIES the old_article!
+           used by function handleNewFic
+    */
     var currentTime = new Date().getTime() / 1000;
-    if (is_private){
-        // console.log('Private mode. Not saving.');
-        return null;
-    }
+
     // There will always be a crawled timestamp
     old_article.crawled = new_article.crawled;
     old_article.crawled__ts = new_article.crawled__ts;

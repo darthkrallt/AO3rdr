@@ -2,14 +2,8 @@
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-    console.log(sender.tab ?
-                "from a content script:" + sender.tab.url :
-                "from the extension");
-    // if (request.greeting == "hello")
-    //   sendResponse({farewell: "goodbye"});
     if (request.message == 'settingsclick'){
         // open new tab
-        // chrome.tabs.create(object createProperties, function callback);
         chrome.tabs.create(
             {url: chrome.extension.getURL('data/settings/index.html')}
         );
@@ -31,7 +25,6 @@ var default_prefs = {
 var storage = chrome.storage.local;
 
 storage.get("prefs", function (items){
-    console.log(JSON.stringify(items));
     if (!items.prefs)
         chrome.storage.local.set({'prefs': default_prefs});
 });
@@ -44,7 +37,6 @@ function handleNewFic(metadata, mutable_data, port) {
         // Must have a vailid ID!
         return null;
     }
-    console.log('handling');
     var newArticle = new Article(metadata, mutable_data);
     // We only want to create a new entry if the mutable data is more than just visit
     var create_if_ne = false;
@@ -64,9 +56,6 @@ function saveArticle(newArticle, create_if_ne, port, do_sync){
         return;
     }
 
-    console.log('saveArticle');
-    console.log(newArticle);
-
     storage.get(newArticle.ao3id, function (data){
         var old_article = data[newArticle.ao3id];
         if (!old_article){
@@ -82,13 +71,9 @@ function saveArticle(newArticle, create_if_ne, port, do_sync){
         }
         // Save the data
         chrome.storage.local.set( data );
-        console.log(data);
-        console.log('skip sync '+ do_sync);
 
         // Sync to server (the function handles checking for permission)
         if (do_sync){
-            console.log('inside sync work');
-            console.log(data);
             syncWork(data[newArticle.ao3id]);
         }
         
@@ -103,14 +88,12 @@ function savePrefs(prefs){
     var storage = chrome.storage.local;
 
     storage.get("prefs", function (items){
-        console.log(items);
         for (var key in prefs){
             if ((key == 'tags') && typeof prefs[key] === 'string') {
                 items.prefs[key] = prefs[key].split(',');
             } else {
                 items.prefs[key] = prefs[key];
             }
-            console.log(key);
         }
         chrome.storage.local.set( items );
     });
@@ -130,69 +113,51 @@ chrome.runtime.onConnect.addListener(function(port) {
     //     return;
     // }
     port.onMessage.addListener(function(request) {
-        console.log('articles table port'+JSON.stringify(request));
         if (request.message == "reveal-token"){
-            console.log('reveal-token');
-
             getUser(callbackMessage(port));
         }
+
         if (request.message == 'save-token'){
             validateAndSaveToken(request.data, port);
         }
+
         if (request.message == 'prefs') {
-            console.log(JSON.stringify(request));
             savePrefs(request.data);
         }
+
         if (request.message == 'fetchdata') {
             fetchDataRequest(request, port);
         }
-        if (request.message == 'restorefrombackup'){
-            console.log('restorefrombackup');
 
+        if (request.message == 'restorefrombackup'){
             // Update the DB data
             var version = request.data['version'];
             var article_data = request.data['article_data'];
 
             for (var key in article_data){
                 if (article_data.hasOwnProperty(key) && article_data[key]['ao3id']) {
-                    console.log(article_data[key]);
                     saveArticle(article_data[key], true, port, true);
-                    console.log('saving article');
                 }
             }
             savePrefs(request.data['prefs']);
 
         }
+
         if (request.message == 'ficdata'){
             handleNewFic(request.data.metadata, request.data.mutable_data, port);
         }
+
         if (request.message == 'runsync'){
-            console.log('runsync message');
             // TODO: is this the best place for this?
             runSync();
         }
     });
 });
 
-// chrome.runtime.onConnect.addListener(function(port) {
-//     // if (!(port.name == "toolbar")){
-//     //     return;
-//     // }
-//     port.onMessage.addListener(function(request) {
-
-//         if (request.message == 'fetchdata')
-//             fetchDataRequest(request, port);
-
-//     });
-
-
-// });
 
 function fetchDataRequest(request, port){
     // Responds to 'fetchdata'
-    console.log('FDR'+port.name+JSON.stringify(port));
     if (request.message == "fetchdata"){
-        console.log(port.name+': '+JSON.stringify(request));
         var storage = chrome.storage.local;
         var pdd_fun = callbackMessage(port);
         if (request.data.prefs){
@@ -217,7 +182,6 @@ function fetchDataRequest(request, port){
             });
         }
         if (request.data.images){
-            console.log('requesting images');
             pdd_fun("datadump", images, "images");
         }
         if (request.data.ficdict_ids){
@@ -225,12 +189,10 @@ function fetchDataRequest(request, port){
                 var data = {};
                 // NOTE: we stringify the nested list
                 var ficdict_ids = JSON.parse(request.data.ficdict_ids);
-                console.log('ficdict requester listener'+ ficdict_ids);
                 
                 for (var key in ficdict_ids) {
                     var fd_id = ficdict_ids[key];
                     if (items[fd_id]) {
-                        console.log(fd_id);
                         data[fd_id] = items[fd_id];
                     }
                 }
@@ -249,7 +211,6 @@ function getUser(callbk){
         if (!('user_id' in items.prefs)){
             newUser(); // WARNING: this is async
         }
-        console.log(JSON.stringify(items));
         callbk("token-revealed", items.prefs.user_id);  // May be null
     });
 
@@ -260,13 +221,6 @@ function getUser(callbk){
 var passDatadump = (function(port){
     return function(data_type, data) {
         port.postMessage({'message' :'datadump', 'data': data, 'data_type': data_type});
-    };
-});
-
-var test = (function(port){
-    return function(data) {
-        console.log(port);
-        console.log(data);
     };
 });
 
@@ -353,15 +307,12 @@ function getDataForSync(callbk){
 }
 
 function syncWork(data){
-    console.log('syncWork');
     if (!data.ao3id){
         return;
     }
 
     var callbk = (function(data){
         return function(user_id) {
-            console.log('inside syncWork callback');
-            console.log(data);
 
             var xhr = new XMLHttpRequest();
             var url = backendUrl + 'user/' + user_id + "/work/" + data['ao3id'];
@@ -370,8 +321,6 @@ function syncWork(data){
             xhr.onreadystatechange = function() {
                 if ((xhr.readyState == 4) && (xhr.status == 200 || xhr.status == 201)) {
                     var diff = JSON.parse(xhr.responseText)['diff'];
-                    console.log('diff');
-                    console.log(diff);
 
                     // This will only contain the diff of one work.
                     // If there was no difference, it will be empty.
@@ -394,14 +343,11 @@ function syncWork(data){
 
 function runSync(){
     var storage = chrome.storage.local;
-    console.log('runsync');
 
     storage.get('prefs', function (items){
         // No sync without user OR explicit permission
         if ('user_id' in items.prefs && items.prefs.sync_enabled){
             var minSyncWait = 60 * 60 * 10;  // 10 Minutes for full sync
-            console.log((Date.now()/1000) -  minSyncWait);
-            console.log(items.prefs['last_sync']);
             if ((Date.now()/1000) -  minSyncWait < items.prefs['last_sync']){
                 return;
             }
@@ -415,22 +361,16 @@ function runSync(){
 function syncData(user_id_override, port){
     /* Use the user_id_override when saving a new user_id/"token" and storage hasn't caught up. */
     // Grab all data
-    console.log('syncData');
     var callbk = function(user_id, data){
         if (user_id_override)
             user_id = user_id_override;
-        console.log('inside syncData callback');
         var xhr = new XMLHttpRequest();
         var url = backendUrl + 'user/' + user_id + "/collection";
         xhr.open("POST", url, true);
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhr.onreadystatechange = function() {
-            console.log(xhr.status);
             if ((xhr.readyState == 4) && (xhr.status == 200 || xhr.status == 201)) {
                 var diff = JSON.parse(xhr.responseText)['diff'];
-                console.log(xhr.responseText);
-                console.log('diff');
-                console.log(diff);
 
                 // Iterate through the dictionary of changed articles and update our DB
                 // the key is the work ID
@@ -447,8 +387,6 @@ function syncData(user_id_override, port){
                                 delete article['user_id'];
                             }
                             if (!(Object.keys(article).length === 0)){
-                                console.log('syncData');
-                                console.log(article);
                                 article['ao3id'] = key;
                                 saveArticle(article, true, port, false)
                             }
