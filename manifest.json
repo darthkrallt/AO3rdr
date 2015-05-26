@@ -26,8 +26,15 @@
 
   "browser_action": {
     "default_title": "AO3rdr",
-    "default_icon": "data/images/icon.svg"
+    "default_popup": "data/settings/popup.html",
+    "default_icon": "data/images/icon_128.png"
   },
+  "icons": {
+    "16": "data/images/icon_16.png",
+    "48": "data/images/icon_48.png",
+    "128": "data/images/icon_128.png"
+  },
+
   "manifest_version": 2,
 
   "web_accessible_resources": [

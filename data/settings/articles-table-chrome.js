@@ -1,8 +1,5 @@
 var artPort = chrome.runtime.connect({name: "articles-table"});
 
-
-function crawlForUpdates() {};
-
 var requestBackup = (function(artPort){
     return function(){
         artPort.postMessage({message:'fetchdata', data: {'exportdata': true}});

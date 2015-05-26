@@ -1,6 +1,5 @@
 var tableData = {};
 var images = {};
-var ao3baseLink = 'http://archiveofourown.org/works/';
 var spinner = null;
 var tokenSyncSpinner = null;
 
@@ -37,54 +36,6 @@ function onTokenSave(token_status, token){
     tokenSyncSpinner.stop();
 }
 
-function generateImageHtml(data){
-    var url = images['star-0'];
-    if (parseInt(data['rating']) > 0){
-        url = images['star-'+data['rating']+'-fill'];
-    } else if (parseInt(data['rating']) == -1) {
-        url = images['dislike-fill'];   
-    }
-    var img = document.createElement("img");
-    img.setAttribute('src', url);
-    img.setAttribute('height', '30');
-    img.setAttribute('alt', data['rating']);
-    var html = document.createElement("td");
-    html.appendChild(img);
-    return html;
-}
-
-function generateAO3link(data){
-    var url = ao3baseLink + data['ao3id'];
-    if (data['chapter_id']) {
-        // Add in the chapter ID if we have it
-        return url + '/chapters/' + data['chapter_id'];
-    }
-    return url;
-}
-
-function generateUnreadHtml(data){
-    var url = images['read'];
-    var img = document.createElement("img");
-    img.setAttribute('alt', 'read');
-    img.setAttribute('height', '30');
-    if (data['read'] < data['chapters']['published']){
-        url = images['unread'];
-        img.setAttribute('alt', 'unread');
-    }
-    img.setAttribute('src', url);
-    var html = document.createElement("td");
-    html.appendChild(img);
-    return html;
-}
-
-function generateChaptersHtml(data){
-    var html = document.createElement("td");
-    html.setAttribute('status', data['chapters']['complete']);
-    var txt_str = data['chapters']['published'] + '/' + data['chapters']['total'];
-    var text = document.createTextNode(txt_str);
-    html.appendChild(text);
-    return html;
-}
 
 function generateRowHtml(data){
 /* Generate the HTML of a single row for the table. Also useful
@@ -244,8 +195,6 @@ function onExportComplete(incomming_data){
 }
 
 $(document).ready(function() { 
-    $('#crawl-updates').click(crawlForUpdates);
-
     $('#upload-data').get(0).addEventListener('change', handleFile, false);
     $('#export-data').click(requestBackup);
 
