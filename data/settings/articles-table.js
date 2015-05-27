@@ -70,10 +70,10 @@ function generateRowHtml(data){
         } else if (boring[j] == 'title') {
             var text = document.createElement('a');
             text.setAttribute('href', generateAO3link(data));
-            var text_str = document.createTextNode(data['title']);
+            var text_str = document.createTextNode(safeDecode(data['title']));
             text.appendChild(text_str);
         } else {
-            var text = document.createTextNode(data[boring[j]]);
+            var text = document.createTextNode(safeDecode(data[boring[j]]));
         }
         html.appendChild(text);
         row.appendChild(html);
@@ -102,7 +102,8 @@ function loadTable(tableData){
         columnDefs: [
             { type: 'alt-string', targets: [0, 1] },
             { type: 'html', targets: 3 }
-        ]
+        ],
+        "order": [[ 0, "desc" ]],
     });
 }
 

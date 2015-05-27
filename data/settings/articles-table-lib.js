@@ -1,5 +1,9 @@
 var ao3baseLink = 'http://archiveofourown.org/works/';
 
+function safeDecode(encoded){
+    return $('<textarea/>').html(encoded).val();
+}
+
 function generateStarImage(data, size){
     var url = images['star-0'];
     if (parseInt(data['rating']) > 0){
