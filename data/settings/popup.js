@@ -45,7 +45,6 @@ function processTopTen(ficdict){
     onlyGood.sort(function (a, b) {
         return (new Date(a.visit)).getTime() - (new Date(b.visit)).getTime();
     });
-    console.log(onlyGood.slice(0,10));
     loadTenTable(onlyGood.slice(0,10));
 
 }
@@ -54,40 +53,56 @@ function generateRowHtmlPopup(data){
 /* Generate the HTML of a single row for the table. Also useful
    for updating!
 */
-    var row = document.createElement('tr');
+
+/*<div class="header">
+  <img src="http://dummyimage.com/100/000000/fff" />
+  <h1>Hello world</h1>
+  <h2>This is a subtitle</h2>
+  <div class="clear"></div>
+</div*/
+
+    var row = document.createElement('li');
     row.setAttribute('id', data['ao3id']);
 
     // First generate the icons and append
-    var html = document.createElement("td");
-    html.appendChild(generateStarImage(data, 20));
-    html.appendChild(generateUnreadImage(data, 20));
-    console.log(html);
-    row.appendChild(html);
+    var img = generateStarImage(data, 15);
+    img.style.paddingRight = '0.2em';
+    //img.style.float = 'left';
+    row.appendChild(img);
+
 
     // Author, Title, Updated, Last Visit all boring
-    var boring = ['author', 'title'];
-    for (var j in boring){
-        var html = document.createElement("td");
-        // html.innerHTML = data[boring[j]]; // note it is already encoded
-        if (boring[j] == 'title') {
-            var text = document.createElement('a');
-            text.setAttribute('href', generateAO3link(data));
-            var text_str = document.createTextNode(data['title']);
-            text.appendChild(text_str);
-        } else {
-            var text = document.createTextNode(data[boring[j]]);
-        }
-        html.appendChild(text);
-        row.appendChild(html);
-    }
+    var link = document.createElement('a');
+    var url =  generateAO3link(data);
+    link.onclick = function(){chrome.tabs.create({'url': url})};
+    // Technically setting this arrt does nothing, but makes mouseover outline work
+    link.setAttribute('href', generateAO3link(data));
+
+    var text_str = document.createTextNode(safeDecode(data['title']));
+    link.appendChild(text_str);
+    row.appendChild(link);
+
+    img = generateUnreadImage(data, 15);
+    img.style.paddingLeft = '0.2em';
+    row.appendChild(img);
+
+    var dd = document.createElement('dd');
+    dd.style.fontSize = '0.75em';
+
+
+    var text = document.createTextNode(safeDecode(data['author']));
+    dd.appendChild(text);
+    
+    row.appendChild(dd);
+
+
     return row;
 }
 
 function loadTenTable(tableData){
+    tableData.reverse();
     // first generate the html
-    var tableBody = $("#topTenTable").find('tbody');
-    // Empty it first
-    $(tableBody).empty();
+    var tableBody = $("#topTen");
     for (var i in tableData){
         try {
             var row = generateRowHtmlPopup(tableData[i]);
