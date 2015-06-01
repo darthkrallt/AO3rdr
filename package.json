@@ -6,8 +6,5 @@
   "description": "A bookmark helper and tag blacklister for Archive of Our Own.",
   "author": "Darthkrallt",
   "license": "LGPL 2.1",
-  "version": "1.0.5",
-  "lib": "src",
-  "main": "src/main.js",
-  "packages": "src"
+  "version": "1.0.5"
 }
