@@ -14,10 +14,6 @@ function onAttach(tableData, prefs){
     loadTable(tableData);
 }
 
-self.port.on('allcrawlscomplete', function onMessage(incomming_data) {
-    crawlsComplete(incomming_data);
-});
-
 self.port.on('exportcomplete', function onMessage(incomming_data) {
     onExportComplete(incomming_data);
 });
@@ -81,10 +77,8 @@ self.port.on('token-saved', function onMessage(incomming_data) {
     if (incomming_data['token_status'] == 'valid'){
         // Trigger a refresh of table data
         tableData = incomming_data['data'];
-        // drop the table
-        $($('#articlesTable').find('tbody')).empty();
-        // reload the table
-        loadTable(tableData);
+        // reload the table destructively
+        loadTable(tableData, true);
         lastSyncUpdate();
     }
 });
@@ -98,17 +92,6 @@ var saveToken = (function(port){
 
 /* end Cloud backup */
 
-var crawlForUpdates = (function(port){
-    return function(){
-        // Ugly global...
-        spinner = new Spinner({position: 'relative'}).spin();
-
-        $('#crawl-spinner').parent().append(spinner.el);
-        port.emit('crawlrequest');
-    }
-})(self.port);
-
-
 $(document).ready(function() { 
-    addTablesorter();
+    // IDK... nothing I guess???
 });

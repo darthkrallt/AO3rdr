@@ -11,8 +11,7 @@ Features include:
     - Cloud Sync for multiple browsers
     - Open source code!
 
-This is to be developed with both mobile and desktop use in mind, so no SDK's 
-were used that are not available on Firefox's beta mobile browser.
+Available on Firefox, Firefox mobile beta, and Chrome browsers.
 
 Credits
 - Skeleton: getskeleton.com
@@ -25,9 +24,6 @@ Credits
     Fancy tag input
 - Spin.js: http://fgnass.github.io/spin.js/
     Spinner grapic thing. @__@
-
-FF Docs to consider
-https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials/Mobile_development
 
 BUGS
   - Firefox memory is unstable. Please regularly back up.

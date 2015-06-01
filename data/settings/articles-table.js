@@ -82,7 +82,11 @@ function generateRowHtml(data){
     return row;
 }
 
-function loadTable(tableData){
+function loadTable(tableData, destroy){
+    destroy = typeof destroy !== 'undefined' ?  destroy : false;
+    if (destroy){
+        $('#articlesTable').DataTable().destroy();
+    }
     // first generate the html
     var tableBody = $("#articlesTable").find('tbody');
     // Empty it first
