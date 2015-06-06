@@ -126,9 +126,13 @@ function parseArticlePage(raw_html){
     var raw_date = null;
     for (var i = 0; i< stats.length; i+=2){
         // going by 2's through stats
-        if (($(stats[i]).html() == 'Published:') || ($(stats[i]).html() == 'Updated:')) {
+        var key = $(stats[i]).html();
+        var value = $(stats[i+1]).html();
+        if ((key == 'Published:') || (key == 'Updated:')) {
             // Only overwrite if null
-            raw_date =  $(stats[i+1]).html() || raw_date;
+            raw_date =  value || raw_date;
+        } else if (key == 'Words:'){
+            out['wordcount'] =  parseFloat(value.replace(',' ,''));
         }
     }
     out['updated'] = new Date(Date.parse(raw_date)).toJSON();
@@ -150,7 +154,6 @@ function parseArticlePage(raw_html){
         out['chapters_read'] = 1;
     }
 
-
     return out;
 }
 
@@ -169,10 +172,21 @@ function parseWorkBlurb(raw_html){
     var raw = $(raw_html).find('p[class=datetime]').html();
     out['updated'] = new Date(Date.parse(raw)).toJSON();
 
+    var stats = $(raw_html).find('dl[class=stats]').children();
+    for (var i = 0; i< stats.length; i+=2){
+        // going by 2's through stats
+        var key = $(stats[i]).html();
+        var value = $(stats[i+1]).html();
+        if (key == 'Words:'){
+            out['wordcount'] = parseFloat(value.replace(',' ,''));
+        }
+    }
+
     out['chapters'] = parseChapters(raw_html);
     // Assume we've not read anything if adding from
     // browse tags page.
     out['chapters_read'] = 0;
+
     return out;
 }
 
