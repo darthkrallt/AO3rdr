@@ -1,16 +1,16 @@
 DK's Reader Manager - AO3rdr
 
-A bookmark manager for reading on Archive of Our Own (archiveofourown.org)
+A bookmark manager for reading on Archive of Our Own (http://archiveofourown.org)
 Features include:
-    - Three star rating system
-    - Hide works
-    - Blacklist by tags
-    - Bookmark by chapter read
-    - Scan bookmarks for updates
-    - Keep track of last visit
-    - Backup and restore user data
-    - Cloud Sync for multiple browsers
-    - Open source code!
+  - Three star rating system
+  - Hide works
+  - Blacklist by tags
+  - Bookmark by chapter read
+  - Scan bookmarks for updates
+  - Keep track of last visit
+  - Backup and restore user data
+  - Cloud Sync for multiple browsers
+  - Open source code!
 
 This is to be developed with both mobile and desktop use in mind, so no SDK's 
 were used that are not available on Firefox's beta mobile browser.
