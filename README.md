@@ -1,6 +1,7 @@
 DK's Reader Manager - AO3rdr
+============================
 
-A bookmark manager for reading on Archive of Our Own (http://archiveofourown.org)
+A bookmark manager for reading on Archive of Our Own (http://archiveofourown.org).
 Features include:
   - Three star rating system
   - Hide works
@@ -16,6 +17,7 @@ This is to be developed with both mobile and desktop use in mind, so no SDK's
 were used that are not available on Firefox's beta mobile browser.
 
 Credits
+-------
 - Skeleton: getskeleton.com
     Easy CSS and layout bones for settings page
 - The Noun Project: thenounproject.com
@@ -31,11 +33,13 @@ FF Docs to consider
 https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials/Mobile_development
 
 BUGS
+----
   - Please report any others you find!
 
 TODO
 
 WISHLIST (not for this release)
+-------------------------------
   - Add "added on" date (not visible in UI)
   - Add some cool stats to the settings page (eg, read the equivalent of 3 LOTR
       series in the last 90 days)
@@ -57,6 +61,7 @@ WISHLIST (not for this release)
   - Sync between devices (would require a server and a license agreement)
 
 LICENSE
+-------
     Copyright (C) 2015  Darthkrallt
 
     This library is free software; you can redistribute it and/or
