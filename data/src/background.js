@@ -1,4 +1,6 @@
-/* The background process for chrome */
+/* CHROME ONLY
+    Core control center of the app.
+*/
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {

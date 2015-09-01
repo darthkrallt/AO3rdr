@@ -1,3 +1,7 @@
+/* CHROME ONLY
+    Used by the popup you make when clicking on the toolbar icon.
+*/
+
 var popPort = chrome.runtime.connect({name: "popup"});
 
 $(document).ready(function() { 

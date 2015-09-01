@@ -1,3 +1,8 @@
+/* USED BY BOTH
+    ContentScript file for the settings page.
+    Depends on articles-table-lib
+*/
+
 var tableData = {};
 var images = {};
 var spinner = null;

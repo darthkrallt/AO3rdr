@@ -1,6 +1,8 @@
-/*  Common core functions used for accessing the ao3 site. Used by both the
+/* USED BY BOTH
+    Common core functions used for accessing the ao3 site. Used by both the
     crawler and the toolbar scripts.
 */
+
 var addonName = 'ao3rdr';
 
 // Handle the message getting the image data on activation

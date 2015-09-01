@@ -1,3 +1,7 @@
+/* CHROME ONLY
+    Message passing for settings page.
+*/
+
 var artPort = chrome.runtime.connect({name: "articles-table"});
 
 var requestBackup = (function(artPort){

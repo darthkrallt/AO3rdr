@@ -1,5 +1,5 @@
-/* ContentScript file for modifying the AO3 pages. Depends on ao3lib.
-
+/* USED BY BOTH
+    ContentScript file for modifying the AO3 pages. Depends on ao3lib.
 */
 
 function processPage(){

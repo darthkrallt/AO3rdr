@@ -1,3 +1,8 @@
+/* USED BY BOTH
+    Used in both main and content scripts
+    The article class, and acting on it.
+*/
+
 function Article(metadata, mutable_data) {
 /* Article Object. As it gets stored in memory.
 */

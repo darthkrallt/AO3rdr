@@ -1,3 +1,7 @@
+/* CHROME ONLY
+    Get the image urls in the content scripts.
+*/
+
 // TODO: incomming data
 var images = {
     'star-shadow':chrome.extension.getURL('data/images/star-shadow.svg'),

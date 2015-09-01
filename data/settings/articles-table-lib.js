@@ -1,3 +1,7 @@
+/* USED BY BOTH
+    Library for articles-table
+*/
+
 var ao3baseLink = 'http://archiveofourown.org/works/';
 
 function safeDecode(encoded){

@@ -1,4 +1,6 @@
-
+/* CHROME ONLY
+    Sending and recieving data on event of rating event.
+*/
 
 function emitSettingsClick(){
     chrome.runtime.sendMessage({message: 'settingsclick'});

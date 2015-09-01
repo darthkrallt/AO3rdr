@@ -1,4 +1,7 @@
-// Note that this is a contentScript, so it gets attached by the main.js
+/* FIREFOX ONLY
+    Message passing for settings page.
+    Note that this is a contentScript, so it gets attached by the main.js
+*/
 
 self.port.on('attached', function onMessage(incomming_data) {
     tableData = incomming_data['data'];
