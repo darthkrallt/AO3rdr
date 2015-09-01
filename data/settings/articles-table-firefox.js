@@ -15,6 +15,7 @@ function onAttach(tableData, prefs){
 }
 
 self.port.on('exportcomplete', function onMessage(incomming_data) {
+    console.log('export complete');
     onExportComplete(incomming_data);
 });
 

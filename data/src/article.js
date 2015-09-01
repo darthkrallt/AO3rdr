@@ -11,6 +11,8 @@ function Article(metadata, mutable_data) {
     this.updated__ts = currentTime;
     this.chapters = metadata['chapters'];
     this.chapters__ts = currentTime;
+    this.wordcount = metadata['wordcount'];
+    this.wordcount__ts = currentTime;
 
     if (mutable_data) {
         this.rating = mutable_data['rating'];
@@ -62,6 +64,11 @@ function updateArticle(old_article, new_article){
         // Clear the hasupdate flag when you've visited
         old_article.hasupdate = false;
         old_article.hasupdate__ts = currentTime;
+    }
+
+    if (new_article.wordcount){
+        old_article.wordcount = new_article.wordcount;
+        old_article.wordcount__ts = new_article.wordcount__ts;
     }
 
     // Important! We need to always update these both together!

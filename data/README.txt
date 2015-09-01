@@ -31,3 +31,5 @@ http://thenounproject.com/term/book/14945/
 Read Icon by Nicholas Menghini from the Noun Project:
 http://thenounproject.com/term/book/10777/
 
+MP3 File by Jevgeni Striganov from the Noun Project:
+https://thenounproject.com/search/?q=download-file&i=56863

@@ -35,6 +35,8 @@ var emitSettingsClick = (function(port){
 
 // Listening to updates after initial load
 self.port.on('update', function(newArticle){
+    console.log('on update');
+    console.log(JSON.stringify(newArticle));
     if (!newArticle){
         return;
     }
