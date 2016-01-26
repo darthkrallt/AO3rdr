@@ -1,6 +1,9 @@
-DK's Reader Manager - AO3rdr
+DK's Reader Manager - AO3rdr - An UNOFFICAL addon for collecting and managing bookmarks.
 
 A bookmark manager for reading on Archive of Our Own (archiveofourown.org)
+
+Please note that this is just made by me for fun, I am not affiliated with the Archive.
+
 Features include:
     - Three star rating system
     - Hide works
