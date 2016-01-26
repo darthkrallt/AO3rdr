@@ -1,24 +1,39 @@
-DK's Reader Manager - AO3rdr - An UNOFFICAL addon for collecting and managing bookmarks.
+DK's Unofficial Reader Manager - AO3rdr
+============================
 
-A bookmark manager for reading on Archive of Our Own (archiveofourown.org)
-
-Please note that this is just made by me for fun, I am not affiliated with the Archive.
+A bookmark manager for reading on Archive of Our Own (http://archiveofourown.org). Please note that this is just made by me for fun, I am not affiliated with the Archive.
 
 Features include:
-    - Three star rating system
-    - Hide works
-    - Blacklist by tags
-    - Bookmark by chapter read
-    - Scan bookmarks for updates
-    - Keep track of last visit
-    - Backup and restore user data
-    - Cloud Sync for multiple browsers
-    - Open source code!
+  - Three star rating system
+  - Hide works
+  - Blacklist by tags
+  - Bookmark by chapter read
+  - Scan bookmarks for updates
+  - Keep track of last visit
+  - Backup and restore user data
+  - Cloud Sync for multiple browsers
+  - Open source code!
+
+Where to get it
+---------------
+
+### Chrome
+
+Available from the Google Chrome webstore https://chrome.google.com/webstore/detail/ao3rdr/hbbcholilmaipbhjbcohpleofolpdnjl
+
+### Firefox
+
+Latest testing version is available from https://github.com/darthkrallt/AO3rdr/blob/master/ao3rdr.xpi
+
+Available from the Mozilla Addon site:
+  * Desktop https://addons.mozilla.org/En-us/firefox/addon/ao3rdr/
+  * Adroid https://addons.mozilla.org/en-us/android/addon/ao3rdr/
 
 This is to be developed with both mobile and desktop use in mind, so no SDK's 
 were used that are not available on Firefox's beta mobile browser.
 
 Credits
+-------
 - Skeleton: getskeleton.com
     Easy CSS and layout bones for settings page
 - The Noun Project: thenounproject.com
@@ -34,11 +49,13 @@ FF Docs to consider
 https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials/Mobile_development
 
 BUGS
+----
   - Please report any others you find!
 
 TODO
 
 WISHLIST (not for this release)
+-------------------------------
   - Add "added on" date (not visible in UI)
   - Add some cool stats to the settings page (eg, read the equivalent of 3 LOTR
       series in the last 90 days)
@@ -60,6 +77,7 @@ WISHLIST (not for this release)
   - Sync between devices (would require a server and a license agreement)
 
 LICENSE
+-------
     Copyright (C) 2015  Darthkrallt
 
     This library is free software; you can redistribute it and/or
