@@ -57,6 +57,7 @@ function saveArticle(newArticle, create_if_ne, port, do_sync){
     }
 
     storage.get(newArticle.ao3id, function (data){
+        console.log(data);
         var old_article = data[newArticle.ao3id];
         if (!old_article){
             if (!create_if_ne){
@@ -70,6 +71,7 @@ function saveArticle(newArticle, create_if_ne, port, do_sync){
             }
         }
         // Save the data
+        console.log(data);
         chrome.storage.local.set( data );
 
         // Sync to server (the function handles checking for permission)

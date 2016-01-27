@@ -3,6 +3,7 @@
 */
 
 function processPage(){
+    console.log('processPage');
     var ids = [];
         // Check if it's a browsing page, or a single article page
     if (checkIfArticlePage()) {
@@ -31,6 +32,7 @@ function createButton(src, alt, value, fun){
 
 // Create the toolbar
 function createToolbar(metadata, article){
+    console.log('createToolbar');
     var newDiv = document.createElement("ul");
     newDiv.setAttribute('id', addonName+metadata['ao3id']);
 
@@ -170,6 +172,7 @@ function onPageviewUpdater(){
 
 $(document).ready(function() { 
     onPageviewUpdater();
+    console.log('document.ready');
     var ids = processPage();
     toolbar_onload(ids); // TODO: implement this for FF
 }); 

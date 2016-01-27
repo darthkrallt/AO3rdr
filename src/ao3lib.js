@@ -229,6 +229,7 @@ function checkIfArticlePage(){
 // Go through the page, look for all the <li class="work blurb group" id="work_2707844" role="article">
 // Processing when running on the "browse tags" or "browse bookmarks"
 function processBrowsePage(){
+    console.log('processBrowsePage');
     var idsOnPage = [];
     var articles = $("li[role=article]");
     for (var i=0; i< articles.length; i++){
@@ -268,6 +269,8 @@ function blacklistBrowsePage(prefs){
 
 
 function processArticlePage(){
+        console.log('processArticlePage');
+
 
         // Processing when running on only a single article
         // Just append the tool bar!

@@ -53,6 +53,7 @@ toolPort.onMessage.addListener(function(request, sender, sendResponse) {
 });
 
 function toolbar_onload(ids) {
+    console.log(toolbar_onload);
     toolPort.postMessage({message: 'runsync'});
     toolPort.postMessage({message: 'fetchdata', data: {images: true}});
     toolPort.postMessage({message:'fetchdata', data: {ficdict_ids: JSON.stringify(ids), prefs: true} });
