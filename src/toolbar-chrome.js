@@ -17,7 +17,17 @@ function emitFicData(metadata, mutable_data){
 
 }
 
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    toolbar_listener(request)
+});
+
+
 toolPort.onMessage.addListener(function(request, sender, sendResponse) {
+    toolbar_listener(request);
+});
+
+function toolbar_listener(request){
     switch (request.message) {
         case 'newfic':
             updateImage(request.data);
@@ -39,15 +49,15 @@ toolPort.onMessage.addListener(function(request, sender, sendResponse) {
             onTokenSave(request.data['token_status']);
             break;
         case 'datadump':
-            datadumper(request);
+            toolbar_datadumper(request);
             break;
         default:
             console.log('responder missed in toolbar');
             break;
     }
-});
+}
 
-function datadumper(request){
+function toolbar_datadumper(request){
     switch(request.data_type){
         case 'prefs':
             prefs = request.data['prefs'];

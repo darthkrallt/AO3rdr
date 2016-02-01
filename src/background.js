@@ -77,9 +77,11 @@ function saveArticle(newArticle, create_if_ne, port, do_sync){
             syncWork(data[newArticle.ao3id]);
         }
         
-        if (port){
-            port.postMessage({message: 'newfic', data: data[newArticle.ao3id]});
-        }
+        // if (port){
+        //     port.postMessage({message: 'newfic', data: data[newArticle.ao3id]});
+        // }
+        // Broadcast new article changes
+        broadcast({message: 'newfic', data: data[newArticle.ao3id]});
     });
 }
 
@@ -88,17 +90,35 @@ function savePrefs(prefs){
     var storage = chrome.storage.local;
 
     storage.get("prefs", function (items){
+        var tags_changed = false;
         for (var key in prefs){
             if ((key == 'tags') && typeof prefs[key] === 'string') {
+                tags_changed = (items.prefs[key].toString() != prefs[key].split(',').toString());
                 items.prefs[key] = prefs[key].split(',');
             } else {
                 items.prefs[key] = prefs[key];
             }
         }
         chrome.storage.local.set( items );
+        // Only broadcast if tags changed
+        if (tags_changed){
+            broadcast({message: 'datadump', data: items, data_type:'prefs'});
+        }
     });
 }
 
+function broadcast(message){
+    "Broadcast a message to ALL tabs. No callbacks allowed. Tested this with "
+    "enough tabs open to make my computer sluggish. Didn't seem to make it worse,"
+    "I assume this is a really light weight function."
+    chrome.tabs.query({}, function(tabs) {
+        for (var idx in tabs) {
+            if (tabs[idx].id){
+                chrome.tabs.sendMessage(tabs[idx].id, message);
+            }
+        }
+    });
+}
 
 // NOTE! You have to call this twice to get it to send
 // first with the port, then with the data you want to send.
@@ -402,15 +422,3 @@ function syncData(user_id_override, port){
 
     getDataForSync(callbk);
 }
-
-
-// var xhr = new XMLHttpRequest();
-// xhr.open("GET", backendUrl, true);
-// xhr.onreadystatechange = function() {
-//     if (xhr.readyState == 4) {
-//         if (xhr.status == 200){
-//             var resp = JSON.parse(xhr.responseText);
-//         }
-//     }
-// }
-// xhr.send();

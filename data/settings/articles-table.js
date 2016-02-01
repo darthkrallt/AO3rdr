@@ -16,6 +16,9 @@ function onPrefs(prefs){
     var tags = prefs['tags'];
     if (Array.isArray(tags))
         tags = tags.join(',');
+    // Do nothing if the tags haven't actually changed.
+    if (tags == $('#blacklist').val())
+        return;
 
     $('#blacklist').importTags(tags);
 

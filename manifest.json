@@ -1,7 +1,7 @@
 {
   "name": "AO3rdr",
   "description": "Rating system and block by tag system for Archive of Our Own",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "permissions": [
     "activeTab",
     "storage"
