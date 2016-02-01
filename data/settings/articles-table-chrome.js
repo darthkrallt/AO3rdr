@@ -56,32 +56,55 @@ var restoreData = (function(artPort){
 
 
 artPort.onMessage.addListener(function(request, sender, sendResponse) {
-    if (request.message == 'token-revealed'){
-        $('#token-display').val(request.data);
-        $('#id-token-box').fadeIn(500);
-    } else if (request.message == 'datadump') {
-        if (request.data_type == 'prefs'){
+    switch (request.message) {
+        case 'images':
+            images = request.data;
+            break;
+        case 'token-revealed':
+            $('#token-display').val(request.data);
+            $('#id-token-box').fadeIn(500);
+            break;
+        case 'exportcomplete':
+            onExportComplete(incomming_data);
+            break;
+        case 'newfic':
+            updateTableRow(request.data);
+            break;
+        case 'token-saved':
+            onTokenSave(request.data['token_status']);
+            break;
+        case 'datadump':
+            datadumper(request);
+            break;
+        default:
+            console.log('responder missed in table');
+            break;
+    }
+});
+
+
+function datadumper(request){
+    switch (request.data_type){
+        case 'images':
+            images = request.data;
+            break;
+        case 'prefs':
             prefs = request.data.prefs;
             onPrefs(prefs);
-        }
-        if (request.data_type == 'ficdict') {
+            break;
+        case 'ficdict':
             tableData = request.data.ficdict;
             loadTable(tableData);
-        }
-        if (request.data_type == 'images'){
-            images = request.data;
-        }
-        if (request.data_type == 'exportdata'){
+            break;
+        case 'exportdata':
             onExportComplete(request.data);
-        }
-    } else if (request.message == 'exportcomplete') {
-        onExportComplete(incomming_data);
-    } else if (request.message == 'newfic') {
-        updateTableRow(request.data);
-    } else if (request.message == 'token-saved') {
-        onTokenSave(request.data['token_status']);
-    };
-});
+            break;
+        default:
+            console.log('datadumper missed in table');
+            break;
+
+    }
+}
 
 
 $(document).ready(function() { 
