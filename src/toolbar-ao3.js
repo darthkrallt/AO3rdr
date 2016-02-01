@@ -111,20 +111,17 @@ function hideByTag(raw_html, metadata){
     // create a placeholder element
     var newDiv = document.createElement("ul");
     newDiv.setAttribute('id', addonName + metadata['ao3id'] + 'blacklisted');
-    var img = document.createElement("img");
-    img.setAttribute('src', images['hidden']);
-
 
     var tmpFun = (function(metadata){
         return function() {
             undoBlacklist(metadata['ao3id'])
         };
     })(metadata);
-    $(img).click(
-        tmpFun
-    );
 
-    newDiv.appendChild(img);
+    var button = createButton(
+            images['hidden'], 'hidden by blacklister', metadata['chapter_id'], tmpFun);
+
+    newDiv.appendChild(button);
 
     var par = document.createElement("li");
     var text = document.createTextNode("hidden by "+ addonName +" blacklister");
