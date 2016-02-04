@@ -21,6 +21,8 @@ function Article(metadata, mutable_data) {
         this.chapter_id__ts = currentTime;
         this.visit = mutable_data['visit'];
         this.visit__ts = currentTime;
+        this.deleted = mutable_data['deleted'] || false;
+        this.deleted__ts = currentTime;
     }
 
 }
@@ -31,6 +33,31 @@ function updateArticle(old_article, new_article){
            used by function handleNewFic
     */
     var currentTime = new Date().getTime() / 1000;
+
+    if (new_article.deleted){
+        // Make sure that the deleted state is in fact the newest
+        if (old_article.deleted != new_article.deleted){
+            if (old_article.deleted__ts < new_article.deleted__ts){
+                old_article.deleted = new_article.deleted;
+                old_article.deleted__ts = new_article.deleted__ts;
+            }
+        } else {
+            // If they're both deleted, we don't care about updating it at all
+            return old_article;
+        }
+    } else if (old_article.deleted && !new_article.deleted){
+        var new_rating = (new_article.rating && (new_article.rating__ts > old_article.deleted__ts));
+        // var new_chapters = (new_article.chapters && (new_article.chapters__ts > old_article.deleted__ts));
+        if (new_rating){
+            if (old_article.deleted__ts < new_article.deleted__ts){
+                old_article.deleted = new_article.deleted;
+                old_article.deleted__ts = currentTime;
+            }
+        } else {
+            // If rating or bookmark page haven't changed, don't un-delete.
+            return old_article;
+        }
+    }
 
     // There will always be a crawled timestamp
     old_article.crawled = new_article.crawled;

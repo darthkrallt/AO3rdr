@@ -46,14 +46,17 @@ function generateRowHtml(data){
 */
     var row = document.createElement('tr');
     row.setAttribute('id', data['ao3id']);
-    // First generate the image
+    // First generate the checkbox
+    row.appendChild(generateTableCheckbox(data));
+
+    // Then generate the image
     row.appendChild(generateImageHtml(data));
 
     // Check if there are unread chapters
     row.appendChild(generateUnreadHtml(data));
 
     // Author, Title, Updated, Last Visit all boring
-    var boring = ['author', 'title', 'updated', 'visit', 'read'];
+    var boring = ['author', 'title', 'updated', 'visit'];
     for (var j in boring){
         var html = document.createElement("td");
         // html.innerHTML = data[boring[j]]; // note it is already encoded
@@ -85,6 +88,7 @@ function generateRowHtml(data){
     return row;
 }
 
+
 function loadTable(tableData){
     // first generate the html
     var tableBody = $("#articlesTable").find('tbody');
@@ -92,6 +96,10 @@ function loadTable(tableData){
     $(tableBody).empty();
     for (var i in tableData){
         try {
+            var perm_deleted = tableData[i].deleted && ((new Date().getTime() / 1000) - tableData[i].deleted__ts > 60)
+            if (perm_deleted){
+                continue;
+            }
             var row = generateRowHtml(tableData[i]);
             tableBody.append(row);
         }
@@ -103,8 +111,14 @@ function loadTable(tableData){
     // Datatables is chrome only because of "dangerous" functions
     $('#articlesTable').dataTable({
         columnDefs: [
-            { type: 'alt-string', targets: [0, 1] },
-            { type: 'html', targets: 3 }
+            {
+                'targets': 0,
+                'searchable': false,
+                'orderable': false,
+                'className': 'dt-body-center',
+            },
+            { type: 'alt-string', targets: [1, 2] },
+            { type: 'html', targets: 4 },
         ],
         "order": [[ 0, "desc" ]],
     });
@@ -125,10 +139,18 @@ function updateTableRow(rowData){
     }
     $('#articlesTable').dataTable({
         columnDefs: [
-            { type: 'alt-string', targets: [0, 1] },
-            { type: 'html', targets: 3 }
-        ]
+            {
+                'targets': 0,
+                'searchable': false,
+                'orderable': false,
+                'className': 'dt-body-center',
+            },
+            { type: 'alt-string', targets: [1, 2] },
+            { type: 'html', targets: 4 },
+        ],
     });
+    // TODO: THIS IS A TERRIBLE PLACE FOR THIS
+    addEditDropdown();
 
     // TODO: adding the elements with the API would be better, but I couldn't get it working.
 

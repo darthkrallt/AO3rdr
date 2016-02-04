@@ -42,6 +42,20 @@ var saveToken = (function(artPort){
     }
 })(artPort);
 
+var emitWorkEdit = (function(artPort){
+    return function(ao3id, update_data) {
+        $('#articlesTable').find('input:checked').each(function(idx){
+            var send_data = {
+                metadata: {'ao3id': ao3id},
+                mutable_data: update_data
+            };
+            artPort.postMessage({message: 'ficdata', data:send_data});
+
+            $(this).click(); // Triggers a clear of the selection
+        });
+    };
+})(artPort);
+
 var restoreData = (function(artPort){
     // This is really confusing! it returns a function to generate another function!
     return function(fileData){
@@ -104,6 +118,7 @@ function datadumper(request){
         case 'ficdict':
             tableData = request.data.ficdict;
             loadTable(tableData);
+            addEditDropdown();
             break;
         case 'exportdata':
             onExportComplete(request.data);

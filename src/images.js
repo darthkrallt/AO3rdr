@@ -12,6 +12,8 @@ var images = {
     'hidden-shadow':chrome.extension.getURL('data/images/hidden-shadow.svg'),
     'dislike':chrome.extension.getURL('data/images/dislike.svg'),
     'dislike-fill':chrome.extension.getURL('data/images/dislike-fill.svg'),
+    'delete':chrome.extension.getURL('data/images/delete.svg'),
+    'delete-fill':chrome.extension.getURL('data/images/delete-fill.svg'),
     'dislike-shadow':chrome.extension.getURL('data/images/dislike-shadow.svg'),
     'menu':chrome.extension.getURL('data/images/menu.svg'),
     'menu-shadow':chrome.extension.getURL('data/images/menu-shadow.svg'),

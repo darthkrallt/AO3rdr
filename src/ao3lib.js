@@ -46,6 +46,10 @@ var pageChapter = extractChapterIdFromPage();
 function setImage(html, stored_data){
     level = parseInt(stored_data.rating);
 
+    if (stored_data.deleted){
+        return;
+    }
+
     if (level > 0) {
         var ele = $(html).find("img[src*='star-"+level+"']");
         $(ele).attr('src', images['star-'+level+'-fill']);

@@ -247,6 +247,7 @@ var passDatadump = (function(port){
 
 // Stuff below this line is broken, 'cuz async foo!
 var backendUrl = 'https://boiling-caverns-2782.herokuapp.com/api/v1.0/';
+// var backendUrl = 'http://127.0.0.1:5000/api/v1.0/'
 
 function newUser(){
 

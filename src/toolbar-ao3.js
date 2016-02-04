@@ -142,6 +142,9 @@ function updateImage(newArticle){
     if (ele) {
         // Clear any selected
         clearImage(ele);
+        if (newArticle.deleted){
+            return;
+        }
         // swap out the images
         setImage(ele, newArticle);
         // Also check if it was blacklisted, if so we want to undo it
