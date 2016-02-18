@@ -65,8 +65,8 @@ function updateArticle(old_article, new_article){
 
     if (new_article.rating){
         // The dislike button is a special case, because it's value 
-        // becomes "0" when we want to undo it.
-        if (old_article.rating == -1){
+        // becomes "0" when we want to undo it (eg, clicked -1 rating again)
+        if ((old_article.rating == -1) && (new_article.rating == -1)){
             new_article.rating = 0;
         }
         old_article.rating = new_article.rating;
