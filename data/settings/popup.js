@@ -36,7 +36,7 @@ function processTopTen(ficdict){
 
     var onlyGood = values.filter(
         function (el) {
-          return el.rating > 0;
+          return (el.rating > 0) && (!el.deleted);
         }
     );
 
