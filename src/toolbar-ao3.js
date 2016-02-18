@@ -31,12 +31,15 @@ function createButton(src, alt, value, fun){
 
 // Create the toolbar
 function createToolbar(metadata, article){
-    var newDiv = document.createElement("ul");
-    newDiv.setAttribute('id', addonName+metadata['ao3id']);
+    var outerEle = document.createElement("ul");
+    outerEle.setAttribute('id', addonName+metadata['ao3id']);
+    outerEle.setAttribute('class', addonName+'-toolbar-outer');
 
-    // Unread icon
-    var unread = createButton(images['read'], 'read');
-    newDiv.appendChild(unread);
+    var newDiv1 = document.createElement("div");
+    newDiv1.setAttribute('class', addonName+'-toolbar-segment left-toolbar');
+
+    var newDiv2 = document.createElement("div");
+    newDiv2.setAttribute('class', addonName+'-toolbar-segment right-toolbar');
 
     // Add the buttons
     // Simple rate actions
@@ -55,9 +58,10 @@ function createToolbar(metadata, article){
         })(metadata, {'rating': item.value});
 
         var button = createButton(item.src, 'rate work '+item.value, item.value, tmpFun);
-        newDiv.appendChild(button);
+        newDiv1.appendChild(button);
 
     });
+
     // If on an individual article page, add a bookmark bar
     if (article){
 
@@ -73,14 +77,17 @@ function createToolbar(metadata, article){
 
         var bookmark = createButton(
             images['bookmark'], 'set chapter bookmark', metadata['chapter_id'], tmpFun2);
-        newDiv.appendChild(bookmark);
+        newDiv2.appendChild(bookmark);
     }
 
     // Menu
     var menu = createButton(images['menu'], 'open settings page', '', emitSettingsClick);
 
-    newDiv.appendChild(menu);
-    return newDiv;
+    newDiv2.appendChild(menu);
+    outerEle.appendChild(newDiv1);
+    outerEle.appendChild(newDiv2);
+
+    return outerEle;
 }
 
 

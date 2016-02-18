@@ -4,3 +4,17 @@ img.ao3rdr-button {
     width: auto;
     height: auto;
 }
+
+div.ao3rdr-toolbar-segment{
+    display: inline;
+}
+
+div.ao3rdr-toolbar-segment.right-toolbar{
+    padding-left: 7px;
+
+}
+
+ul.ao3rdr-toolbar-outer{
+    display: inline-block;
+    width: 167px;
+}
