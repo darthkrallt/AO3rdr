@@ -44,15 +44,13 @@ var saveToken = (function(artPort){
 
 var emitWorkEdit = (function(artPort){
     return function(ao3id, update_data) {
-        $('#articlesTable').find('input:checked').each(function(idx){
-            var send_data = {
-                metadata: {'ao3id': ao3id},
-                mutable_data: update_data
-            };
-            artPort.postMessage({message: 'ficdata', data:send_data});
-
-            $(this).click(); // Triggers a clear of the selection
-        });
+        var row = $('#articlesTable').find('#'+ao3id);
+        var send_data = {
+            metadata: {'ao3id': ao3id},
+            mutable_data: update_data
+        };
+        artPort.postMessage({message: 'ficdata', data:send_data});
+        $(row).click();
     };
 })(artPort);
 
