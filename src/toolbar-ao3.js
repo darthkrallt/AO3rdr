@@ -107,10 +107,15 @@ function undoBlacklist(workId){
 }
 
 
-function hideByTag(raw_html, metadata){
+function hideByTag(raw_html, metadata, matching_tags){
+    var id_str = addonName + metadata['ao3id'] + 'blacklisted';
+    // Don't hide if already hidden
+    if ($('#' + id_str).length != 0){
+        return;
+    }
     // create a placeholder element
     var newDiv = document.createElement("ul");
-    newDiv.setAttribute('id', addonName + metadata['ao3id'] + 'blacklisted');
+    newDiv.setAttribute('id', id_str);
 
     var tmpFun = (function(metadata){
         return function() {
@@ -124,7 +129,7 @@ function hideByTag(raw_html, metadata){
     newDiv.appendChild(button);
 
     var par = document.createElement("li");
-    var text = document.createTextNode("hidden by "+ addonName +" blacklister");
+    var text = document.createTextNode("hidden for "+matching_tags.join(', '));
     par.appendChild(text);
     newDiv.appendChild(par);
     // insert the placeholder element

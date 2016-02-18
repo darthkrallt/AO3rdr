@@ -204,12 +204,16 @@ function matchTag(string1, string2){
 }
 
 function checkTags(taglist, blacklist_tags){
+    var matches = [];
     for (var i in taglist){
         for (var j in blacklist_tags){
             if (matchTag(taglist[i], blacklist_tags[j])){
-                return true;
+                matches.push(taglist[i]);
             }
         }
+    }
+    if (matches.length > 0){
+        return matches;
     }
     return false;
 }
@@ -264,8 +268,9 @@ function blacklistBrowsePage(prefs){
         var tags = parseTags(articles[i]);
 
         // if it's a banned tag, hide it!
-        if (checkTags(tags, blacklist_tags)){
-            hideByTag(articles[i], info);
+        var matching_tags = checkTags(tags, blacklist_tags);
+        if (matching_tags){
+            hideByTag(articles[i], info, matching_tags);
         }
     }
 }

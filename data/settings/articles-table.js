@@ -17,11 +17,12 @@ function onPrefs(prefs){
     if (Array.isArray(tags))
         tags = tags.join(',');
     // Do nothing if the tags haven't actually changed.
-    if (tags == $('#blacklist').val())
+    if (tags == $('#blacklist').val()){
         return;
+    }
 
+    // Unbind, then rebind the onchange so this doesn't trigger it
     $('#blacklist').importTags(tags);
-
 }
 
 function onTokenSave(token_status, token){
@@ -264,7 +265,7 @@ $(document).ready(function() {
     );
     $('#blacklist').tagsInput({
         // my parameters here
-        'onChange' : emitTagData,
+        'onAddTag' : emitTagData,
         'height': '75px',
         'width': '100%',
     });

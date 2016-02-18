@@ -56,7 +56,7 @@ div.modal {
     left: 30%;
     border: 1px solid #bbb;
 }
-div.modal.p{
+div.modal p{
     margin: 2.5em;
 }
 
