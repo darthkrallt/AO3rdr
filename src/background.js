@@ -152,7 +152,7 @@ chrome.runtime.onConnect.addListener(function(port) {
         if (request.message == 'restorefrombackup'){
             // Update the DB data
             var version = request.data['version'];
-            var article_data = request.data['article_data'];
+            var article_data = request.data['ficdict'];
 
             for (var key in article_data){
                 if (article_data.hasOwnProperty(key) && article_data[key]['ao3id']) {
