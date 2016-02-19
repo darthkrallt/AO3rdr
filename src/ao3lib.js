@@ -34,7 +34,7 @@ function clearImage(html){
             $(clearMe[i]).attr('src', images['star-'+level]);
         } else if (parseInt(level) <= 0 ){
             $(clearMe[i]).attr('src', images['dislike']);
-            show($(clearMe[i]).closest('.toolbar-outer'));
+            show($(clearMe[i]).closest('.ao3rdr-toolbar-outer'));
         }
     };
 
@@ -56,7 +56,7 @@ function setImage(html, stored_data){
     } else if (level == -1) {
         var ele = $(html).find("img[src*='dislike.svg']");
         $(ele).attr('src', images['dislike-fill']);
-        hide(ele.closest('.toolbar-outer'));
+        hide(ele.closest('.ao3rdr-toolbar-outer'));
     }
 
     if (stored_data.chapter_id == pageChapter) {
