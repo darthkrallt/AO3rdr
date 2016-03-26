@@ -44,6 +44,15 @@ Credits
     Fancy tag input
 - Spin.js: http://fgnass.github.io/spin.js/
     Spinner grapic thing. @__@
+- html2dom: https://github.com/freddyb/html2dom
+    Replacing calls to inner HTML to comply with Mozilla security requirements
+
+Modifications to 3rd Part Libraries
+-------
+- spin.js, line 28, hard coded create element type
+- jquery.dataTables.js, lines 1499, 1694, 3099, 3947, changed call from inner HTML to html2dom
+    https://blog.mozilla.org/security/2013/09/24/introducing-html2dom-an-alternative-to-setting-innerhtml/
+- jquery.dataTables.js, line 1688, hard coded create element type
 
 FF Docs to consider
 https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials/Mobile_development
@@ -73,12 +82,10 @@ WISHLIST (not for this release)
   - tests, HAHAHAHA. THESE ARE IMPORTANT. BUT ALSO AREN'T GONNA HAPPEN.
   - Add support for tumblr (I shudder to think how much work...)
   - Localization
-  - Delete works from database via settings page
   - enable private browsing
-    The DB not saving is there, but the UI responsiveness is not
   - Multi article works- eg, authors that don't use the standard chapters, but
       instead have one "chapter" per work
-  - Check author for update
+  - Better update notifications
 
 LICENSE
 -------
