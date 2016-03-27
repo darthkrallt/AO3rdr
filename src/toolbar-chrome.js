@@ -52,7 +52,6 @@ function toolbar_listener(request){
             toolbar_datadumper(request);
             break;
         default:
-            console.log('responder missed in toolbar');
             break;
     }
 }

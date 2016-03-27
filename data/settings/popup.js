@@ -1,7 +1,6 @@
 var popPort = chrome.runtime.connect({name: "popup"});
 
 $(document).ready(function() { 
-    console.log('popup');
     popPort.postMessage({message: 'fetchdata', data: {ficdict: true}});
     // Add yer clicks
     $('a.bookmarks').click(function(){
@@ -19,7 +18,6 @@ popPort.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.message == 'datadump') {
         if (request.data_type == 'ficdict') {
             tableData = request.data.ficdict;
-            console.log(tableData);
             processTopTen(tableData);
         }
 
@@ -27,20 +25,15 @@ popPort.onMessage.addListener(function(request, sender, sendResponse) {
 });
 
 function processTopTen(ficdict){
-    console.log(ficdict);
     var values = Object.keys(ficdict).map(function(key){
         return ficdict[key];
     });
-
-    console.log(values);
 
     var onlyGood = values.filter(
         function (el) {
           return (el.rating > 0) && (!el.deleted);
         }
     );
-
-    console.log(onlyGood);
 
     onlyGood.sort(function (a, b) {
         return (new Date(a.visit)).getTime() - (new Date(b.visit)).getTime();
