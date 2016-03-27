@@ -1,0 +1,55 @@
+{
+
+  "manifest_version": 2,
+  "name": "ao3rdr",
+  "version": "1.1.0",
+
+  "permissions": [
+    "activeTab",
+    "storage",
+    "https://boiling-caverns-2782.herokuapp.com/*"
+  ],
+
+  "description": "Rating system and block by tag system for Archive of Our Own.",
+  "icons": {
+    "16": "data/images/icon_16.png",
+    "48": "data/images/icon_48.png",
+    "128": "data/images/icon_128.png"
+  },
+
+  "applications": {
+    "gecko": {
+      "id": "ao3rdr@mozilla.org",
+      "strict_min_version": "46.0"
+    }
+  },
+
+  "background": {
+    "scripts": ["src/background.js", "src/article.js", "src/images.js"]
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["http://archiveofourown.org/*", "https://archiveofourown.org/*", "https://boiling-caverns-2782.herokuapp.com/*"],
+      "css": ["data/style.css"],
+      "js": [
+        "lib/jquery-1.11.2.min.js", "src/ao3lib.js", 
+        "src/toolbar-ao3.js", "src/toolbar-chrome.js",
+        "src/article.js", "src/images.js"
+      ],
+      "all_frames": true
+    }
+  ],
+  "options_page": "data/settings/index.html",
+
+  "browser_action": {
+    "default_title": "AO3rdr",
+    "default_popup": "data/settings/popup.html",
+    "default_icon": "data/images/icon_128.png"
+  },
+
+  "web_accessible_resources": [
+    "data/settings/articles-table-chrome.js", "data/settings/articles-table.js", "data/settings/articles-table-lib.js", "data/settings/credits.html", "data/settings/index.html", "data/settings/jquery.tagsinput.css", "data/settings/jquery.tagsinput.js", "data/settings/popup.html", "data/settings/popup.js", "data/settings/tablesort.js", "data/settings/css/custom.css", "data/settings/css/normalize.css", "data/settings/css/skeleton.css", "data/images/bookmark-fill.svg", "data/images/bookmark-shadow.svg", "data/images/bookmark.svg", "data/images/close.svg", "data/images/cloud-offline.svg", "data/images/cloud-ok.svg", "data/images/cloud-sync.svg", "data/images/dislike-fill.svg", "data/images/dislike-shadow.svg", "data/images/dislike.svg", "data/images/flag.svg", "data/images/hidden-shadow.svg", "data/images/hidden.svg", "data/images/icon_128.png", "data/images/icon_16.png", "data/images/icon_48.png", "data/images/icon.png", "data/images/icon.svg", "data/images/menu-shadow.svg", "data/images/menu.svg", "data/images/read.svg", "data/images/star-0.svg", "data/images/star-1-fill.svg", "data/images/star-1.svg", "data/images/star-3-fill.svg", "data/images/star-3.svg", "data/images/star-5-fill.svg", "data/images/star-5.svg", "data/images/star-shadow.svg", "data/images/sync.svg", "data/images/unread.svg"
+  ]
+
+}

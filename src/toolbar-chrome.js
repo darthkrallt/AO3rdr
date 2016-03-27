@@ -82,7 +82,7 @@ function toolbar_datadumper(request){
                  }
             }
         default:
-            console.log('datadumper missed in toolbar');
+            console.log(request.data_type + ' datadumper missed in toolbar');
             break;
     }
 }

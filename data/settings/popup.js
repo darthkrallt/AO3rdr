@@ -75,7 +75,7 @@ function generateRowHtmlPopup(data){
     var link = document.createElement('a');
     var url =  generateAO3link(data);
     link.onclick = function(){chrome.tabs.create({'url': url})};
-    // Technically setting this arrt does nothing, but makes mouseover outline work
+    // Technically setting this arrt does nothing, but makes mouse over outline work
     link.setAttribute('href', generateAO3link(data));
 
     var text_str = document.createTextNode(safeDecode(data['title']));

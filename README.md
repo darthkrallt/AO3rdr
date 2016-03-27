@@ -40,12 +40,18 @@ Credits
     Icons (see the README in the data folder for more comprehensive list)
 - Tablesorter: tablesorter.com
     Sortable table
+    Changes: Hard coded createElement, used html2dom instead of setting innerHTML
 - XOXCO's Tag Input plugin: xoxco.com/projects/code/tagsinput/
     Fancy tag input
 - Spin.js: http://fgnass.github.io/spin.js/
     Spinner grapic thing. @__@
+    Changes: hard coded div in createElement
 - html2dom: https://github.com/freddyb/html2dom
     Replacing calls to inner HTML to comply with Mozilla security requirements
+    Changes: commented out most of the parseFromString function
+- Chrome build Script:
+    https://developer.chrome.com/extensions/crx
+    changes made: Added a comment of the source URl.
 
 Modifications to 3rd Part Libraries
 -------
