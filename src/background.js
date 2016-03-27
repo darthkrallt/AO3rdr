@@ -21,7 +21,6 @@ var default_prefs = {
     'sync_enabled':true
 };
 
-
 var storage = chrome.storage.local;
 
 storage.get("prefs", function (items){
