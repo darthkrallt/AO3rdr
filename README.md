@@ -40,36 +40,29 @@ Credits
     Icons (see the README in the data folder for more comprehensive list)
 - Tablesorter: tablesorter.com
     Sortable table
-    Changes: Hard coded createElement, used html2dom instead of setting innerHTML
 - XOXCO's Tag Input plugin: xoxco.com/projects/code/tagsinput/
     Fancy tag input
 - Spin.js: http://fgnass.github.io/spin.js/
     Spinner grapic thing. @__@
-    Changes: hard coded div in createElement
 - html2dom: https://github.com/freddyb/html2dom
     Replacing calls to inner HTML to comply with Mozilla security requirements
-    Changes: commented out most of the parseFromString function
 - Chrome build Script:
     https://developer.chrome.com/extensions/crx
-    changes made: Added a comment of the source URl.
 
-Modifications to 3rd Part Libraries
+Modifications to 3rd Party Libraries
 -------
 - spin.js, line 28, hard coded create element type
 - jquery.dataTables.js, lines 1499, 1694, 3099, 3947, changed call from inner HTML to html2dom
     https://blog.mozilla.org/security/2013/09/24/introducing-html2dom-an-alternative-to-setting-innerhtml/
 - jquery.dataTables.js, line 1688, hard coded create element type
+- Chrome build Script: Added a comment of the source URl.
 
 FF Docs to consider
 https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials/Mobile_development
 
 BUGS
-<<<<<<< HEAD:README.md
 ----
   - Please report any others you find!
-=======
-  - Firefox memory is unstable. Please regularly back up.
->>>>>>> Removed crawl for updates feature. Fixed bug in sync logic.:README.txt
 
 TODO
   - Check works for update on server
@@ -85,7 +78,7 @@ WISHLIST (not for this release)
     - Maybe use some fancy hashin' 
         https://github.com/Caligatio/jsSHA/releases/tag/v1.5.0
     - also take advantage of the (#id_ref) url strings for this
-  - tests, HAHAHAHA. THESE ARE IMPORTANT. BUT ALSO AREN'T GONNA HAPPEN.
+  - tests
   - Add support for tumblr (I shudder to think how much work...)
   - Localization
   - enable private browsing
