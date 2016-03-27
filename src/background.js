@@ -77,9 +77,6 @@ function saveArticle(newArticle, create_if_ne, port, do_sync){
             syncWork(data[newArticle.ao3id]);
         }
         
-        // if (port){
-        //     port.postMessage({message: 'newfic', data: data[newArticle.ao3id]});
-        // }
         // Broadcast new article changes
         broadcast({message: 'newfic', data: data[newArticle.ao3id]});
     });
@@ -111,7 +108,14 @@ function broadcast(message){
     "Broadcast a message to ALL tabs. No callbacks allowed. Tested this with "
     "enough tabs open to make my computer sluggish. Didn't seem to make it worse,"
     "I assume this is a really light weight function."
-    chrome.tabs.query({}, function(tabs) {
+
+    // Don't put the extensionId as the first argument.
+    // All you will get is WAT.
+    chrome.runtime.sendMessage(message);
+
+    // You need the tabs permission to match on url
+    chrome.tabs.query({url: '*://*.archiveofourown.org/*'}, function(tabs) {
+        // This DOES have the matching tabs
         for (var idx in tabs) {
             if (tabs[idx].id){
                 chrome.tabs.sendMessage(tabs[idx].id, message);

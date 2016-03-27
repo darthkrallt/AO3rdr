@@ -53,13 +53,6 @@ var emitWorkEdit = (function(artPort){
         artPort.postMessage({message: 'ficdata', data:send_data});
 
         $(row).find('input').click();
-
-        // HACK for Firefox:
-        // since broadcast doesn't talk to the extension tabs, 
-        // we have to update the row from here and not a broadcast message.
-        // This doesn't actually hurt anything, but if update fails, UI wont reflect
-        var HACK_data = $.extend(tableData[ao3id], update_data);
-        updateTableRow(HACK_data);
     };
 })(artPort);
 
