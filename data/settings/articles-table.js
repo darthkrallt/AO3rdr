@@ -266,6 +266,7 @@ $(document).ready(function() {
     $('#blacklist').tagsInput({
         // my parameters here
         'onAddTag' : emitTagData,
+        'onRemoveTag': emitTagData,
         'height': '75px',
         'width': '100%',
     });
