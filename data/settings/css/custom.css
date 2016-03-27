@@ -38,3 +38,48 @@ input.boxclose{
 .spinner{
     position: relative;
 }
+
+#ddslick-edit-works{
+    float:left;
+}
+#articlesTable_filter{
+    float: right;
+}
+#articlesTable_length{
+    float: right;
+}
+
+div.modal {
+    position: fixed;
+    z-index:100;
+    top: 10%;
+    left: 30%;
+    border: 1px solid #bbb;
+}
+div.modal p{
+    margin: 2.5em;
+}
+
+div.modal_overlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 10;
+  background-color: rgba(0,0,0,0.5);
+}
+
+img.dd-selected-image{
+    max-width:25px;
+    max-height:25px;
+    width: auto;
+    height: auto;
+}
+
+img.dd-option-image{
+    max-width:25px;
+    max-height:25px;
+    width: auto;
+    height: auto;
+}

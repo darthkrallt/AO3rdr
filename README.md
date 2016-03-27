@@ -40,19 +40,39 @@ Credits
     Icons (see the README in the data folder for more comprehensive list)
 - Tablesorter: tablesorter.com
     Sortable table
+    Changes: Hard coded createElement, used html2dom instead of setting innerHTML
 - XOXCO's Tag Input plugin: xoxco.com/projects/code/tagsinput/
     Fancy tag input
 - Spin.js: http://fgnass.github.io/spin.js/
     Spinner grapic thing. @__@
+    Changes: hard coded div in createElement
+- html2dom: https://github.com/freddyb/html2dom
+    Replacing calls to inner HTML to comply with Mozilla security requirements
+    Changes: commented out most of the parseFromString function
+- Chrome build Script:
+    https://developer.chrome.com/extensions/crx
+    changes made: Added a comment of the source URl.
+
+Modifications to 3rd Part Libraries
+-------
+- spin.js, line 28, hard coded create element type
+- jquery.dataTables.js, lines 1499, 1694, 3099, 3947, changed call from inner HTML to html2dom
+    https://blog.mozilla.org/security/2013/09/24/introducing-html2dom-an-alternative-to-setting-innerhtml/
+- jquery.dataTables.js, line 1688, hard coded create element type
 
 FF Docs to consider
 https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials/Mobile_development
 
 BUGS
+<<<<<<< HEAD:README.md
 ----
   - Please report any others you find!
+=======
+  - Firefox memory is unstable. Please regularly back up.
+>>>>>>> Removed crawl for updates feature. Fixed bug in sync logic.:README.txt
 
 TODO
+  - Check works for update on server
 
 WISHLIST (not for this release)
 -------------------------------
@@ -68,13 +88,10 @@ WISHLIST (not for this release)
   - tests, HAHAHAHA. THESE ARE IMPORTANT. BUT ALSO AREN'T GONNA HAPPEN.
   - Add support for tumblr (I shudder to think how much work...)
   - Localization
-  - Delete works from database via settings page
   - enable private browsing
-    The DB not saving is there, but the UI responsiveness is not
   - Multi article works- eg, authors that don't use the standard chapters, but
       instead have one "chapter" per work
-  - Check author for update
-  - Sync between devices (would require a server and a license agreement)
+  - Better update notifications
 
 LICENSE
 -------

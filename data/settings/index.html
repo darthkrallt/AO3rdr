@@ -15,12 +15,13 @@
 
   <!-- FONT
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
 
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" type="text/css" href="../../lib/DataTables-1.10.7/media/css/jquery.dataTables.css">
+
 
   <!-- Favicon
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -30,41 +31,67 @@
   <link rel="stylesheet" type="text/css" href="jquery.tagsinput.css" />
   <link rel="stylesheet" type="text/css" href="css/custom.css" />
 
+  <!-- JS (chrome only) -->
+  <script type="text/javascript" src="../../lib/jquery-1.11.2.min.js"></script>
+  <script type="text/javascript" src="../../lib/ddSlick.js"></script>
+  <script type="text/javascript" src="jquery.tagsinput.js"></script>
+  <script type="text/javascript" src="articles-table.js"></script>
+  <script type="text/javascript" src="../../lib/spin.js"></script>
+  <script type="text/javascript" src="tablesort.js"></script>
+  <script type="text/javascript" src="articles-table-chrome.js"></script>
+  <script type="text/javascript" src="articles-table-lib.js"></script>
+
+  <script type="text/javascript" src="../../lib/DataTables-1.10.7/media/js/jquery.dataTables.js"></script>
+  <script type="text/javascript" src="../../lib/html2dom.js"></script>
+  <script type="text/javascript" src="../../lib/DataTables-1.10.7/plugins/alt-string.js"></script>
+
+
 </head>
 <body>
 
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div class="container">
-   <div class="row">
+    <div class="row">
       <div class="twelve columns" style="margin-top: 5%">
-      <div class="row">
-
-          <h5>Check out your bookmarks here</h5>
-          <p>Here you can easily interact with all of the articles that you have read, skimmed liked or disliked. <a href="credits.html"> Credits Page</a></p>
-        </div>
-
+        <h5>Prefrences and Bookmarks</h5>
       </div>
+
+    </div>
+
+    <div class="row">
+      <div class="eleven columns">
+        
+        <input class="boxopen" type="button" id="cloud-sync-box-button" value="Cloud Sync and Backup">
+        <input class="boxopen" type="button" id="download-data-box-button" value="Data Export and Import">
+        <input class="boxopen" type="button" id="blacklist-box-button" value="Tag Blacklisting">
+
+
+        <form action="credits.html" style="display: inline">
+          <input class="button-primary" type="submit" value="Credits Page">
+        </form>
+      </div>
+
     </div>
 
 <!-- cloud sync status boxes -->
-    <div class="row box" id="cloud-sync-box" style="display:visible">
+    <div class="row box" id="cloud-sync-box"  style="display: none;">
       <input type="image" alt="close" src="../images/close.svg" class="boxclose">
-      <h6 class="docs-header">Cloud Sync Status</h6>
+      <h6 class="docs-header">Cloud Sync and Backup</h6>
 
       <div class="four columns" id="cloud-sync-status">
            <img src='../images/cloud-ok.svg' class='icon inside'>
           <p id="last-sync">Last Sync: Not yet synced</p>
       </div>
 
-      <div class="three columns">
-        <input class="button-primary" id="reveal-token" type="submit" value="Reveal Token">
+      <div class="seven columns">
+        <input class="button-primary" id="reveal-token" type="submit" value="Show Token for cross-Device Sync">
       </div>
 
-      <div class="four columns">
+      <div class="three columns">
         <label for="enable-cloud-sync">
           <input id="enable-cloud-sync" type="checkbox">
-          <span class="label-body">Enable Cloud Sync</span>
+          <span class="label-body">Enabled</span>
         </label>
       </div>
     </div>  
@@ -88,42 +115,46 @@
 <!-- end cloud sync status boxes -->
 
 
-    <div class="row">
+    <div class="row box" id="download-data-box"  style="display: none;">
+      <input type="image" alt="close" src="../images/close.svg" class="boxclose">
+      <h6 class="docs-header">Data Export and Import</h6>
 
-      <div class="twelve columns">
+      <div class="three columns">
+        <input type="button" id="export-data" class="button-primary" value="Download Your Data">
+      </div>
+          
+      <div class="eight columns">
+        <input type="button" id="restore-data" class="button" value="Import from File">
+        <input type="file" id="upload-data" class="button" value="Import from File">
+      </div>
+
+    </div>
+
+    <div class="row box" id="blacklist-box"  style="display: none;">
+      <input type="image" alt="close" src="../images/close.svg" class="boxclose">
+      <h6 class="docs-header">Tag Blacklisting</h6>
+
+      <div class = "eight columns">
+        <p>Hide works by tag. The blackist tag "foo" will match the AO3 tags "<b>foo</b>", "<b>foo</b>lish", "<b>FOO</b>L", "bare<b>foo</b>t", etc.</p>
+      </div>
+
+      <div class="three columns">
         <form>
-          <input type="button" id="crawl-updates" class="button-primary" value="Check Works for Updates">
-          <div id="crawl-spinner"></div>
-
           <label for="enable-autofilter" class="inline-checkbox-right">
             <input id="enable-autofilter" type="checkbox">
-            <span class="label-body">Enable Autofilter</span>
+            <span class="label-body">Enabled</span>
           </label>
         </form>
 
       </div>
 
-      <div class="row">
-        <div class="five columns">
-          <input type="button" id="export-data" class="button-primary" value="Download Your Data">
-        </div>
-            
-        <div class="seven columns">
-          <input type="button" id="restore-data" class="button" value="Restore From Backup">
-          <input type="file" id="upload-data" class="button" value="Restore from Backup">
-        </div>
-      </div>
+      <div class="eleven columns">
 
-
-      <div class="row">
-        <div class="twelve columns">
-
-          <div id="blacklist-wrapper">
-            <label for="blacklist">Blacklisted Tags</label>
-            <input class="u-full-width" id="blacklist" />
-          </div>
-          
+        <div id="blacklist-wrapper">
+          <!-- <label for="blacklist">Blacklisted Tags</label> -->
+          <input class="u-full-width" id="blacklist" />
         </div>
+        
       </div>
 
 
@@ -134,14 +165,13 @@
         <table id="articlesTable"> 
         <thead> 
         <tr> 
+            <th></th>
             <th>Rating</th> 
-            <th>Update</th>
             <th>Unread</th>
             <th>Author</th> 
             <th>Title</th> 
             <th>Last Update</th>
             <th>Last Visit</th> 
-            <th>Read</th>
             <th>Chapters</th>
         </tr> 
         </thead> 
@@ -150,6 +180,7 @@
         </table>
       </div>
     </div>
+
   </div>
 
 <!-- End Document

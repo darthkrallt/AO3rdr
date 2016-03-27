@@ -1,11 +1,12 @@
 Icon by Shane Miller from the Noun Project:
 http://thenounproject.com/term/book/8198/
 
-Star Icons by Julien Deveaux from the Noun Project:
+Star and other Icons by Julien Deveaux from the Noun Project:
 http://thenounproject.com/term/star/47902/
 http://thenounproject.com/term/star/47903/
 http://thenounproject.com/term/star/47898/
 http://thenounproject.com/term/star/47901/
+https://thenounproject.com/term/fire/47980/
 
 Trash Icon by Julien Deveaux from the Noun Project:
 http://thenounproject.com/term/trash/49048/
@@ -30,4 +31,7 @@ http://thenounproject.com/term/book/14945/
 
 Read Icon by Nicholas Menghini from the Noun Project:
 http://thenounproject.com/term/book/10777/
+
+Hide Icon by Angela Noble from the Noun Project:
+https://thenounproject.com/term/blind/41992/
 

@@ -34,7 +34,7 @@ function clearImage(html){
             $(clearMe[i]).attr('src', images['star-'+level]);
         } else if (parseInt(level) <= 0 ){
             $(clearMe[i]).attr('src', images['dislike']);
-            show($(clearMe[i]).parent());
+            show($(clearMe[i]).closest('.ao3rdr-toolbar-outer'));
         }
     };
 
@@ -46,18 +46,17 @@ var pageChapter = extractChapterIdFromPage();
 function setImage(html, stored_data){
     level = parseInt(stored_data.rating);
 
+    if (stored_data.deleted){
+        return;
+    }
+
     if (level > 0) {
         var ele = $(html).find("img[src*='star-"+level+"']");
         $(ele).attr('src', images['star-'+level+'-fill']);
     } else if (level == -1) {
         var ele = $(html).find("img[src*='dislike.svg']");
         $(ele).attr('src', images['dislike-fill']);
-        hide(ele.parent());
-    }
-
-    // Make sure that it's visible for positive raing (eg, undoing neg rating)
-    if (level >= 0){
-        show(ele.parent());
+        hide(ele.closest('.ao3rdr-toolbar-outer'));
     }
 
     if (stored_data.chapter_id == pageChapter) {
@@ -190,19 +189,26 @@ function parseTags(raw_html){
 }
 
 function matchTag(string1, string2){
+    if (!string1 || !string2){
+        return false;
+    }
     if (string1.toLowerCase().indexOf(string2.toLowerCase()) != -1){
         return true;
     }
     return false;
 }
 
-function checkTags(taglist){
+function checkTags(taglist, blacklist_tags){
+    var matches = [];
     for (var i in taglist){
-        for (var j in prefs['tags']){
-            if (matchTag(taglist[i], prefs['tags'][j])){
-                return true;
+        for (var j in blacklist_tags){
+            if (matchTag(taglist[i], blacklist_tags[j])){
+                matches.push(taglist[i]);
             }
         }
+    }
+    if (matches.length > 0){
+        return matches;
     }
     return false;
 }
@@ -229,9 +235,7 @@ function processBrowsePage(){
     var idsOnPage = [];
     var articles = $("li[role=article]");
     for (var i=0; i< articles.length; i++){
-
         var info = parseWorkBlurb(articles[i]);
-        var tags = parseTags(articles[i]);
 
         // Keep track of all the id's on the page
         idsOnPage.push(info['ao3id']);
@@ -239,12 +243,31 @@ function processBrowsePage(){
         var toolbar = createToolbar(info, false);
         articles[i].appendChild(toolbar);
 
+    }
+    // Note that having a global "prefs" is FF only. TODO: fix
+    if (prefs)
+        blacklistBrowsePage(prefs);
+    return idsOnPage;
+}
+
+function blacklistBrowsePage(prefs){
+    var articles = $("li[role=article]");
+    var blacklist_tags = prefs['tags'];
+
+    if (typeof blacklist_tags === 'string'){
+        blacklist_tags = blacklist_tags.split(',');
+    }
+
+    for (var i=0; i< articles.length; i++){
+        var info = parseWorkBlurb(articles[i]);
+        var tags = parseTags(articles[i]);
+
         // if it's a banned tag, hide it!
-        if (checkTags(tags)){
-            hideByTag(articles[i], info);
+        var matching_tags = checkTags(tags, blacklist_tags);
+        if (matching_tags){
+            hideByTag(articles[i], info, matching_tags);
         }
     }
-    return idsOnPage;
 }
 
 
