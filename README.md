@@ -57,34 +57,17 @@ Modifications to 3rd Party Libraries
 - jquery.dataTables.js, line 1688, hard coded create element type
 - Chrome build Script: Added a comment of the source URl.
 
-FF Docs to consider
-https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials/Mobile_development
-
 BUGS
 ----
+  - Check the [Github Issues](https://github.com/darthkrallt/AO3rdr/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
   - Please report any others you find!
 
 TODO
   - Check works for update on server
 
-WISHLIST (not for this release)
+WISHLIST
 -------------------------------
-  - Add "added on" date (not visible in UI)
-  - Add some cool stats to the settings page (eg, read the equivalent of 3 LOTR
-      series in the last 90 days)
-  - Add tabbed view to settings page to sort by genre
-  - Add SAD star rating
-  - bookmark by individual line (when works are 50,000+ words in one chapter)
-    - Maybe use some fancy hashin' 
-        https://github.com/Caligatio/jsSHA/releases/tag/v1.5.0
-    - also take advantage of the (#id_ref) url strings for this
-  - tests
-  - Add support for tumblr (I shudder to think how much work...)
-  - Localization
-  - enable private browsing
-  - Multi article works- eg, authors that don't use the standard chapters, but
-      instead have one "chapter" per work
-  - Better update notifications
+  - See the [Github Issues - Enhancements](https://github.com/darthkrallt/AO3rdr/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement) for the list of planned future features
 
 LICENSE
 -------
