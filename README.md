@@ -8,11 +8,10 @@ Features include:
   - Hide works
   - Blacklist by tags
   - Bookmark by chapter read
-  - Scan bookmarks for updates
   - Keep track of last visit
   - Backup and restore user data
   - Cloud Sync for multiple browsers
-  - Open source code!
+  - Open source
 
 Where to get it
 ---------------
@@ -43,7 +42,7 @@ Credits
 - XOXCO's Tag Input plugin: xoxco.com/projects/code/tagsinput/
     Fancy tag input
 - Spin.js: http://fgnass.github.io/spin.js/
-    Spinner grapic thing. @__@
+    Spinner grapic
 - html2dom: https://github.com/freddyb/html2dom
     Replacing calls to inner HTML to comply with Mozilla security requirements
 - Chrome build Script:
@@ -57,16 +56,16 @@ Modifications to 3rd Party Libraries
 - jquery.dataTables.js, line 1688, hard coded create element type
 - Chrome build Script: Added a comment of the source URl.
 
-BUGS
+Bugs
 ----
   - Check the [Github Issues](https://github.com/darthkrallt/AO3rdr/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
   - Please report any others you find!
 
-WISHLIST
+Upcoming Features
 -------------------------------
   - See the [Github Issues - Enhancements](https://github.com/darthkrallt/AO3rdr/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement) for the list of planned future features
 
-LICENSE
+License
 -------
     Copyright (C) 2015  Darthkrallt
 
