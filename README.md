@@ -62,9 +62,6 @@ BUGS
   - Check the [Github Issues](https://github.com/darthkrallt/AO3rdr/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
   - Please report any others you find!
 
-TODO
-  - Check works for update on server
-
 WISHLIST
 -------------------------------
   - See the [Github Issues - Enhancements](https://github.com/darthkrallt/AO3rdr/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement) for the list of planned future features
