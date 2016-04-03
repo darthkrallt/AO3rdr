@@ -27,7 +27,7 @@ Latest testing version is available from https://github.com/darthkrallt/AO3rdr/b
 
 Available from the Mozilla Addon site:
   * Desktop https://addons.mozilla.org/En-us/firefox/addon/ao3rdr/
-  * Adroid https://addons.mozilla.org/en-us/android/addon/ao3rdr/
+  * Android https://addons.mozilla.org/en-us/android/addon/ao3rdr/
 
 This is to be developed with both mobile and desktop use in mind, so no SDK's 
 were used that are not available on Firefox's beta mobile browser.
