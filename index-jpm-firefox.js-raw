@@ -150,6 +150,8 @@ var settingsPage = tabs.on('ready', function(tab) {
         contentScriptFile: [self.data.url('./lib/jquery-1.11.2.min.js'),
                             self.data.url('./data/settings/jquery.tagsinput.js'),
                             self.data.url("./data/settings/articles-table.js"),
+                            self.data.url("./data/settings/articles-table-jpm-firefox.js"),
+                            self.data.url("./data/settings/articles-table-content.js"),
                             self.data.url('./lib/spin.js'),],
         // TODO: make sure that the callbackMessage function works
         // if not you'll have to do the following:

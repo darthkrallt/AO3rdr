@@ -14,6 +14,8 @@ cp README.md build/
 
 # Remove files we don't want in the build
 rm build/background-chrome.js  # WebExtensions main script
+rm build/src/toolbar-chrome.js
+rm build/data/settings/articles-table-chrome.js
 
 # Build the background script
 cp index-jpm-firefox.js-raw build/index-jpm-firefox.js
