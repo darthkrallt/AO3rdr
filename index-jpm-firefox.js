@@ -25,6 +25,28 @@ var system = require("sdk/system");
 var workerList = [];
 
 /*
+    "message" is a dictionary formatted like this:
+        {'message': message, 'data': data, 'data_type': data_type}
+    only the 'message' field is mandatory
+*/
+function broadcast(message){
+    for (var worker in workerList){
+        worker.port.emit(message['message'], message);
+    }
+}
+
+/*
+    callbackMessage is intended to do port message passing as a callback
+        You have to call this twice to get it to send, first with the port,
+        second with the data you want to send
+*/
+var callbackMessage = (function(port){
+    return function(message, data, data_type) {
+        port.emit(message, {'message': message, 'data': data, 'data_type': data_type});
+    };
+});
+
+/*
     This is a way to make simple storage look like chrome storage.
     TODO: Is it a terrible idea to override get and set like this?
 
@@ -56,6 +78,45 @@ var storage = {
 };
 
 
+function onAttachFun(worker) {
+    /* This function contains logic for handling all incoming messages. */
+    worker.postMessage('test message');
+    workerList.push(worker);
+    worker.on('detach', function () {
+        detachWorker(this, workerList);
+    });
+
+    worker.port.on('settingsclick', function() {
+        var newTab = tabs.open(self.data.url('./settings/index.html'));
+    });
+    worker.port.on('test incomming message', function(args) {
+        // You may also pass data as a second argument to 'emit'
+        worker.port.emit('test outgoing message');
+    });
+    worker.port.on('reveal-token', function() {
+        getUser(callbackMessage(this.port));
+    });
+    worker.port.on('save-token', function(request) {
+        validateAndSaveToken(request.data, this.port);
+    });
+    worker.port.on('prefs', function(request) {
+        savePrefs(request.data);
+    });
+    worker.port.on('fetchdata', function(request) {
+        fetchDataRequest(request, this.port);
+    });
+    worker.port.on('restorefrombackup', function(request) {
+        restoreFromBackup(request);
+    });
+    worker.port.on('ficdata', function(request) {
+        handleNewFic(request.data.metadata, request.data.mutable_data, port);
+    });
+    worker.port.on('runsync', function() {
+        runSync();
+    });
+}
+
+
 // Create a page mod
 // It will run a script whenever a ".org" URL is loaded
 // The script replaces the page contents with a message
@@ -70,21 +131,7 @@ var setupAO3 = pageMod.PageMod({
                         self.data.url("./toolbar-ao3.js"),
                         self.data.url("./ao3lib.js"),],
     // We actually want this on any page load of the site
-    onAttach: function(worker) {
-        worker.postMessage('test message');
-        workerList.push(worker);
-        worker.on('detach', function () {
-            detachWorker(this, workerList);
-        });
-
-        worker.port.on('settingsclick', function() {
-            var newTab = tabs.open(self.data.url('./settings/index.html'));
-        });
-        worker.port.on('test incomming message', function(args) {
-            // You may also pass data as a second argument to 'emit'
-            worker.port.emit('test outgoing message');
-        });
-    }
+    onAttach: onAttachFun,
 });
 
 // All the scripts for running the settings page need are attached here because
@@ -100,22 +147,25 @@ var settingsPage = tabs.on('ready', function(tab) {
                             self.data.url('./data/settings/jquery.tagsinput.js'),
                             self.data.url("./data/settings/articles-table.js"),
                             self.data.url('./lib/spin.js'),],
-        onAttach: function(worker) { 
-            // are you supposed to use "worker" or "this"?
-            workerList.push(worker);
-            worker.on('detach', function () {
-                detachWorker(this, workerList);
-            });
-            var callbackfun = (function(parentWorker, port) {
-                return function() {
-                    port.emit('test emit');
-                };
-            })(worker, worker.port);
-            worker.port.on('test callback', function(port) {
-                callbackfun();
-            });
+        // TODO: make sure that the callbackMessage function works
+        // if not you'll have to do the following:
+        // onAttach: function(worker) { 
+        //     // are you supposed to use "worker" or "this"?
+        //     workerList.push(worker);
+        //     worker.on('detach', function () {
+        //         detachWorker(this, workerList);
+        //     });
+        //     var callbackfun = (function(parentWorker, port) {
+        //         return function() {
+        //             port.emit('test emit');
+        //         };
+        //     })(worker, worker.port);
+        //     worker.port.on('test callback', function(port) {
+        //         callbackfun();
+        //     });
 
-        },
+        // },
+        onAttach: onAttachFun,
         onClose: function(worker) {
             detachWorker(worker, workerList);
         },

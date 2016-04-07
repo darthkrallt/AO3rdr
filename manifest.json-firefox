@@ -28,7 +28,7 @@
   },
 
   "background": {
-    "scripts": ["src/background.js", "src/article.js", "src/images.js"]
+    "scripts": ["src/background-chrome.js", "src/background.js", "src/article.js", "src/images.js"]
   },
 
   "content_scripts": [

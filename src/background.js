@@ -1,17 +1,4 @@
-/* The background process for chrome */
-
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-    if (request.message == 'settingsclick'){
-        // open new tab
-        chrome.tabs.create(
-            {url: chrome.extension.getURL('data/settings/index.html')}
-        );
-    }
-});
-
-// TODO: use storage.sync for the cloud sync key!!!
-// use storage.local for everything else
+/* The common background process */
 
 // Initialize preferences
 var default_prefs = {
@@ -21,11 +8,10 @@ var default_prefs = {
     'sync_enabled':true
 };
 
-var storage = chrome.storage.local;
 
 storage.get("prefs", function (items){
     if (!items.prefs)
-        chrome.storage.local.set({'prefs': default_prefs});
+        storage.set({'prefs': default_prefs});
 });
 
 function handleNewFic(metadata, mutable_data, port) {
@@ -47,7 +33,6 @@ function handleNewFic(metadata, mutable_data, port) {
 }
 
 function saveArticle(newArticle, create_if_ne, port, do_sync){
-    var storage = chrome.storage.local;
     // WARNING: CHECK FOR VAILD ao3id
     // ASKING FOR undefined IN LOCALSTORAGE RETURNS EVERYTHING
     console.assert(newArticle.ao3id);
@@ -69,7 +54,7 @@ function saveArticle(newArticle, create_if_ne, port, do_sync){
             }
         }
         // Save the data
-        chrome.storage.local.set( data );
+        storage.set( data );
 
         // Sync to server (the function handles checking for permission)
         if (do_sync){
@@ -83,7 +68,6 @@ function saveArticle(newArticle, create_if_ne, port, do_sync){
 
 
 function savePrefs(prefs){
-    var storage = chrome.storage.local;
 
     storage.get("prefs", function (items){
         var tags_changed = false;
@@ -95,7 +79,7 @@ function savePrefs(prefs){
                 items.prefs[key] = prefs[key];
             }
         }
-        chrome.storage.local.set( items );
+        storage.set( items );
         // Only broadcast if tags changed
         if (tags_changed){
             broadcast({message: 'datadump', data: items, data_type:'prefs'});
@@ -103,85 +87,11 @@ function savePrefs(prefs){
     });
 }
 
-function broadcast(message){
-    "Broadcast a message to ALL tabs. No callbacks allowed. Tested this with "
-    "enough tabs open to make my computer sluggish. Didn't seem to make it worse,"
-    "I assume this is a really light weight function."
-
-    // Don't put the extensionId as the first argument.
-    // All you will get is WAT.
-    chrome.runtime.sendMessage(message);
-
-    // You need the tabs permission to match on url
-    chrome.tabs.query({url: '*://*.archiveofourown.org/*'}, function(tabs) {
-        // This DOES have the matching tabs
-        for (var idx in tabs) {
-            if (tabs[idx].id){
-                chrome.tabs.sendMessage(tabs[idx].id, message);
-            }
-        }
-    });
-}
-
-// NOTE! You have to call this twice to get it to send
-// first with the port, then with the data you want to send.
-var callbackMessage = (function(port){
-    return function(message, data, data_type) {
-        port.postMessage({'message': message, 'data': data, 'data_type': data_type});
-    };
-});
-
-chrome.runtime.onConnect.addListener(function(port) {
-    // if (!(port.name == "articles-table")){
-    //     return;
-    // }
-    port.onMessage.addListener(function(request) {
-        if (request.message == "reveal-token"){
-            getUser(callbackMessage(port));
-        }
-
-        if (request.message == 'save-token'){
-            validateAndSaveToken(request.data, port);
-        }
-
-        if (request.message == 'prefs') {
-            savePrefs(request.data);
-        }
-
-        if (request.message == 'fetchdata') {
-            fetchDataRequest(request, port);
-        }
-
-        if (request.message == 'restorefrombackup'){
-            // Update the DB data
-            var version = request.data['version'];
-            var article_data = request.data['ficdict'];
-
-            for (var key in article_data){
-                if (article_data.hasOwnProperty(key) && article_data[key]['ao3id']) {
-                    saveArticle(article_data[key], true, port, true);
-                }
-            }
-            savePrefs(request.data['prefs']);
-
-        }
-
-        if (request.message == 'ficdata'){
-            handleNewFic(request.data.metadata, request.data.mutable_data, port);
-        }
-
-        if (request.message == 'runsync'){
-            // TODO: is this the best place for this?
-            runSync();
-        }
-    });
-});
-
 
 function fetchDataRequest(request, port){
     // Responds to 'fetchdata'
     if (request.message == "fetchdata"){
-        var storage = chrome.storage.local;
+
         var pdd_fun = callbackMessage(port);
         if (request.data.prefs){
             storage.get("prefs", function (items){
@@ -226,9 +136,21 @@ function fetchDataRequest(request, port){
 }
 
 
+function restoreFromBackup(request){
+        // Update the DB data
+    var version = request.data['version'];
+    var article_data = request.data['ficdict'];
+
+    for (var key in article_data){
+        if (article_data.hasOwnProperty(key) && article_data[key]['ao3id']) {
+            saveArticle(article_data[key], true, port, true);
+        }
+    }
+    savePrefs(request.data['prefs']);
+}
+
 
 function getUser(callbk){
-    var storage = chrome.storage.local;
 
     storage.get("prefs", function (items){
         if (!('user_id' in items.prefs)){
@@ -238,14 +160,6 @@ function getUser(callbk){
     });
 
 }
-
-// NOTE! You have to call this twice to get it to send
-// first with the port, then with the data you want to send.
-var passDatadump = (function(port){
-    return function(data_type, data) {
-        port.postMessage({'message' :'datadump', 'data': data, 'data_type': data_type});
-    };
-});
 
 
 // Stuff below this line is broken, 'cuz async foo!
@@ -301,7 +215,6 @@ function validateAndSaveToken(token, port){
 
 
 function getUserForSync(callbk){
-    var storage = chrome.storage.local;
 
     storage.get("prefs", function (items){
         // No sync without user OR explicit permission
@@ -313,7 +226,6 @@ function getUserForSync(callbk){
 }
 
 function getDataForSync(callbk){
-    var storage = chrome.storage.local;
 
     storage.get(function (items){
         // No sync without user OR explicit permission
@@ -366,7 +278,6 @@ function syncWork(data){
 }
 
 function runSync(){
-    var storage = chrome.storage.local;
 
     storage.get('prefs', function (items){
         // No sync without user OR explicit permission
