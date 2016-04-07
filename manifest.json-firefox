@@ -9,7 +9,8 @@
     "activeTab",
     "storage",
     "tabs",
-    "https://boiling-caverns-2782.herokuapp.com/*"
+    "https://boiling-caverns-2782.herokuapp.com/*",
+    "https://*.ao3rdr.com/*"
   ],
 
   "description": "Rating system and block by tag system for Archive of Our Own.",

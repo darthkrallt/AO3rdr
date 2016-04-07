@@ -1,14 +1,21 @@
 {
-  "title": "ao3rdr",
+  "title": "AO3rdr",
   "name": "ao3rdr",
-  "homepage": "https://github.com/darthkrallt/AO3rdr",
-  "description": "An unofficial bookmark helper and tag blacklister for Archive of Our Own.",
-  "main": "ff_main.js",
-  "author": "Darthkrallt",
+  "version": "1.2.0",
+  "description": "Rating system and block by tag system for Archive of Our Own.",
+  "main": "index-jpm-firefox.js",
+  "author": "darthkrallt",
   "engines": {
     "firefox": ">=38.0a1",
     "fennec": ">=38.0a1"
   },
-  "license": "LGPL 2.1",
-  "version": "1.0.7"
+  "icon": "resource://@ao3rdr/data/images/icon.png",
+  "permissions": {
+    "cross-domain-content": [
+      "https://boiling-caverns-2782.herokuapp.com/*",
+      "https://ao3rdr.com/*",
+      "https://www.ao3rdr.com/*"
+    ]
+  },
+  "license": "LGPL-2.1"
 }
