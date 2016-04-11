@@ -53,7 +53,6 @@ function createToolbar(metadata, article){
     buttonData.map(function(item){
         var tmpFun = (function(metadata, mutable_data){
             return function() {
-                console.log('tmpFun');
                 emitFicData(metadata, mutable_data);
             };
         })(metadata, {'rating': item.value});
@@ -72,7 +71,6 @@ function createToolbar(metadata, article){
         };
         var tmpFun2 = (function(metadata, mutable_data){
             return function() {
-                console.log('tmpFun2');
                 emitFicData(metadata, mutable_data);
             };
         })(metadata, bookmark_data);
@@ -175,10 +173,6 @@ function onPageviewUpdater(){
         // Doesn't have mutable data, we are only checking the immutable
         var visit = new Date().toJSON();
         emitFicData(info, {'visit': visit});
-    } else {
-        // TODO: implement updating of chapter information only for multi work
-        // pages. Saves some crawl bandwidth, but a very low priority feature.
-        ;
     }
 }
 

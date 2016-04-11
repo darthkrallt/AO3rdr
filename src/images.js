@@ -1,4 +1,3 @@
-// TODO: incomming data
 var images = {
     'star-shadow':chrome.extension.getURL('data/images/star-shadow.svg'),
     'star-0':chrome.extension.getURL('data/images/star-0.svg'),

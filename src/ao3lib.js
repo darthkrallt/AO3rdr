@@ -243,9 +243,6 @@ function processBrowsePage(){
         articles[i].appendChild(toolbar);
 
     }
-    // Note that having a global "prefs" is FF only. TODO: fix
-    if (prefs)
-        blacklistBrowsePage(prefs);
     return idsOnPage;
 }
 

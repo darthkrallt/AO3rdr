@@ -45,8 +45,6 @@ function toolbar_listener(request){
 }
 
 function toolbar_datadumper(request){
-    console.log('toolbar_datadumper');
-    console.log(request);
     switch(request.data_type){
         case 'prefs':
             prefs = request.data['prefs'];

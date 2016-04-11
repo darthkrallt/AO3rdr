@@ -257,7 +257,6 @@ $(document).ready(function() {
     );
     $('#save-token').click(
         function() {
-            console.log('save-token');
             // TODO: fix spinner
             // tokenSyncSpinner = new Spinner({position: 'relative'}).spin();
             // $('#id-token-box').append(tokenSyncSpinner.el);

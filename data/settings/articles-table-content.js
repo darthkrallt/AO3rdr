@@ -36,7 +36,6 @@ var revealToken = (function(artPort){
 var saveToken = (function(artPort){
     return function(){
         var token = $("#token-display").val();
-        console.log('saveToken');
         artPort.postMessage({message: 'save-token', data:token});
     }
 })(artPort);
@@ -92,8 +91,6 @@ function articles_listener(request){
 
 
 function datadumper(request){
-    console.log('articles table datadumper');
-    console.log(request);
     switch (request.data_type){
         case 'prefs':
             prefs = request.data.prefs;

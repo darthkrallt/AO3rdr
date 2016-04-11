@@ -88,11 +88,8 @@ function savePrefs(prefs){
 
 
 function fetchDataRequest(request, port){
-    console.log('fetchdata');
-    console.log(request);
     // Responds to 'fetchdata'
     if (request.message == "fetchdata"){
-        console.log(port);
 
         var pdd_fun = callbackMessage(port);
         if (request.data.prefs){
@@ -100,9 +97,6 @@ function fetchDataRequest(request, port){
                 pdd_fun("datadump", items, "prefs");
             });
         }
-        console.log('fetchDataRequest');
-        console.log(port);
-        console.log(request);
         if (request.data.ficdict || request.data.exportdata){
             storage.get(function (data){
                 var items = {"ficdict": {}};
@@ -111,8 +105,6 @@ function fetchDataRequest(request, port){
                         items.ficdict[key] = data[key];
                 }
                 if (request.data.ficdict){
-                    console.log('ficdict datadump');
-                    console.log(items);
                     pdd_fun("datadump", items, "ficdict");
                 }
                 else {
