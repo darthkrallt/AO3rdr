@@ -11,7 +11,7 @@ function emitFicData(metadata, mutable_data){
 
 function toolbar_onload(ids) {
     toolPort.postMessage({message: 'runsync'});
-    toolPort.postMessage({message: 'fetchdata', data: {images: true}});
+    // toolPort.postMessage({message: 'fetchdata', data: {images: true}});
     toolPort.postMessage({message: 'fetchdata', data: {ficdict_ids: JSON.stringify(ids), prefs: true} });
 }
 
@@ -45,14 +45,13 @@ function toolbar_listener(request){
 }
 
 function toolbar_datadumper(request){
+    console.log('toolbar_datadumper');
+    console.log(request);
     switch(request.data_type){
         case 'prefs':
             prefs = request.data['prefs'];
             // Re-do blacklisting
             blacklistBrowsePage(prefs);
-            break;
-        case 'images':
-            images = request.data;
             break;
         case 'ficdict':
             for (key in request.data){

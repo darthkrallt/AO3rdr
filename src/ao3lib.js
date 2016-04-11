@@ -4,7 +4,6 @@
 var addonName = 'ao3rdr';
 
 // Handle the message getting the image data on activation
-var images = {};
 var prefs = {};
 
 
@@ -282,4 +281,3 @@ function processArticlePage(){
         // it's only one id
         return [info['ao3id']];
 }
-

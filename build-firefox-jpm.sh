@@ -16,10 +16,12 @@ cp README.md build/
 rm build/background-chrome.js  # WebExtensions main script
 rm build/src/toolbar-chrome.js
 rm build/data/settings/articles-table-chrome.js
+rm build/ao3rdr/data/settings/index-chrome.html
 
 # Build the background script
 cp index-jpm-firefox.js-raw build/index-jpm-firefox.js
 cat src/background.js >> build/index-jpm-firefox.js
+cat src/article.js >> build/index-jpm-firefox.js
 
 # Build the firefox add on
 cd build; jpm xpi; cp ao3rdr.xpi ../ao3rdr-jpm.xpi

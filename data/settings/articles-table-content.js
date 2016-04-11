@@ -36,6 +36,7 @@ var revealToken = (function(artPort){
 var saveToken = (function(artPort){
     return function(){
         var token = $("#token-display").val();
+        console.log('saveToken');
         artPort.postMessage({message: 'save-token', data:token});
     }
 })(artPort);
@@ -68,9 +69,6 @@ var restoreData = (function(artPort){
 
 function articles_listener(request){
     switch (request.message) {
-        case 'images':
-            images = request.data;
-            break;
         case 'token-revealed':
             $('#token-display').val(request.data);
             $('#id-token-box').fadeIn(500);
@@ -94,10 +92,9 @@ function articles_listener(request){
 
 
 function datadumper(request){
+    console.log('articles table datadumper');
+    console.log(request);
     switch (request.data_type){
-        case 'images':
-            images = request.data;
-            break;
         case 'prefs':
             prefs = request.data.prefs;
             onPrefs(prefs);
@@ -117,7 +114,6 @@ function datadumper(request){
 }
 
 
-$(document).ready(function() { 
-    artPort.postMessage({message: 'fetchdata', data: {images:true}});
+$(document).ready(function() {
     artPort.postMessage({message: 'fetchdata', data: {prefs: true, ficdict: true}});
 });

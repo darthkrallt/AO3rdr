@@ -1,5 +1,4 @@
 var tableData = {};
-var images = {};
 var spinner = null;
 var tokenSyncSpinner = null;
 
@@ -258,8 +257,10 @@ $(document).ready(function() {
     );
     $('#save-token').click(
         function() {
-            tokenSyncSpinner = new Spinner({position: 'relative'}).spin();
-            $('#id-token-box').append(tokenSyncSpinner.el);
+            console.log('save-token');
+            // TODO: fix spinner
+            // tokenSyncSpinner = new Spinner({position: 'relative'}).spin();
+            // $('#id-token-box').append(tokenSyncSpinner.el);
             saveToken();
         }
     );

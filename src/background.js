@@ -35,7 +35,6 @@ function handleNewFic(metadata, mutable_data, port) {
 function saveArticle(newArticle, create_if_ne, port, do_sync){
     // WARNING: CHECK FOR VAILD ao3id
     // ASKING FOR undefined IN LOCALSTORAGE RETURNS EVERYTHING
-    console.assert(newArticle.ao3id);
     if (!newArticle.ao3id){
         return;
     }
@@ -89,8 +88,11 @@ function savePrefs(prefs){
 
 
 function fetchDataRequest(request, port){
+    console.log('fetchdata');
+    console.log(request);
     // Responds to 'fetchdata'
     if (request.message == "fetchdata"){
+        console.log(port);
 
         var pdd_fun = callbackMessage(port);
         if (request.data.prefs){
@@ -98,6 +100,9 @@ function fetchDataRequest(request, port){
                 pdd_fun("datadump", items, "prefs");
             });
         }
+        console.log('fetchDataRequest');
+        console.log(port);
+        console.log(request);
         if (request.data.ficdict || request.data.exportdata){
             storage.get(function (data){
                 var items = {"ficdict": {}};
@@ -105,17 +110,17 @@ function fetchDataRequest(request, port){
                     if (data.hasOwnProperty(key) && data[key]['ao3id'])
                         items.ficdict[key] = data[key];
                 }
-                if (request.data.ficdict)
+                if (request.data.ficdict){
+                    console.log('ficdict datadump');
+                    console.log(items);
                     pdd_fun("datadump", items, "ficdict");
+                }
                 else {
                     items['prefs'] = data['prefs'];
                     items['version'] = '1.0.0';
                     pdd_fun("datadump", items, "exportdata");
                 }
             });
-        }
-        if (request.data.images){
-            pdd_fun("datadump", images, "images");
         }
         if (request.data.ficdict_ids){
             storage.get(function (items){
@@ -143,7 +148,7 @@ function restoreFromBackup(request){
 
     for (var key in article_data){
         if (article_data.hasOwnProperty(key) && article_data[key]['ao3id']) {
-            saveArticle(article_data[key], true, port, true);
+            saveArticle(article_data[key], true, null, true);
         }
     }
     savePrefs(request.data['prefs']);
@@ -162,57 +167,8 @@ function getUser(callbk){
 }
 
 
-// Stuff below this line is broken, 'cuz async foo!
 var backendUrl = 'https://boiling-caverns-2782.herokuapp.com/api/v1.0/';
 // var backendUrl = 'http://127.0.0.1:5000/api/v1.0/'
-
-function newUser(){
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", backendUrl + "user", true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4) {
-            if (xhr.status == 201){
-                var resp = JSON.parse(xhr.responseText);
-                var user_id = resp['user_id'];
-                savePrefs({'user_id': user_id});
-            }
-        }
-    }
-    xhr.send();
-
-}
-
-function validateAndSaveToken(token, port){
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", backendUrl + "user/" + token, true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4) {
-            if (xhr.status == 200){
-                var resp = JSON.parse(xhr.responseText);
-                if ('user_id' in resp){
-                    var user_id = resp['user_id'];
-                    savePrefs({'user_id': user_id });
-                    port.postMessage({
-                        message: 'token-saved', 
-                        data: {'token_status': 'valid', user_id: user_id}
-                    });
-                    // Pass in new token to be sure against race conditions
-                    syncData(resp['user_id'], port);
-                }
-            } else {
-                port.postMessage({
-                    message: 'token-saved', 
-                    data: {'token_status': 'invalid'}
-                });
-            }
-        }
-    }
-    xhr.send();
-
-}
-
 
 function getUserForSync(callbk){
 
@@ -242,41 +198,6 @@ function getDataForSync(callbk){
 
 }
 
-function syncWork(data){
-    if (!data.ao3id){
-        return;
-    }
-
-    var callbk = (function(data){
-        return function(user_id) {
-
-            var xhr = new XMLHttpRequest();
-            var url = backendUrl + 'user/' + user_id + "/work/" + data['ao3id'];
-            xhr.open("POST", url, true);
-            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            xhr.onreadystatechange = function() {
-                if ((xhr.readyState == 4) && (xhr.status == 200 || xhr.status == 201)) {
-                    var diff = JSON.parse(xhr.responseText)['diff'];
-
-                    // This will only contain the diff of one work.
-                    // If there was no difference, it will be empty.
-                    if ('user_id' in diff)
-                        delete diff['user_id'];
-                    if (Object.keys(diff).length === 0){
-                        diff['ao3id'] = data['ao3id'];
-                        saveArticle(diff, true, null, false);
-                    }
-                }
-            }
-            xhr.send(data);
-
-        };
-    })(JSON.stringify(data));
-
-    getUserForSync(callbk);
-
-}
-
 function runSync(){
 
     storage.get('prefs', function (items){
@@ -293,47 +214,3 @@ function runSync(){
 
 }
 
-function syncData(user_id_override, port){
-    /* Use the user_id_override when saving a new user_id/"token" and storage hasn't caught up. */
-    // Grab all data
-    var callbk = function(user_id, data){
-        if (user_id_override)
-            user_id = user_id_override;
-        var xhr = new XMLHttpRequest();
-        var url = backendUrl + 'user/' + user_id + "/collection";
-        xhr.open("POST", url, true);
-        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xhr.onreadystatechange = function() {
-            if ((xhr.readyState == 4) && (xhr.status == 200 || xhr.status == 201)) {
-                var diff = JSON.parse(xhr.responseText)['diff'];
-
-                // Iterate through the dictionary of changed articles and update our DB
-                // the key is the work ID
-                // Also contains the settings!
-                for (var key in diff) {
-                    if (diff.hasOwnProperty(key)) {
-                        if (key == 'settings'){
-                            // TODO: update the settings
-                        } else if (key == 'user_id'){
-                            ; // You can safely ignore
-                        } else {
-                            var article = diff[key];
-                            if ('user_id' in article){
-                                delete article['user_id'];
-                            }
-                            if (!(Object.keys(article).length === 0)){
-                                article['ao3id'] = key;
-                                saveArticle(article, true, port, false)
-                            }
-                        }
-                    }
-                }
-                savePrefs({'last_sync': new Date().getTime() / 1000});
-
-            }
-        }
-        xhr.send(JSON.stringify(data));
-    }
-
-    getDataForSync(callbk);
-}
