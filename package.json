@@ -1,6 +1,7 @@
 {
   "title": "AO3rdr",
   "name": "ao3rdr",
+  "id": "jid1-ayTtY9e4Iz49HA@jetpack",
   "version": "1.2.0",
   "description": "Rating system and block by tag system for Archive of Our Own.",
   "main": "index-jpm-firefox.js",
@@ -9,7 +10,6 @@
     "firefox": ">=38.0a1",
     "fennec": ">=38.0a1"
   },
-  "icon": "resource://@ao3rdr/data/images/icon.png",
   "permissions": {
     "cross-domain-content": [
       "https://boiling-caverns-2782.herokuapp.com/*",

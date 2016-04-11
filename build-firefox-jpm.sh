@@ -12,6 +12,9 @@ cp package.json build/package.json
 cp LICENSE.txt build/
 cp README.md build/
 
+# Icon in the root of the directory
+cp data/images/icon.png build/
+
 # Remove files we don't want in the build
 rm build/src/background-chrome.js  # WebExtensions main script
 rm build/src/toolbar-chrome.js
