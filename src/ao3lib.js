@@ -4,7 +4,6 @@
 var addonName = 'ao3rdr';
 
 // Handle the message getting the image data on activation
-var images = {};
 var prefs = {};
 
 
@@ -244,9 +243,6 @@ function processBrowsePage(){
         articles[i].appendChild(toolbar);
 
     }
-    // Note that having a global "prefs" is FF only. TODO: fix
-    if (prefs)
-        blacklistBrowsePage(prefs);
     return idsOnPage;
 }
 
@@ -282,4 +278,3 @@ function processArticlePage(){
         // it's only one id
         return [info['ao3id']];
 }
-

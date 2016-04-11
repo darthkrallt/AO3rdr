@@ -2,14 +2,15 @@
 
   "manifest_version": 2,
   "name": "ao3rdr",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "id": "jid1-ayTtY9e4Iz49HA@jetpack",
 
   "permissions": [
     "activeTab",
     "storage",
     "tabs",
-    "https://boiling-caverns-2782.herokuapp.com/*"
+    "https://boiling-caverns-2782.herokuapp.com/*",
+    "https://*.ao3rdr.com/*"
   ],
 
   "description": "Rating system and block by tag system for Archive of Our Own.",
@@ -27,7 +28,7 @@
   },
 
   "background": {
-    "scripts": ["src/background.js", "src/article.js", "src/images.js"]
+    "scripts": ["src/background-chrome.js", "src/background.js", "src/article.js", "src/images.js"]
   },
 
   "content_scripts": [
@@ -37,6 +38,7 @@
       "js": [
         "lib/jquery-1.11.2.min.js", "src/ao3lib.js", 
         "src/toolbar-ao3.js", "src/toolbar-chrome.js",
+        "src/toolbar-content.js",
         "src/article.js", "src/images.js"
       ],
       "all_frames": true
@@ -51,7 +53,7 @@
   },
 
   "web_accessible_resources": [
-    "data/settings/articles-table-chrome.js", "data/settings/articles-table.js", "data/settings/articles-table-lib.js", "data/settings/credits.html", "data/settings/index.html", "data/settings/jquery.tagsinput.css", "data/settings/jquery.tagsinput.js", "data/settings/popup.html", "data/settings/popup.js", "data/settings/tablesort.js", "data/settings/css/custom.css", "data/settings/css/normalize.css", "data/settings/css/skeleton.css", "data/images/bookmark-fill.svg", "data/images/bookmark-shadow.svg", "data/images/bookmark.svg", "data/images/close.svg", "data/images/cloud-offline.svg", "data/images/cloud-ok.svg", "data/images/cloud-sync.svg", "data/images/dislike-fill.svg", "data/images/dislike-shadow.svg", "data/images/dislike.svg", "data/images/flag.svg", "data/images/hidden-shadow.svg", "data/images/hidden.svg", "data/images/icon_128.png", "data/images/icon_16.png", "data/images/icon_48.png", "data/images/icon.png", "data/images/icon.svg", "data/images/menu-shadow.svg", "data/images/menu.svg", "data/images/read.svg", "data/images/star-0.svg", "data/images/star-1-fill.svg", "data/images/star-1.svg", "data/images/star-3-fill.svg", "data/images/star-3.svg", "data/images/star-5-fill.svg", "data/images/star-5.svg", "data/images/star-shadow.svg", "data/images/sync.svg", "data/images/unread.svg"
+    "data/settings/articles-table-chrome.js", "data/settings/articles-table-content.js", "data/settings/articles-table.js", "data/settings/articles-table-lib.js", "data/settings/credits.html", "data/settings/index.html", "data/settings/jquery.tagsinput.css", "data/settings/jquery.tagsinput.js", "data/settings/popup.html", "data/settings/popup.js", "data/settings/tablesort.js", "data/settings/css/custom.css", "data/settings/css/normalize.css", "data/settings/css/skeleton.css", "data/images/bookmark-fill.svg",  "data/images/bookmark.svg", "data/images/close.svg", "data/images/cloud-offline.svg", "data/images/cloud-ok.svg", "data/images/cloud-sync.svg", "data/images/dislike-fill.svg", "data/images/dislike.svg", "data/images/flag.svg", "data/images/hidden.svg", "data/images/icon_128.png", "data/images/icon_16.png", "data/images/icon_48.png", "data/images/icon.png", "data/images/icon.svg", "data/images/menu.svg", "data/images/read.svg", "data/images/star-0.svg", "data/images/star-1-fill.svg", "data/images/star-1.svg", "data/images/star-3-fill.svg", "data/images/star-3.svg", "data/images/star-5-fill.svg", "data/images/star-5.svg", "data/images/sync.svg", "data/images/unread.svg"
   ]
 
 }
