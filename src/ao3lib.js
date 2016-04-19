@@ -105,12 +105,25 @@ function parseChapters(raw_html){
     return out;
 }
 
+
+function parseAuthor(raw_html){
+    var authors = $(raw_html).find('a[rel="author"]');
+    var authorList = [];
+    authors.each(function(){
+        authorList.push($(this).text());
+    });
+    return authorList.join(', ');
+}
+
+
 function parseArticlePage(raw_html){
 /* Extract Information from an article page
 */
     var out = {};
     // Title, Author are in preface group
-    out['author'] = $(raw_html).find('a[rel=author]').html();
+
+    out['author'] = parseAuthor(raw_html);
+
     var raw = $(raw_html).find("h2[class='title heading']").html();
     // AO3 has weird whitespace around the title on this page, strip it!
     out['title'] = $.trim(raw);
@@ -160,10 +173,11 @@ function parseWorkBlurb(raw_html){
 
     out['url'] = header_div.attr('href');
     out['ao3id'] = out['url'].slice(7);
-    out['title'] = header_div.html();
 
-    out['title'] = $(raw_html).find('a').html();
-    out['author'] = $(raw_html).find('a[rel=author]').html();
+    out['title'] = $($(raw_html).find('[class=heading]')).find('a[href^="/works/"]').text();
+
+    out['author'] = parseAuthor(raw_html);
+
     var raw = $(raw_html).find('p[class=datetime]').html();
     out['updated'] = new Date(Date.parse(raw)).toJSON();
 

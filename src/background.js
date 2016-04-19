@@ -101,8 +101,12 @@ function fetchDataRequest(request, port){
             storage.get(function (data){
                 var items = {"ficdict": {}};
                 for (var key in data){
-                    if (data.hasOwnProperty(key) && data[key]['ao3id'])
+                    if (data.hasOwnProperty(key) && data[key]['ao3id']){
                         items.ficdict[key] = data[key];
+                        // HACK: TODO: bugfix for html in title
+                        if (items.ficdict[key]['title'].indexOf('Public Bookmark') >= 0)
+                            items.ficdict[key]['title'] = '(please click to fix title)';
+                    }
                 }
                 if (request.data.ficdict){
                     pdd_fun("datadump", items, "ficdict");
@@ -124,6 +128,9 @@ function fetchDataRequest(request, port){
                     var fd_id = ficdict_ids[key];
                     if (items[fd_id]) {
                         data[fd_id] = items[fd_id];
+                        // HACK: TODO: bugfix for html in title
+                        if (data[fd_id]['title'].indexOf('Public Bookmark') >= 0)
+                            data[fd_id]['title'] = '(please click to fix title)';
                     }
                 }
                 pdd_fun("datadump", data, "ficdict");
@@ -134,9 +141,13 @@ function fetchDataRequest(request, port){
 
 
 function restoreFromBackup(request){
-        // Update the DB data
+    // Update the DB data
     var version = request.data['version'];
     var article_data = request.data['ficdict'];
+    // Old version of backup
+    if (!article_data){
+        article_data = request.data['article_data'];
+    }
 
     for (var key in article_data){
         if (article_data.hasOwnProperty(key) && article_data[key]['ao3id']) {

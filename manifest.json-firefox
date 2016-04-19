@@ -2,7 +2,7 @@
 
   "manifest_version": 2,
   "name": "ao3rdr",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "id": "jid1-ayTtY9e4Iz49HA@jetpack",
 
   "permissions": [

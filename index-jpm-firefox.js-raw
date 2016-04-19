@@ -318,7 +318,7 @@ function syncWork(data){
         content: JSON.stringify(data),
         contentType: 'application/json',
         onComplete: function (response) {
-            console.log('syncwork ' + response.status + ' ' + JSON.stringify(response.json));
+            // console.log('syncwork ' + response.status + ' ' + JSON.stringify(response.json));
             // Merge data here
             if ((response.status == 200) || (response.status == 201)){
                 var diff = response.json['diff'];
@@ -354,7 +354,7 @@ function syncData(){
         contentType: 'application/json',
         onComplete: function (response) {
             // Merge data here
-            console.log('syncdata ' + response.status + ' ' + response.json);
+            // console.log('syncdata ' + response.status + ' ' + response.json);
             if ((response.status == 200) || (response.status == 201)){
                 var diff = response.json['diff'];
                 // Iterate through the dictionary of changed articles and update our DB
