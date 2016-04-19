@@ -4,7 +4,9 @@ function Article(metadata, mutable_data) {
     var currentTime = new Date().getTime() / 1000; // ms to seconds
     this.ao3id = metadata.ao3id;
     this.author = unescape(metadata.author);
+    this.author__ts = currentTime;
     this.title = unescape(metadata.title);
+    this.title__ts = currentTime;
     this.crawled = new Date().toJSON();
     this.crawled__ts = currentTime;
     this.updated = new Date(metadata.updated).toJSON();
@@ -91,6 +93,19 @@ function updateArticle(old_article, new_article){
         old_article.hasupdate__ts = currentTime;
     }
 
+    if ((new_article.title) && (new_article.title != "undefined")){
+        if (old_article.title != new_article.title){
+            old_article.title = new_article.title;
+            old_article.title__ts = new_article.title__ts;
+        }
+    }
+
+    if (new_article.author && (new_article.author != "undefined")){
+        if (old_article.author != new_article.title){
+            old_article.author = new_article.author;
+            old_article.author__ts = new_article.author__ts;
+        }
+    }
     // Important! We need to always update these both together!
     if (new_article.read || !(old_article.read)) {
         old_article.read = new_article.read;
