@@ -274,7 +274,7 @@ function blacklistBrowsePage(prefs){
 
         // if it's a banned tag, hide it!
         var matching_tags = checkTags(tags, blacklist_tags);
-        if (matching_tags){
+        if (matching_tags && prefs.autofilter){
             hideByTag(articles[i], info, matching_tags);
         }
     }
