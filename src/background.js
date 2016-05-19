@@ -104,7 +104,7 @@ function fetchDataRequest(request, port){
                     if (data.hasOwnProperty(key) && data[key]['ao3id']){
                         items.ficdict[key] = data[key];
                         // HACK: TODO: bugfix for html in title
-                        if (items.ficdict[key]['title'].indexOf('Public Bookmark') >= 0)
+                        if (items.ficdict[key]['title'] && items.ficdict[key]['title'].indexOf('Public Bookmark') >= 0)
                             items.ficdict[key]['title'] = '(please click to fix title)';
                     }
                 }
@@ -129,7 +129,7 @@ function fetchDataRequest(request, port){
                     if (items[fd_id]) {
                         data[fd_id] = items[fd_id];
                         // HACK: TODO: bugfix for html in title
-                        if (data[fd_id]['title'].indexOf('Public Bookmark') >= 0)
+                        if (data[fd_id]['title'] && data[fd_id]['title'].indexOf('Public Bookmark') >= 0)
                             data[fd_id]['title'] = '(please click to fix title)';
                     }
                 }
