@@ -116,6 +116,19 @@ function parseAuthor(raw_html){
 }
 
 
+function parseDate(raw_date){
+    /* Ensure that regardless of format, we stick to assuming UTC. 
+        THIS ONLY WORKS FOR DATE, IT ASSUMES NO TIME IS SPECIFIED.
+    */
+    var _date = new Date(raw_date);
+    if (_date.getUTCHours() == 0) {
+        return _date.toJSON();
+    }
+    var out = new Date(Date.UTC(_date.getFullYear(), _date.getMonth(), _date.getDate(), 0, 0, 0));
+    return out.toJSON();
+    
+}
+
 function parseArticlePage(raw_html){
 /* Extract Information from an article page
 */
@@ -142,7 +155,8 @@ function parseArticlePage(raw_html){
             raw_date =  $(stats[i+1]).html() || raw_date;
         }
     }
-    out['updated'] = new Date(Date.parse(raw_date)).toJSON();
+    console.log(raw_date)
+    out['updated'] = parseDate(raw_date);
 
     out['chapters'] = parseChapters(raw_html);
     // Assume we've read up to this page if we are adding the bookmark from it.
@@ -179,7 +193,8 @@ function parseWorkBlurb(raw_html){
     out['author'] = parseAuthor(raw_html);
 
     var raw = $(raw_html).find('p[class=datetime]').html();
-    out['updated'] = new Date(Date.parse(raw)).toJSON();
+    console.log(raw);
+    out['updated'] = parseDate(raw);
 
     out['chapters'] = parseChapters(raw_html);
     // Assume we've not read anything if adding from

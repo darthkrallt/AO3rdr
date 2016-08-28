@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>QUnit basic example</title>
+  <link rel="stylesheet" href="qunitsrc/qunit-2.0.1.css" type="text/css" media="screen">
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+  <script type="text/javascript" src="../lib/jquery-1.11.2.min.js"></script>
+  <script type="text/javascript" src="qunitsrc/qunit-2.0.1.js"></script>
+
+  <!-- Include the test libraries -->
+  <script type="text/javascript" src="../src/ao3lib.js"></script>
+  <script type="text/javascript" src="test/ao3lib_tests.js"></script>
+
+
+  <!-- Fixtures go here -->
+
+  <div id="qunit-fixture-workspage-general-one-chapter">
+<li class="work blurb group" id="work_123456789101112" role="article">
+  
+
+  <!--title, author, fandom-->
+  <div class="header module">
+
+    <h4 class="heading">
+      <a href="/works/123456789101112">Test work - General - One Chapter</a>
+      by
+        
+      <!-- do not cache -->
+      <a href="/users/testUser/pseuds/testUser" rel="author">testUser</a>
+
+      
+    </h4>
+
+    <h5 class="fandoms heading">
+      <span class="landmark">Fandoms:</span>
+      <a href="/tags/The%20Avengers%20(Marvel%20Movies)/works" class="tag">The Avengers (Marvel Movies)</a>
+      &nbsp;
+    </h5>
+
+    <!--required tags-->
+    <ul class="required-tags">
+<li> <a href="/help/symbols-key.html" aria-controls="#modal" class="help symbol question modal modal-attached" title="Symbols key"><span class="rating-general-audience rating" title="General Audiences"><span class="text">General Audiences</span></span></a></li>
+<li> <a href="/help/symbols-key.html" aria-controls="#modal" class="help symbol question modal modal-attached" title="Symbols key"><span class="warning-no warnings" title="No Archive Warnings Apply"><span class="text">No Archive Warnings Apply</span></span></a></li>
+<li> <a href="/help/symbols-key.html" aria-controls="#modal" class="help symbol question modal modal-attached" title="Symbols key"><span class="category-slash category" title="M/M"><span class="text">M/M</span></span></a></li>
+<li> <a href="/help/symbols-key.html" aria-controls="#modal" class="help symbol question modal modal-attached" title="Symbols key"><span class="complete-yes iswip" title="Complete Work"><span class="text">Complete Work</span></span></a></li>
+</ul>
+    <p class="datetime">28 Aug 2016</p>
+  </div>
+
+  <!--warnings again, cast, freeform tags-->
+  <h6 class="landmark heading">Tags</h6>
+  <ul class="tags commas">
+    <li class="warnings"><strong><a href="/tags/No%20Archive%20Warnings%20Apply/works" class="tag">No Archive Warnings Apply</a></strong></li><li class="relationships"><a href="/tags/testA*s*testB/works" class="tag">testA/testB</a></li><li class="characters"><a href="/tags/testA/works" class="tag">testA</a></li> <li class="characters"><a href="/tags/testB/works" class="tag">testB</a></li> <li class="freeforms"><a href="/tags/Writing%20Tests/works" class="tag">Writing Tests</a></li> <li class="freeforms"><a href="/tags/Programmer%20doesn't%20know%20what%20a%20bed%20is/works" class="tag">Programmer doesn't know what a bed is</a></li>
+  </ul>
+
+  <!--summary-->
+    <h6 class="landmark heading">Summary</h6>
+    <blockquote class="userstuff summary">
+      <p>Are there some words here? Yeah, if I was an author and not a tester this is what the description would be. But alas. Here I sit writing mock test data.</p>
+    </blockquote>
+
+
+  <!--stats-->
+
+  <dl class="stats">
+      <dt class="language">Language:</dt>
+      <dd class="language">English</dd>
+    <dt class="words">Words:</dt>
+    <dd class="words">1,234</dd>
+    <dt class="chapters">Chapters:</dt>
+    <dd class="chapters">1/1</dd>
+
+
+
+
+    <dt class="hits">Hits:</dt>
+    <dd class="hits">4</dd>
+
+  </dl>
+
+
+</li>
+
+  </div>
+
+<!-- Fixture 2: logged out mature work -->
+
+<div id="qunit-fixture-workspage-mature-logout-one-chapter">
+<div id="main" class="works-show region" role="main">
+          
+          <div class="flash"></div>
+          <p class="caution">
+  This work could have adult content. If you proceed you have agreed that you are willing to see such content.
+</p>
+
+<ul class="actions" role="navigation">
+  <li>
+    <a href="/works/12345678910111213?view_adult=true">Proceed</a>
+  </li>
+  <li>
+    <a href="http://archiveofourown.org/tags/Star%20Trek/works">Go Back</a>
+  </li>
+</ul>
+
+<p class="message footnote">
+  If you accept cookies from our site and you choose "Proceed", you will not be asked again during this session (that is, until you close your browser). If you log in you can store your preference and never be asked again.
+</p>
+
+<div class="clear"></div>
+
+<ol class="work index group">
+  <li class="work blurb group" id="work_12345678910111213" role="article">
+  
+
+  <!--title, author, fandom-->
+  <div class="header module">
+
+    <h4 class="heading">
+      <a href="/works/12345678910111213">Test Work 2 - Mature - One Chapter</a>
+      by
+        
+      <!-- do not cache -->
+      <a href="/users/testUser2/pseuds/testUser2" rel="author">testUser2</a>
+
+
+
+      
+      
+    </h4>
+
+    <h5 class="fandoms heading">
+      <span class="landmark">Fandoms:</span>
+      <a href="/tags/Star%20Trek:%20Alternate%20Original%20Series%20(Movies)/works" class="tag">Star Trek: Alternate Original Series (Movies)</a>
+      &nbsp;
+    </h5>
+
+    <!--required tags-->
+    <ul class="required-tags">
+<li> <a href="/help/symbols-key.html" aria-controls="#modal" class="help symbol question modal modal-attached" title="Symbols key"><span class="rating-mature rating" title="Mature"><span class="text">Mature</span></span></a></li>
+<li> <a href="/help/symbols-key.html" aria-controls="#modal" class="help symbol question modal modal-attached" title="Symbols key"><span class="warning-no warnings" title="No Archive Warnings Apply"><span class="text">No Archive Warnings Apply</span></span></a></li>
+<li> <a href="/help/symbols-key.html" aria-controls="#modal" class="help symbol question modal modal-attached" title="Symbols key"><span class="category-slash category" title="M/M"><span class="text">M/M</span></span></a></li>
+<li> <a href="/help/symbols-key.html" aria-controls="#modal" class="help symbol question modal modal-attached" title="Symbols key"><span class="complete-yes iswip" title="Complete Work"><span class="text">Complete Work</span></span></a></li>
+</ul>
+    <p class="datetime">28 Aug 2016</p>
+  </div>
+
+  <!--warnings again, cast, freeform tags-->
+  <h6 class="landmark heading">Tags</h6>
+  <ul class="tags commas">
+    <li class="warnings"><strong><a href="/tags/No%20Archive%20Warnings%20Apply/works" class="tag">No Archive Warnings Apply</a></strong></li><li class="relationships"><a href="/tags/Person%20A*d*%20Person*s*Human%20%22Human%22%20Human/works" class="tag">Person A. Person/Human "Human" Human</a></li><li class="characters"><a href="/tags/Person%20A*d*%20Person/works" class="tag">Person A. Person</a></li> <li class="characters"><a href="/tags/Human%20%22Human%22%20Human/works" class="tag">Human "Human" Human</a></li><li class="freeforms"><a href="/tags/post%20star%20trek%20beyond/works" class="tag">post star trek beyond</a></li> <li class="freeforms"><a href="/tags/Writing%20Tests/works" class="tag">Writing Tests</a></li>
+  </ul>
+
+  <!--summary-->
+    <h6 class="landmark heading">Summary</h6>
+    <blockquote class="userstuff summary">
+      <p>Today is another day for writing tests. Why should I embark on this quest? For science? NO. For code quality. </p> <p>Here is a paragraph.</p> <p>Hope you support Unicode ಠ_ಠ</p>
+    </blockquote>
+
+
+  <!--stats-->
+
+  <dl class="stats">
+      <dt class="language">Language:</dt>
+      <dd class="language">English</dd>
+    <dt class="words">Words:</dt>
+    <dd class="words">3,510</dd>
+    <dt class="chapters">Chapters:</dt>
+    <dd class="chapters">1/1</dd>
+
+
+
+    <dt class="comments">Comments:</dt>
+    <dd class="comments"><a href="/works/12345678910111213?show_comments=true#comments">2</a></dd>
+    <dt class="kudos">Kudos:</dt>
+    <dd class="kudos"><a href="/works/12345678910111213#comments">42</a></dd>
+    <dt class="bookmarks">Bookmarks:</dt>
+    <dd class="bookmarks"><a href="/works/12345678910111213/bookmarks">6</a></dd>
+
+    <dt class="hits">Hits:</dt>
+    <dd class="hits">301</dd>
+
+  </dl>
+
+
+</li>
+
+</ol>
+
+          <div class="clear"><!--presentational--></div>
+        </div>
+
+</div>
+
+<!-- Fixture 3: Same as Fixture 2, but the warning-confirmed page (Articles page) -->
+<div id="qunit-fixture-workspage-mature-logout-one-chapter-confirmed-warning">
+  
+<div class="wrapper">
+
+  <dl class="work meta group" role="complementary">
+          <dt class="rating tags">
+              Rating:
+          </dt>
+
+          <dd class="rating tags">
+            <ul class="commas">
+               <li class="last"><a href="/tags/Mature/works" class="tag">Mature</a></li>
+            </ul>
+          </dd>
+          <dt class="warning tags">
+              <a href="/tos_faq#tags">Archive Warning</a>:
+          </dt>
+
+          <dd class="warning tags">
+            <ul class="commas">
+               <li class="last"><a href="/tags/No%20Archive%20Warnings%20Apply/works" class="tag">No Archive Warnings Apply</a></li>
+            </ul>
+          </dd>
+          <dt class="category tags">
+              Category:
+          </dt>
+
+          <dd class="category tags">
+            <ul class="commas">
+               <li class="last"><a href="/tags/M*s*M/works" class="tag">M/M</a></li>
+            </ul>
+          </dd>
+          <dt class="fandom tags">
+              Fandom:
+          </dt>
+
+          <dd class="fandom tags">
+            <ul class="commas">
+               <li class="last"><a href="/tags/Star%20Trek:%20Alternate%20Original%20Series%20(Movies)/works" class="tag">Star Trek: Alternate Original Series (Movies)</a></li>
+            </ul>
+          </dd>
+          <dt class="relationship tags">
+              Relationship:
+          </dt>
+
+          <dd class="relationship tags">
+            <ul class="commas">
+               <li class="last"><a href="/tags/Person%20A*d*%20Person*s*Human%20%22Human%22%20Human/works" class="tag">Person A. Person/Human "Human" Human</a></li>
+            </ul>
+          </dd>
+          <dt class="character tags">
+              Characters:
+          </dt>
+
+          <dd class="character tags">
+            <ul class="commas">
+               <li><a href="/tags/Person%20A*d*%20Person/works" class="tag">Person A. Person</a></li><li class="last"><a href="/tags/Human%20%22Human%22%20Human/works" class="tag">Human "Human" Human</a></li>
+            </ul>
+          </dd>
+          <dt class="freeform tags">
+              Additional Tags:
+          </dt>
+
+          <dd class="freeform tags">
+            <ul class="commas">
+               <li><a href="/tags/post%20star%20trek%20beyond/works" class="tag">post star trek beyond</a></li>
+               <li><a href="/tags/Writing%20Tests/works" class="tag">Writing Tests</a></li>
+            </ul>
+          </dd>
+
+      <dt class="language">
+        Language:
+      </dt>
+      <dd class="language">
+        English
+      </dd>
+
+
+
+    <dt class="stats">Stats:</dt>
+    <dd class="stats">
+<!-- end of cache -->
+
+      <dl class="stats"><dt class="published">Published:</dt><dd class="published">2016-08-28</dd><dt class="words">Words:</dt><dd class="words">3510</dd><dt class="chapters">Chapters:</dt><dd class="chapters">1/1</dd><dt class="comments">Comments:</dt><dd class="comments">2</dd><dt class="kudos">Kudos:</dt><dd class="kudos">42</dd><dt class="bookmarks">Bookmarks:</dt><dd class="bookmarks"><a href="/works/12345678910111213/bookmarks">6</a></dd><dt class="hits">Hits:</dt><dd class="hits">301</dd></dl>
+      </dd>
+  </dl>
+</div>
+
+<div id="workskin">
+  <div class="preface group">
+    <h2 class="title heading">
+      Test Work 2 - Mature - One Chapter
+    </h2>
+    <h3 class="byline heading">
+      <a href="/users/testUser2/pseuds/testUser2" rel="author">testUser2</a>
+    </h3>
+
+
+        <div class="summary module" role="complementary">
+          <h3 class="heading">Summary:</h3>
+            <blockquote class="userstuff">
+              <p>Today is another day for writing tests. Why should I embark on this quest? For science? NO. For code quality. </p> <p>Here is a paragraph.</p> <p>Hope you support Unicode ಠ_ಠ</p>
+            </blockquote>
+        </div>
+
+
+  </div>
+
+
+<!--/descriptions-->
+
+<!--chapter content-->
+    <div id="chapters" role="article">
+        <h3 class="landmark heading" id="work">Work Text:</h3>
+          <div class="userstuff"><p>
+  <span>“Eggs and Ham.”</span>
+</p>
+<p>
+  <span>This work is not very exciting. It is only two paragraphs. SENTENCES.</span>
+</p>
+<p>
+  <span>ಠ_ಠ</span>
+</p>
+        <!-- end cache -->
+    </div>
+<!--/chapter-->
+  
+  </div>
+
+<div id="feedback" class="feedback" role="complementary">
+
+  <h3 class="landmark heading">Actions</h3>
+
+  <ul class="actions" role="navigation">
+      <li><a href="#main">↑ Top</a></li>
+
+
+
+
+
+
+      <li>
+        <form accept-charset="UTF-8" action="/kudos" id="new_kudo" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"><input name="authenticity_token" type="hidden" value="XXXXXX/XXXXXXXXXXXXXXX/XXXXXXXX="></div>
+          <input class="text" id="kudo_commentable_id" name="kudo[commentable_id]" type="hidden" value="12345678910111213">
+          <input class="text" id="kudo_commentable_type" name="kudo[commentable_type]" type="hidden" value="Work">
+          <input id="kudo_submit" name="commit" type="submit" value="Kudos ♥">
+</form>      </li>
+
+
+
+
+        <li id="show_comments_link"><a href="/comments/show_comments?work_id=12345678910111213" data-remote="true">Comments (2)</a></li>
+  </ul>
+
+  <div id="kudos_message"></div>
+
+  <h3 class="landmark heading"><a name="comments">Comments</a></h3>
+
+  
+
+    <div id="kudos">
+      <p class="kudos">
+          <a href="/users/testUser3">testUser3</a>, <a href="/users/testUser4">testUser4</a>, <a href="/users/testUser5">testUser5</a>, <a href="/users/testUser5">testUser5</a>, <a href="/users/testUser6">testUser6</a>, <a href="/users/testUser7">testUser7</a>, <a href="/users/testUser8">testUser8</a>, <a href="/users/testUser9">testUser9</a>, <a href="/users/testUser10">testUser10</a>, <a href="/users/testUser11">testUser11</a>, <a href="/users/testUser12">testUser12</a>
+             as well as 
+          33 guests
+         left kudos on this work!
+        <span class="kudos_expanded hidden">
+          <a href="#" id="kudos_collapser">(collapse)</a>
+        </span>
+      </p>
+</div>
+
+
+    <div id="add_comment_placeholder" title="top level comment">
+      <div id="add_comment">
+        <!-- expects the local variables comment, commentable, and button_name -->
+<div class="post comment" id="comment_form_for_12345678910111213">
+  <form accept-charset="UTF-8" action="/works/12345678910111213/comments" class="new_comment" id="comment_for_12345678910111213" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"><input name="authenticity_token" type="hidden" value="XXXXXX/XXXXXXXXXXXXXXX/XXXXXXXX="></div>
+    <fieldset>
+      <legend>Post Comment</legend>
+
+
+        
+      <p>
+        <label for="comment_content_for_12345678910111213" class="landmark">Comment</label>
+        <textarea class="comment_form observe_textlength" id="comment_content_for_12345678910111213" name="comment[content]" title="Enter Comment"></textarea>
+        <input type="hidden" id="controller_name_for_12345678910111213" name="controller_name" value="works">
+      </p>
+      <p class="character_counter"><span aria-live="polite" aria-valuemax="4300" aria-valuenow="4300" class="value" data-maxlength="4300" id="comment_content_for_12345678910111213_counter">4300</span> characters left</p>
+      <p class="submit actions">
+        <input data-disable-with="Please wait..." id="comment_submit_for_12345678910111213" name="commit" type="submit" value="Comment">
+      </p>
+    </fieldset>
+</form></div>
+<div class="clear"></div>
+
+      </div>
+    </div>
+
+  <!-- If we have javascript, here is where the comments will be spiffily inserted -->
+  <!-- If not, and show_comments is true, here is where the comments will be rendered -->
+  <div id="comments_placeholder" style="display:none;">
+  </div>
+
+
+</div>
+
+</div>
+<!-- end fixture 3 -->
+
+
+</body>
+</html>
