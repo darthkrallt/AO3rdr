@@ -29,3 +29,46 @@ var images = {
 
 // END TOOLBAR STUBS
 
+QUnit.module( "Toolbar Content" );
+// processPage returns ids on the page
+QUnit.test( "processPage - bookmarks", function( assert ) {
+    var fixture =  $( "#qunit-fixture-bookmarkspage-page" );
+    var standardObject = [
+      "888888888888",
+      "5555555555"
+     ];
+
+    var checkMe = processPage(fixture);
+    assert.deepEqual( checkMe, standardObject, "processPage" );
+});
+
+QUnit.test( "processPage - tags", function( assert ) {
+    var fixture =  $( "#qunit-fixture-tagspage-page" );
+    var standardObject = [
+        "777777777777",
+        "888888888888",
+        "99999999999999"
+    ];
+
+    var checkMe = processPage(fixture);
+    assert.deepEqual( checkMe, standardObject, "processPage" );
+});
+
+QUnit.test( "processPage - article", function( assert ) {
+    var fixture =  $( "#qunit-fixture-workspage-mature-logout-one-chapter-confirmed-warning" );
+    var standardObject = ["12345678910111213"];
+
+    var checkMe = processPage(fixture);
+    assert.deepEqual( checkMe, standardObject, "processPage" );
+});
+
+// Next all these likely need a refactor
+// checkForBlacklistedArticle
+
+// undoBlacklist
+
+// createToolbar // Run though the click actions?
+// Also covers updateImage ?
+
+// hideByTag
+

@@ -3,13 +3,13 @@
 */
 
 // Not necessarily a user visit, just processing it
-function processPage(){
+function processPage(raw_html){
     var ids = [];
         // Check if it's a browsing page, or a single article page
-    if (checkIfArticlePage($("html").html())) {
-        ids = processArticlePage();
+    if (checkIfArticlePage(raw_html)) {
+        ids = processArticlePage(raw_html);
     } else {
-        ids = processBrowsePage();
+        ids = processBrowsePage(raw_html);
     }
     return ids;
 }

@@ -61,13 +61,9 @@ QUnit.test( "Get the list of ids from browse (tags) page", function( assert ) {
   // Ensure that this returns a list of ids
   var fixture = $( "#qunit-fixture-tagspage-page" );
   var standardObject =  [
-    "123456789101112",
-    "12345678910111213",
     "777777777777",
     "888888888888",
-    "99999999999999",
-    "888888888888",
-    "5555555555"
+    "99999999999999"
   ];
   createToolbar = function(){return document.createElement("p");}; // TODO: refactor this
   var checkMe = processBrowsePage(fixture);

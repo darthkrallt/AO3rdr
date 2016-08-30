@@ -260,9 +260,9 @@ function checkIfArticlePage(raw_html){
 
 // Go through the page, look for all the <li class="work blurb group" id="work_2707844" role="article">
 // Processing when running on the "browse tags" or "browse bookmarks"
-function processBrowsePage(){
+function processBrowsePage(raw_html){
     var idsOnPage = [];
-    var articles = $("li[role=article]");
+    var articles = $(raw_html).find("li[role=article]");
     for (var i=0; i< articles.length; i++){
         var info = parseWorkBlurb(articles[i]);
 
@@ -297,11 +297,11 @@ function blacklistBrowsePage(prefs){
 }
 
 
-function processArticlePage(){
+function processArticlePage(raw_html){
 
         // Processing when running on only a single article
         // Just append the toolbar!
-        var info = parseArticlePage($('html'));
+        var info = parseArticlePage(raw_html);
         var toolbar = createToolbar(info, true);
         $('ul[class="work navigation actions"]').append(toolbar);
 
@@ -312,6 +312,6 @@ function processArticlePage(){
 // The entry into all of the AO3 actions
 function ao3onReady(){
     onPageviewUpdater();
-    var ids = processPage();
+    var ids = processPage($('html').html());
     toolbar_onload(ids);
 }
