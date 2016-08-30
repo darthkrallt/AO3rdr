@@ -301,7 +301,7 @@ function processArticlePage(){
 
         // Processing when running on only a single article
         // Just append the tool bar!
-        var info = parseArticlePage($('#main'));
+        var info = parseArticlePage($('html'));
         var toolbar = createToolbar(info, true);
         $('ul[class="work navigation actions"]').append(toolbar);
 
