@@ -5,10 +5,6 @@ function emitSettingsClick () {
     console.log('settingsclick');
 };
 
-function ao3onReady() {
-    console.log('ao3onReady');
-}
-
 // UGh, the "images" as global really has to go :|
 var images = {
     'star-0':'data/images/star-0.svg',

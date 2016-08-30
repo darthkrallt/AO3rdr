@@ -34,6 +34,11 @@ function updateArticle(old_article, new_article){
            WARNING! MODIFIES the old_article!
            used by function handleNewFic
     */
+    // Do nothing if mismatched ids!!!
+    if (old_article.ao3id != new_article.ao3id) {
+        return old_article;
+    }
+
     var currentTime = new Date().getTime() / 1000;
 
     if (new_article.deleted){
@@ -91,6 +96,13 @@ function updateArticle(old_article, new_article){
         // Clear the hasupdate flag when you've visited
         old_article.hasupdate = false;
         old_article.hasupdate__ts = currentTime;
+    }
+
+    if (new_article.updated && new_article.updated != "undefined") {
+        if (new_article.updated > old_article.updated){
+            old_article.updated = new_article.updated;
+            old_article.updated__ts = new_article.updated__ts;
+        }
     }
 
     if ((new_article.title) && (new_article.title != "undefined")){
