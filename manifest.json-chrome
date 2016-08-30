@@ -19,7 +19,8 @@
         "lib/jquery-1.11.2.min.js", "src/ao3lib.js", 
         "src/toolbar-ao3.js", "src/toolbar-chrome.js",
         "src/toolbar-content.js",
-        "src/article.js", "src/images.js"
+        "src/article.js", "src/images.js",
+        "src/contentscript.js"
       ],
       "all_frames": true
     }

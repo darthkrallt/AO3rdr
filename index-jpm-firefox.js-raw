@@ -203,6 +203,7 @@ var setupAO3 = pageMod.PageMod({
         self.data.url("./../src/toolbar-content.js"),
         self.data.url("./../src/toolbar-jpm-firefox.js"),
         self.data.url("./../src/ao3lib.js"),
+        self.data.url("./../src/contentscript.js"),
     ],
     contentScriptOptions: {"images" : images},
     contentStyleFile: self.data.url('./style.css'),

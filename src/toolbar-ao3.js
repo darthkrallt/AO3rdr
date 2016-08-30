@@ -2,6 +2,7 @@
 
 */
 
+// Not necessarily a user visit, just processing it
 function processPage(){
     var ids = [];
         // Check if it's a browsing page, or a single article page
@@ -164,9 +165,8 @@ function updateImage(newArticle){
     }
 }
 
+
 // When viewing a page by a user visit
-// NOTE: this function is named the same, but slightly different from the one 
-// in the crawler
 function onPageviewUpdater(){
     if (checkIfArticlePage($("html").html())) {
         var info = parseArticlePage($('#main'));
@@ -175,9 +175,3 @@ function onPageviewUpdater(){
         emitFicData(info, {'visit': visit});
     }
 }
-
-$(document).ready(function() { 
-    onPageviewUpdater();
-    var ids = processPage();
-    toolbar_onload(ids);
-}); 

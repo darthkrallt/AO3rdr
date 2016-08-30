@@ -300,11 +300,18 @@ function blacklistBrowsePage(prefs){
 function processArticlePage(){
 
         // Processing when running on only a single article
-        // Just append the tool bar!
+        // Just append the toolbar!
         var info = parseArticlePage($('html'));
         var toolbar = createToolbar(info, true);
         $('ul[class="work navigation actions"]').append(toolbar);
 
         // it's only one id
         return [info['ao3id']];
+}
+
+// The entry into all of the AO3 actions
+function ao3onReady(){
+    onPageviewUpdater();
+    var ids = processPage();
+    toolbar_onload(ids);
 }
