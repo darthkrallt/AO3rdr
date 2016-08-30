@@ -241,19 +241,20 @@ function checkTags(taglist, blacklist_tags){
     return false;
 }
 
-function checkIfBookmarksPage(){
-    return ($('#main').attr('class').indexOf("bookmarks-index") != -1);
+function checkIfBookmarksPage(raw_html){
+    return ($(raw_html).find('.bookmark.index.group').length > 0);
 }
 
-function checkIfTagsPage(){
-    return ($('#main').attr('class').indexOf("works-index") != -1);
+function checkIfTagsPage(raw_html){
+    return ($(raw_html).find('.work.index.group').length > 0);
 }
 
 
-function checkIfArticlePage(){
+function checkIfArticlePage(raw_html){
     // Article pages are "works-show" or chapters-show?,
     //  while browse are "works-index"
-    return ((!checkIfBookmarksPage()) && (!checkIfTagsPage()));
+    // work meta group
+    return ($(raw_html).find('.work.meta.group').length > 0);
 }
 
 

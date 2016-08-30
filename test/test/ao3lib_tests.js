@@ -28,17 +28,13 @@ QUnit.test( "Parse Mature Warning Page one chapter work logged out warning confi
   var fixture = $( "#qunit-fixture-workspage-mature-logout-one-chapter-confirmed-warning" );
   var standardObject = {"ao3id":"12345678910111213","title":"Test Work 2 - Mature - One Chapter","author":"testUser2","updated":"2016-08-28T00:00:00.000Z","chapters":{"published":"1","total":"1","complete":true},"chapters_read":1};
   var checkMe = parseArticlePage(fixture);
-  assert.deepEqual( checkMe, standardObject, "parseArticlePage" );
-
-  // var standardTags = ["Star Trek: Alternate Original Series (Movies)", "No Archive Warnings Apply", 'Person A. Person/Human "Human" Human', "Person A. Person", 'Human "Human" Human', "post star trek beyond", "Writing Tests"];
-  // var checkTags = parseTags(fixture);
-  // assert.deepEqual( checkTags, standardTags, "parseTags" );
+  assert.deepEqual( checkMe, standardObject, "parseWorksPage" );
 
 });
  
 QUnit.module( "Page Detection" );
 QUnit.test( "Bookmarks Page", function( assert ) {
-
+  var fixture = $( "#qunit-fixture-bookmarkspage-page" );
   assert.equal( true, checkIfBookmarksPage(fixture), "checkIfBookmarksPage" );
   assert.equal( false, checkIfTagsPage(fixture), "checkIfTagsPage" );
   assert.equal( false, checkIfArticlePage(fixture), "checkIfArticlePage" );
@@ -47,9 +43,10 @@ QUnit.test( "Bookmarks Page", function( assert ) {
 });
 
 QUnit.test( "Tags Page", function( assert ) {
-
+  var fixture = $( "#qunit-fixture-tagspage-page" );
   assert.equal( false, checkIfBookmarksPage(fixture), "checkIfBookmarksPage" );
   assert.equal( true, checkIfTagsPage(fixture), "checkIfTagsPage" );
+  console.log(checkIfArticlePage(fixture));
   assert.equal( false, checkIfArticlePage(fixture), "checkIfArticlePage" );
 
 

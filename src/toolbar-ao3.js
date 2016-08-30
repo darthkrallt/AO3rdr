@@ -5,7 +5,7 @@
 function processPage(){
     var ids = [];
         // Check if it's a browsing page, or a single article page
-    if (checkIfArticlePage()) {
+    if (checkIfArticlePage($("html").html())) {
         ids = processArticlePage();
     } else {
         ids = processBrowsePage();
@@ -168,7 +168,7 @@ function updateImage(newArticle){
 // NOTE: this function is named the same, but slightly different from the one 
 // in the crawler
 function onPageviewUpdater(){
-    if (checkIfArticlePage()) {
+    if (checkIfArticlePage($("html").html())) {
         var info = parseArticlePage($('#main'));
         // Doesn't have mutable data, we are only checking the immutable
         var visit = new Date().toJSON();
