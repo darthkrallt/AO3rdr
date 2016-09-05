@@ -155,7 +155,6 @@ function parseArticlePage(raw_html){
             raw_date =  $(stats[i+1]).html() || raw_date;
         }
     }
-    console.log(raw_date)
     out['updated'] = parseDate(raw_date);
 
     out['chapters'] = parseChapters(raw_html);
@@ -193,7 +192,6 @@ function parseWorkBlurb(raw_html){
     out['author'] = parseAuthor(raw_html).join(', ');
 
     var raw = $(raw_html).find('p[class=datetime]').html();
-    console.log(raw);
     out['updated'] = parseDate(raw);
 
     out['chapters'] = parseChapters(raw_html);
@@ -334,6 +332,6 @@ function processArticlePage(raw_html){
 // The entry into all of the AO3 actions
 function ao3onReady(){
     onPageviewUpdater();
-    var ids = processPage($('html').html());
+    var ids = processPage($('html'));
     toolbar_onload(ids);
 }
