@@ -42,7 +42,7 @@ Run on EACH BROWSER.
 
 ### Uploading A new version:
 
-- [ ] Firefox:
+- [ ] Firefox: https://addons.mozilla.org/en-US/firefox
     Expected wait time: Days to weeks depending on queue length.
     Be sure to keep an eye on email in case of rejection
 - [ ] Chrome: https://chrome.google.com/webstore/developer/dashboard

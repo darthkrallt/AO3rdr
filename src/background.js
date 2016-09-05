@@ -170,7 +170,7 @@ function getUser(callbk){
 }
 
 
-var backendUrl = 'https://boiling-caverns-2782.herokuapp.com/api/v1.0/';
+var backendUrl = 'https://ao3rdr.com/api/v1.0/';
 // var backendUrl = 'http://127.0.0.1:5000/api/v1.0/'
 
 function getUserForSync(callbk){
