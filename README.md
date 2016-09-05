@@ -31,6 +31,11 @@ Available from the Mozilla Addon site:
 This is to be developed with both mobile and desktop use in mind, so no SDK's 
 were used that are not available on Firefox's beta mobile browser.
 
+### Opera
+
+Waiting for approval process.
+
+
 Credits
 -------
 - Skeleton: getskeleton.com
@@ -81,6 +86,13 @@ How to Build
 
   - JPM, current release `jpm run`
   - (WebExtensions, NOT RELEASED) `build-firefox.sh  # Must manually load into FF`
+
+### Opera
+  - See 'Chrome'
+
+How to Release
+---------------
+See RELEASE_PROCESS.md
 
 License
 -------
