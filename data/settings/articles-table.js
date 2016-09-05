@@ -210,9 +210,11 @@ function handleFile(){
 function onExportComplete(incomming_data){
     var content = JSON.stringify(incomming_data);
     var link = document.createElement('a');
+    var d = new Date();
+    var d_string = d.toISOString().split('T')[0];
 
     link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(content));
-    link.setAttribute('download', 'AO3rdr-backup.txt');
+    link.setAttribute('download', 'AO3rdr-backup-'+d_string+'.txt');
     link.setAttribute('visibility', 'hidden');
     link.setAttribute('display', 'none');
 
