@@ -32,8 +32,8 @@ QUnit.test( "Parse General one chapter work", function( assert ) {
   assert.deepEqual( checkMe, standardObject, "parseWorkBlurb" );
 
   var standardTags = ["The Avengers (Marvel Movies)", "No Archive Warnings Apply", "testA/testB", "testA", "testB", "Writing Tests", "Programmer doesn't know what a bed is"];
-  var checkTags = parseTags(fixture);
-  assert.deepEqual( checkTags, standardTags, "parseTags" );
+  var checkMe = parseTags(fixture);
+  assert.deepEqual( checkMe, standardTags, "parseTags" );
 });
 
 QUnit.test( "Parse Mature Warning Page one chapter work logged out", function( assert ) {
@@ -43,8 +43,8 @@ QUnit.test( "Parse Mature Warning Page one chapter work logged out", function( a
   assert.deepEqual( checkMe, standardObject, "parseWorkBlurb" );
 
   var standardTags = ["Star Trek: Alternate Original Series (Movies)", "No Archive Warnings Apply", 'Person A. Person/Human "Human" Human', "Person A. Person", 'Human "Human" Human', "post star trek beyond", "Writing Tests"];
-  var checkTags = parseTags(fixture);
-  assert.deepEqual( checkTags, standardTags, "parseTags" );
+  var checkMe = parseTags(fixture);
+  assert.deepEqual( checkMe, standardTags, "parseTags" );
 });
 
 QUnit.test( "Parse Mature Warning Page one chapter work logged out warning confirmed", function( assert ) {
@@ -78,4 +78,70 @@ QUnit.test( "Get the list of ids from browse (tags) page", function( assert ) {
   createToolbar = function(){return document.createElement("p");}; // TODO: refactor this
   var checkMe = processArticlePage(fixture);
   assert.deepEqual( checkMe, standardObject, "processArticlePage" );
+});
+
+// Blacklisting Tests
+QUnit.module("Blacklisting Tests");
+// Do blacklist only on complete author name, not partial
+QUnit.test( "checkAuthors & checkTags Mature logged out", function( assert ) {
+  var fixture = $( "#qunit-fixture-workspage-mature-logout-one-chapter" );
+  var blackList = ['testUser2', 'A. Person', 'test'];
+  var standardObject = ['testUser2']; // The desired blacklisted author
+
+  // Gotta parse Authors first
+  var authors = parseAuthor(fixture);
+  var checkMe = checkAuthors(authors, blackList);
+  assert.deepEqual( checkMe, standardObject, "parseWorkBlurb" );
+
+  // Gotta parse Tags first
+  var tags = parseTags(fixture);
+  var standardTags =  ['Person A. Person/Human \"Human\" Human', "Person A. Person", "Writing Tests"];
+  var checkMe = checkTags(tags, blackList);
+  assert.deepEqual( checkMe, standardTags, "parseTags" );
+});
+
+QUnit.test( "checkAuthors Mature logged out", function( assert ) {
+  var fixture = $( "#qunit-fixture-workspage-mature-logout-one-chapter" );
+  var blackList = ['testUser', 'A. Person', 'test'];
+  var standardObject = false; // The desired blacklisted author should be EMPTY
+
+  // Gotta parse Authors first
+  var authors = parseAuthor(fixture);
+  var checkMe = checkAuthors(authors, blackList);
+  console.log(authors);
+  assert.deepEqual( checkMe, standardObject, "parseWorkBlurb" );
+
+});
+
+// Do blacklist only on complete author name, not partial
+QUnit.test( "checkAuthors & checkTags tagspage", function( assert ) {
+  var fixture = $( "#qunit-fixture-tagspage-page" );
+  var first_work = fixture.find('#work_777777777777');
+  var blackList = ['testUser6', 'test'];
+  var standardObject = ['testUser6']; // The desired blacklisted author
+
+  // Gotta parse Authors first
+  var authors = parseAuthor(first_work);
+  var checkMe = checkAuthors(authors, blackList);
+  assert.deepEqual( checkMe, standardObject, "parseWorkBlurb" );
+
+  // Gotta parse Tags first
+  var tags = parseTags(first_work);
+  var standardTags =  ["Writing Tests"];
+  var checkMe = checkTags(tags, blackList);
+  assert.deepEqual( checkMe, standardTags, "parseTags" );
+});
+
+QUnit.test( "checkAuthors tagspage", function( assert ) {
+  var fixture = $( "#qunit-fixture-tagspage-page" );
+  var first_work = fixture.find('#work_777777777777');
+  var blackList = ['testUser', 'test'];
+  var standardObject = false; // The desired blacklisted author should be EMPTY
+
+  // Gotta parse Authors first
+  var authors = parseAuthor(first_work);
+  var checkMe = checkAuthors(authors, blackList);
+  console.log(authors);
+  assert.deepEqual( checkMe, standardObject, "parseWorkBlurb" );
+
 });

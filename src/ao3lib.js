@@ -112,7 +112,7 @@ function parseAuthor(raw_html){
     authors.each(function(){
         authorList.push($(this).text());
     });
-    return authorList.join(', ');
+    return authorList;
 }
 
 
@@ -135,7 +135,7 @@ function parseArticlePage(raw_html){
     var out = {};
     // Title, Author are in preface group
 
-    out['author'] = parseAuthor(raw_html);
+    out['author'] = parseAuthor(raw_html).join(', ');
 
     var raw = $(raw_html).find("h2[class='title heading']").html();
     // AO3 has weird whitespace around the title on this page, strip it!
@@ -190,7 +190,7 @@ function parseWorkBlurb(raw_html){
 
     out['title'] = $($(raw_html).find('[class=heading]')).find('a[href^="/works/"]').text();
 
-    out['author'] = parseAuthor(raw_html);
+    out['author'] = parseAuthor(raw_html).join(', ');
 
     var raw = $(raw_html).find('p[class=datetime]').html();
     console.log(raw);
@@ -232,6 +232,25 @@ function checkTags(taglist, blacklist_tags){
         for (var j in blacklist_tags){
             if (matchTag(taglist[i], blacklist_tags[j])){
                 matches.push(taglist[i]);
+            }
+        }
+    }
+    if (matches.length > 0){
+        return matches;
+    }
+    return false;
+}
+
+function checkAuthors(authorList, blacklist_tags){
+    // Similar to "checkTags", but author must match in it's entirety.
+    // Case insensitive.
+    var matches = [];
+    for (var i in authorList){
+        for (var j in blacklist_tags){
+            var auth = authorList[i];
+            var tag = blacklist_tags[j];
+            if ((auth == tag) || (auth.toLowerCase() == tag.toLowerCase()) ){
+                matches.push(auth);
             }
         }
     }
@@ -287,10 +306,13 @@ function blacklistBrowsePage(prefs){
     for (var i=0; i< articles.length; i++){
         var info = parseWorkBlurb(articles[i]);
         var tags = parseTags(articles[i]);
+        var authors = parseAuthor(articles[i]);
 
         // if it's a banned tag, hide it!
         var matching_tags = checkTags(tags, blacklist_tags);
-        if (matching_tags && prefs.autofilter){
+        var matching_authors = checkAuthors(authors, blacklist_tags);
+
+        if ( (matching_authors || matching_tags) && prefs.autofilter){
             hideByTag(articles[i], info, matching_tags);
         }
     }
