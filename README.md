@@ -47,6 +47,8 @@ Credits
     Replacing calls to inner HTML to comply with Mozilla security requirements
 - Chrome build Script:
     https://developer.chrome.com/extensions/crx
+- qUnit: https://qunitjs.com
+    jQuery testing suite
 
 Modifications to 3rd Party Libraries
 -------
