@@ -79,10 +79,8 @@ function savePrefs(prefs){
             }
         }
         storage.set( items );
-        // Only broadcast if tags changed
-        if (tags_changed){
-            broadcast({message: 'datadump', data: items, data_type:'prefs'});
-        }
+        // Good for: tags changing, last_sync changing
+        broadcast({message: 'datadump', data: items, data_type:'prefs'});
     });
 }
 

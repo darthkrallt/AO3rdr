@@ -38,7 +38,7 @@ Run on EACH BROWSER.
 ### Build:
 
 - [ ] ./build-chrome.sh  # you will use the unpacked generated folder build/ao3rdr for both Chrome and Opera
-- [ ] jpm build # Firefox version
+- [ ] ./build-firefox-jpm.sh  # Firefox version
 
 ### Uploading A new version:
 

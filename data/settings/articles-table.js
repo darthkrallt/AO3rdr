@@ -36,7 +36,7 @@ function onTokenSave(token_status, token){
     }
     $('#token-check').children('.icon').attr('src', src);
     $('#token-check').children('p').text(msg);
-    tokenSyncSpinner.stop();
+    // tokenSyncSpinner.stop(); // TODO: fix spinner
 }
 
 
@@ -184,8 +184,31 @@ function lastSyncUpdate(){
     $('#cloud-sync-status').children('p').text(msg);
 
     $('#last-sync').text(msg);
+    // Enable sync again
+    toggleSync(true);
 }
 
+
+function toggleSync(is_enabled){
+    console.log('toggling sync');
+    console.log(is_enabled);
+    if (is_enabled){
+        $('#sync-now').addClass( 'button-primary' );
+        $('#sync-now').removeClass( 'button' );
+        $('#sync-now').click(
+            function() {
+                syncNow();
+            }
+        );
+    } else {
+        $('#sync-now').addClass( 'button' );
+        $('#sync-now').removeClass( 'button-primary' );
+        $('#sync-now').click(
+            function() {
+            }
+        );
+    }
+}
 
 // Handle the file upload, NOTE only for single file upload
 // Borrowed heavily from 
@@ -260,9 +283,14 @@ $(document).ready(function() {
     $('#save-token').click(
         function() {
             // TODO: fix spinner
-            // tokenSyncSpinner = new Spinner({position: 'relative'}).spin();
-            // $('#id-token-box').append(tokenSyncSpinner.el);
+            //tokenSyncSpinner = new Spinner({position: 'relative'}).spin();
+            //$('#id-token-box').append(tokenSyncSpinner.el);
             saveToken();
+        }
+    );
+    $('#sync-now').click(
+        function() {
+            syncNow();
         }
     );
     $('#blacklist').tagsInput({
