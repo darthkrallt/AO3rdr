@@ -11,7 +11,6 @@ QUnit.test( "Tags Page", function( assert ) {
   var fixture = $( "#qunit-fixture-tagspage-page" );
   assert.equal( false, checkIfBookmarksPage(fixture), "checkIfBookmarksPage" );
   assert.equal( true, checkIfTagsPage(fixture), "checkIfTagsPage" );
-  console.log(checkIfArticlePage(fixture));
   assert.equal( false, checkIfArticlePage(fixture), "checkIfArticlePage" );
 });
 
@@ -108,7 +107,6 @@ QUnit.test( "checkAuthors Mature logged out", function( assert ) {
   // Gotta parse Authors first
   var authors = parseAuthor(fixture);
   var checkMe = checkAuthors(authors, blackList);
-  console.log(authors);
   assert.deepEqual( checkMe, standardObject, "parseWorkBlurb" );
 
 });
@@ -141,7 +139,6 @@ QUnit.test( "checkAuthors tagspage", function( assert ) {
   // Gotta parse Authors first
   var authors = parseAuthor(first_work);
   var checkMe = checkAuthors(authors, blackList);
-  console.log(authors);
   assert.deepEqual( checkMe, standardObject, "parseWorkBlurb" );
 
 });

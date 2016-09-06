@@ -190,8 +190,6 @@ function lastSyncUpdate(){
 
 
 function toggleSync(is_enabled){
-    console.log('toggling sync');
-    console.log(is_enabled);
     if (is_enabled){
         $('#sync-now').addClass( 'button-primary' );
         $('#sync-now').removeClass( 'button' );
