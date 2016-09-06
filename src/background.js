@@ -29,11 +29,11 @@ function handleNewFic(metadata, mutable_data, port) {
         var mutable_keys = Object.keys(mutable_data);
         create_if_ne = !arrayCompare(mutable_keys, ['visit']);
     }
-    saveArticle(newArticle, create_if_ne, port, true);
+    saveArticle(newArticle, create_if_ne, port, true, true);
 }
 
 
-function saveArticle(newArticle, create_if_ne, port, do_sync){
+function saveArticle(newArticle, create_if_ne, port, do_sync, do_broadcast){
     // WARNING: CHECK FOR VAILD ao3id
     // ASKING FOR undefined IN LOCALSTORAGE RETURNS EVERYTHING
     if (!newArticle.ao3id){
@@ -62,7 +62,8 @@ function saveArticle(newArticle, create_if_ne, port, do_sync){
         }
         
         // Broadcast new article changes
-        broadcast({message: 'newfic', data: data[newArticle.ao3id]});
+        if (do_broadcast)
+            broadcast({message: 'newfic', data: data[newArticle.ao3id]});
     });
 }
 
@@ -107,7 +108,8 @@ function fetchDataRequest(request, port){
                             items.ficdict[key]['title'] = '(please click to fix title)';
                         }
                         // HACK: Another html bugfix
-                        items.ficdict[key]['title'] = fixRestrictedHTML(items.ficdict[key]['title']);
+                        if (items.ficdict[key]['title'])
+                            items.ficdict[key]['title'] = fixRestrictedHTML(items.ficdict[key]['title']);
                     }
                 }
                 if (request.data.ficdict){
@@ -151,9 +153,15 @@ function restoreFromBackup(request){
         article_data = request.data['article_data'];
     }
 
+    var i = 0;
+    var do_broadcast = true;
     for (var key in article_data){
         if (article_data.hasOwnProperty(key) && article_data[key]['ao3id']) {
-            saveArticle(article_data[key], true, null, true);
+            i += 1;
+            // Don't broadcast more than 10 works
+            if (i > 10)
+                do_broadcast = false;
+            saveArticle(article_data[key], true, null, false, do_broadcast);
         }
     }
     savePrefs(request.data['prefs']);

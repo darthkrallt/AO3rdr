@@ -141,7 +141,10 @@ function fixRestrictedHTML(title){
     // pages, containing <img alt="(Restricted)" ...
     var problem_string = '<img alt="(Restricted)" ';
     if (title.indexOf(problem_string) != -1){
-        return title.split('>')[1];
+        title = title.split('>')[1];
     }
+    // Also a bug around "&amp;" and escaping.
+    var title = title.replace(/&amp;/g, '').replace(/&lt;/g, '').replace(/&gt/g, '');
+
     return title;
 }

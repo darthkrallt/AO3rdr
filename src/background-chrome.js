@@ -146,7 +146,7 @@ function syncWork(data){
                         delete diff['user_id'];
                     if (Object.keys(diff).length === 0){
                         diff['ao3id'] = data['ao3id'];
-                        saveArticle(diff, true, null, false);
+                        saveArticle(diff, true, null, false, true);
                     }
                 }
             }
@@ -177,6 +177,8 @@ function syncData(user_id_override, port){
                 // Iterate through the dictionary of changed articles and update our DB
                 // the key is the work ID
                 // Also contains the settings!
+                var i = 0;
+                var do_broadcast = true;
                 for (var key in diff) {
                     if (diff.hasOwnProperty(key)) {
                         if (key == 'settings'){
@@ -188,9 +190,13 @@ function syncData(user_id_override, port){
                             if ('user_id' in article){
                                 delete article['user_id'];
                             }
+                            i += 1;
+                            // Don't broadcast more than 10 works
+                            if (i > 10)
+                                do_broadcast = false;
                             if (!(Object.keys(article).length === 0)){
                                 article['ao3id'] = key;
-                                saveArticle(article, true, port, false)
+                                saveArticle(article, true, port, false, do_broadcast);
                             }
                         }
                     }
