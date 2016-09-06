@@ -198,7 +198,7 @@ var setupAO3 = pageMod.PageMod({
     include: ["http://archiveofourown.org/*", "https://archiveofourown.org/*",],
     contentScriptWhen: 'ready',
     contentScriptFile: [
-        self.data.url('./../lib/jquery-1.12.4.min.js'),
+        self.data.url('./../lib/jquery-2.2.4.min.js'),
         self.data.url("./../src/toolbar-ao3.js"),
         self.data.url("./../src/toolbar-content.js"),
         self.data.url("./../src/toolbar-jpm-firefox.js"),
@@ -216,7 +216,7 @@ var setupSettings = pageMod.PageMod({
     include: ["resource://jid1-aytty9e4iz49ha-at-jetpack/data/settings/index.html"],
     contentScriptWhen: 'ready',
     contentScriptFile: [
-            self.data.url('./../lib/jquery-1.12.4.min.js'),
+            self.data.url('./../lib/jquery-2.2.4.min.js'),
             self.data.url('./settings/jquery.tagsinput.js'),
             self.data.url('./../lib/DataTables-1.10.7/media/js/jquery.dataTables.js'),
             self.data.url('./../lib/html2dom.js'),

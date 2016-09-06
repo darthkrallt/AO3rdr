@@ -16,7 +16,7 @@
       "matches": ["http://archiveofourown.org/*", "https://archiveofourown.org/*", "https://boiling-caverns-2782.herokuapp.com/*", "https://*.ao3rdr.com/*"],
       "css": ["data/style.css"],
       "js": [
-        "lib/jquery-1.12.4.min.js", "src/ao3lib.js",
+        "lib/jquery-2.2.4.min.js", "src/ao3lib.js",
         "src/toolbar-ao3.js", "src/toolbar-chrome.js",
         "src/toolbar-content.js",
         "src/article.js", "src/images.js",
