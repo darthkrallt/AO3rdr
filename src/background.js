@@ -32,6 +32,7 @@ function handleNewFic(metadata, mutable_data, port) {
     saveArticle(newArticle, create_if_ne, port, true);
 }
 
+
 function saveArticle(newArticle, create_if_ne, port, do_sync){
     // WARNING: CHECK FOR VAILD ao3id
     // ASKING FOR undefined IN LOCALSTORAGE RETURNS EVERYTHING
@@ -102,8 +103,11 @@ function fetchDataRequest(request, port){
                     if (data.hasOwnProperty(key) && data[key]['ao3id']){
                         items.ficdict[key] = data[key];
                         // HACK: TODO: bugfix for html in title
-                        if (items.ficdict[key]['title'] && items.ficdict[key]['title'].indexOf('Public Bookmark') >= 0)
+                        if (items.ficdict[key]['title'] && items.ficdict[key]['title'].indexOf('Public Bookmark') >= 0){
                             items.ficdict[key]['title'] = '(please click to fix title)';
+                        }
+                        // HACK: Another html bugfix
+                        items.ficdict[key]['title'] = fixRestrictedHTML(items.ficdict[key]['title']);
                     }
                 }
                 if (request.data.ficdict){
