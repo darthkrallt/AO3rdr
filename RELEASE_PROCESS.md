@@ -24,9 +24,9 @@ We are supporting _three_ platforms, so let's have a rundown for each.
 Run on EACH BROWSER.
 
 - [ ] Add bookmarks via:
-    - [ ] Works page
-    - [ ] Bookmarks page
-    - [ ] Article page
+    - [ ] Works page http://archiveofourown.org/works
+    - [ ] Bookmarks page http://archiveofourown.org/users/USER/bookmarks
+    - [ ] Article page (pick one from works page)
 - [ ] Delete bookmark from extension page
 - [ ] Download backup
 - [ ] Upload Backup
