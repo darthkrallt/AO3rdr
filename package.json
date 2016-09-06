@@ -2,7 +2,7 @@
   "title": "AO3rdr",
   "name": "ao3rdr",
   "id": "jid1-ayTtY9e4Iz49HA@jetpack",
-  "version": "1.2.3",
+  "version": "1.3.0",
   "description": "Rating system and block by tag system for Archive of Our Own.",
   "main": "index-jpm-firefox.js",
   "author": "darthkrallt",
@@ -16,6 +16,9 @@
       "https://ao3rdr.com/*",
       "https://www.ao3rdr.com/*"
     ]
+  },
+  "permissions": {
+    "multiprocess": true
   },
   "license": "LGPL-2.1"
 }

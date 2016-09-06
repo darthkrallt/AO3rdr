@@ -40,6 +40,15 @@ var saveToken = (function(artPort){
     }
 })(artPort);
 
+var syncNow = (function(artPort){
+    return function(){
+        artPort.postMessage({message:'runsync'});
+        // Also signal to the user that their message was recieved
+        toggleSync(false);
+    }
+})(artPort);
+
+
 
 var emitWorkEdit = (function(artPort){
     return function(ao3id, update_data) {

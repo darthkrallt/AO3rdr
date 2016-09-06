@@ -198,11 +198,12 @@ var setupAO3 = pageMod.PageMod({
     include: ["http://archiveofourown.org/*", "https://archiveofourown.org/*",],
     contentScriptWhen: 'ready',
     contentScriptFile: [
-        self.data.url('./../lib/jquery-1.11.2.min.js'),
+        self.data.url('./../lib/jquery-2.2.4.min.js'),
         self.data.url("./../src/toolbar-ao3.js"),
         self.data.url("./../src/toolbar-content.js"),
         self.data.url("./../src/toolbar-jpm-firefox.js"),
         self.data.url("./../src/ao3lib.js"),
+        self.data.url("./../src/contentscript.js"),
     ],
     contentScriptOptions: {"images" : images},
     contentStyleFile: self.data.url('./style.css'),
@@ -215,7 +216,7 @@ var setupSettings = pageMod.PageMod({
     include: ["resource://jid1-aytty9e4iz49ha-at-jetpack/data/settings/index.html"],
     contentScriptWhen: 'ready',
     contentScriptFile: [
-            self.data.url('./../lib/jquery-1.11.2.min.js'),
+            self.data.url('./../lib/jquery-2.2.4.min.js'),
             self.data.url('./settings/jquery.tagsinput.js'),
             self.data.url('./../lib/DataTables-1.10.7/media/js/jquery.dataTables.js'),
             self.data.url('./../lib/html2dom.js'),
@@ -329,7 +330,7 @@ function syncWork(data){
                     delete diff['user_id'];
                 if (Object.keys(diff).length === 0){
                     diff['ao3id'] = data['ao3id'];
-                    saveArticle(diff, true, null, false);
+                    saveArticle(diff, true, null, false, true);
                 }
             }
         }
@@ -360,6 +361,8 @@ function syncData(){
                 // Iterate through the dictionary of changed articles and update our DB
                 // the key is the work ID
                 // Also contains the settings!
+                var i = 0;
+                var do_broadcast = true;
                 for (var key in diff) {
                     if (diff.hasOwnProperty(key)) {
                         if (key == 'settings'){
@@ -371,9 +374,13 @@ function syncData(){
                             if ('user_id' in article){
                                 delete article['user_id'];
                             }
+                            i += 1;
+                            // Don't broadcast more than 10 works
+                            if (i > 10)
+                                do_broadcast = false;
                             if (!(Object.keys(article).length === 0)){
                                 article['ao3id'] = key;
-                                saveArticle(article, true, port, false)
+                                saveArticle(article, true, null, false, do_broadcast)
                             }
                         }
                     }

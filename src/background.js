@@ -29,10 +29,11 @@ function handleNewFic(metadata, mutable_data, port) {
         var mutable_keys = Object.keys(mutable_data);
         create_if_ne = !arrayCompare(mutable_keys, ['visit']);
     }
-    saveArticle(newArticle, create_if_ne, port, true);
+    saveArticle(newArticle, create_if_ne, port, true, true);
 }
 
-function saveArticle(newArticle, create_if_ne, port, do_sync){
+
+function saveArticle(newArticle, create_if_ne, port, do_sync, do_broadcast){
     // WARNING: CHECK FOR VAILD ao3id
     // ASKING FOR undefined IN LOCALSTORAGE RETURNS EVERYTHING
     if (!newArticle.ao3id){
@@ -61,7 +62,8 @@ function saveArticle(newArticle, create_if_ne, port, do_sync){
         }
         
         // Broadcast new article changes
-        broadcast({message: 'newfic', data: data[newArticle.ao3id]});
+        if (do_broadcast)
+            broadcast({message: 'newfic', data: data[newArticle.ao3id]});
     });
 }
 
@@ -79,10 +81,8 @@ function savePrefs(prefs){
             }
         }
         storage.set( items );
-        // Only broadcast if tags changed
-        if (tags_changed){
-            broadcast({message: 'datadump', data: items, data_type:'prefs'});
-        }
+        // Good for: tags changing, last_sync changing
+        broadcast({message: 'datadump', data: items, data_type:'prefs'});
     });
 }
 
@@ -104,8 +104,12 @@ function fetchDataRequest(request, port){
                     if (data.hasOwnProperty(key) && data[key]['ao3id']){
                         items.ficdict[key] = data[key];
                         // HACK: TODO: bugfix for html in title
-                        if (items.ficdict[key]['title'] && items.ficdict[key]['title'].indexOf('Public Bookmark') >= 0)
+                        if (items.ficdict[key]['title'] && items.ficdict[key]['title'].indexOf('Public Bookmark') >= 0){
                             items.ficdict[key]['title'] = '(please click to fix title)';
+                        }
+                        // HACK: Another html bugfix
+                        if (items.ficdict[key]['title'])
+                            items.ficdict[key]['title'] = fixRestrictedHTML(items.ficdict[key]['title']);
                     }
                 }
                 if (request.data.ficdict){
@@ -149,9 +153,15 @@ function restoreFromBackup(request){
         article_data = request.data['article_data'];
     }
 
+    var i = 0;
+    var do_broadcast = true;
     for (var key in article_data){
         if (article_data.hasOwnProperty(key) && article_data[key]['ao3id']) {
-            saveArticle(article_data[key], true, null, true);
+            i += 1;
+            // Don't broadcast more than 10 works
+            if (i > 10)
+                do_broadcast = false;
+            saveArticle(article_data[key], true, null, false, do_broadcast);
         }
     }
     savePrefs(request.data['prefs']);
@@ -170,7 +180,7 @@ function getUser(callbk){
 }
 
 
-var backendUrl = 'https://boiling-caverns-2782.herokuapp.com/api/v1.0/';
+var backendUrl = 'https://ao3rdr.com/api/v1.0/';
 // var backendUrl = 'http://127.0.0.1:5000/api/v1.0/'
 
 function getUserForSync(callbk){

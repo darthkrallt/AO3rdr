@@ -31,6 +31,11 @@ Available from the Mozilla Addon site:
 This is to be developed with both mobile and desktop use in mind, so no SDK's 
 were used that are not available on Firefox's beta mobile browser.
 
+### Opera
+
+Waiting for approval process.
+
+
 Credits
 -------
 - Skeleton: getskeleton.com
@@ -47,6 +52,8 @@ Credits
     Replacing calls to inner HTML to comply with Mozilla security requirements
 - Chrome build Script:
     https://developer.chrome.com/extensions/crx
+- qUnit: https://qunitjs.com
+    jQuery testing suite
 
 Modifications to 3rd Party Libraries
 -------
@@ -64,6 +71,28 @@ Bugs
 Upcoming Features
 -------------------------------
   - See the [Github Issues - Enhancements](https://github.com/darthkrallt/AO3rdr/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement) for the list of planned future features
+
+How to Build
+---------------
+
+### Chrome
+
+```
+./build-chrome.sh  # Then use "load unpacked extension" 
+# to import the build/ao3rdr folder into chrome
+```
+
+### Firefox
+
+  - JPM, current release `jpm run`
+  - (WebExtensions, NOT RELEASED) `build-firefox.sh  # Must manually load into FF`
+
+### Opera
+  - See 'Chrome'
+
+How to Release
+---------------
+See RELEASE_PROCESS.md
 
 License
 -------

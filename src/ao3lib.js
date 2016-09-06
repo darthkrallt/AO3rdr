@@ -112,9 +112,22 @@ function parseAuthor(raw_html){
     authors.each(function(){
         authorList.push($(this).text());
     });
-    return authorList.join(', ');
+    return authorList;
 }
 
+
+function parseDate(raw_date){
+    /* Ensure that regardless of format, we stick to assuming UTC. 
+        THIS ONLY WORKS FOR DATE, IT ASSUMES NO TIME IS SPECIFIED.
+    */
+    var _date = new Date(raw_date);
+    if (_date.getUTCHours() == 0) {
+        return _date.toJSON();
+    }
+    var out = new Date(Date.UTC(_date.getFullYear(), _date.getMonth(), _date.getDate(), 0, 0, 0));
+    return out.toJSON();
+    
+}
 
 function parseArticlePage(raw_html){
 /* Extract Information from an article page
@@ -122,7 +135,7 @@ function parseArticlePage(raw_html){
     var out = {};
     // Title, Author are in preface group
 
-    out['author'] = parseAuthor(raw_html);
+    out['author'] = parseAuthor(raw_html).join(', ');
 
     var raw = $(raw_html).find("h2[class='title heading']").html();
     // AO3 has weird whitespace around the title on this page, strip it!
@@ -142,7 +155,7 @@ function parseArticlePage(raw_html){
             raw_date =  $(stats[i+1]).html() || raw_date;
         }
     }
-    out['updated'] = new Date(Date.parse(raw_date)).toJSON();
+    out['updated'] = parseDate(raw_date);
 
     out['chapters'] = parseChapters(raw_html);
     // Assume we've read up to this page if we are adding the bookmark from it.
@@ -176,10 +189,10 @@ function parseWorkBlurb(raw_html){
 
     out['title'] = $($(raw_html).find('[class=heading]')).find('a[href^="/works/"]').text();
 
-    out['author'] = parseAuthor(raw_html);
+    out['author'] = parseAuthor(raw_html).join(', ');
 
     var raw = $(raw_html).find('p[class=datetime]').html();
-    out['updated'] = new Date(Date.parse(raw)).toJSON();
+    out['updated'] = parseDate(raw);
 
     out['chapters'] = parseChapters(raw_html);
     // Assume we've not read anything if adding from
@@ -226,27 +239,47 @@ function checkTags(taglist, blacklist_tags){
     return false;
 }
 
-function checkIfBookmarksPage(){
-    return ($('#main').attr('class').indexOf("bookmarks-index") != -1);
+function checkAuthors(authorList, blacklist_tags){
+    // Similar to "checkTags", but author must match in it's entirety.
+    // Case insensitive.
+    var matches = [];
+    for (var i in authorList){
+        for (var j in blacklist_tags){
+            var auth = authorList[i];
+            var tag = blacklist_tags[j];
+            if ((auth == tag) || (auth.toLowerCase() == tag.toLowerCase()) ){
+                matches.push(auth);
+            }
+        }
+    }
+    if (matches.length > 0){
+        return matches;
+    }
+    return false;
 }
 
-function checkIfTagsPage(){
-    return ($('#main').attr('class').indexOf("works-index") != -1);
+function checkIfBookmarksPage(raw_html){
+    return ($(raw_html).find('.bookmark.index.group').length > 0);
+}
+
+function checkIfTagsPage(raw_html){
+    return ($(raw_html).find('.work.index.group').length > 0);
 }
 
 
-function checkIfArticlePage(){
+function checkIfArticlePage(raw_html){
     // Article pages are "works-show" or chapters-show?,
     //  while browse are "works-index"
-    return ((!checkIfBookmarksPage()) && (!checkIfTagsPage()));
+    // work meta group
+    return ($(raw_html).find('.work.meta.group').length > 0);
 }
 
 
 // Go through the page, look for all the <li class="work blurb group" id="work_2707844" role="article">
 // Processing when running on the "browse tags" or "browse bookmarks"
-function processBrowsePage(){
+function processBrowsePage(raw_html){
     var idsOnPage = [];
-    var articles = $("li[role=article]");
+    var articles = $(raw_html).find("li[role=article]");
     for (var i=0; i< articles.length; i++){
         var info = parseWorkBlurb(articles[i]);
 
@@ -271,24 +304,34 @@ function blacklistBrowsePage(prefs){
     for (var i=0; i< articles.length; i++){
         var info = parseWorkBlurb(articles[i]);
         var tags = parseTags(articles[i]);
+        var authors = parseAuthor(articles[i]);
 
         // if it's a banned tag, hide it!
         var matching_tags = checkTags(tags, blacklist_tags);
-        if (matching_tags && prefs.autofilter){
+        var matching_authors = checkAuthors(authors, blacklist_tags);
+
+        if ( (matching_authors || matching_tags) && prefs.autofilter){
             hideByTag(articles[i], info, matching_tags);
         }
     }
 }
 
 
-function processArticlePage(){
+function processArticlePage(raw_html){
 
         // Processing when running on only a single article
-        // Just append the tool bar!
-        var info = parseArticlePage($('#main'));
+        // Just append the toolbar!
+        var info = parseArticlePage(raw_html);
         var toolbar = createToolbar(info, true);
         $('ul[class="work navigation actions"]').append(toolbar);
 
         // it's only one id
         return [info['ao3id']];
+}
+
+// The entry into all of the AO3 actions
+function ao3onReady(){
+    onPageviewUpdater();
+    var ids = processPage($('html'));
+    toolbar_onload(ids);
 }

@@ -34,6 +34,11 @@ function updateArticle(old_article, new_article){
            WARNING! MODIFIES the old_article!
            used by function handleNewFic
     */
+    // Do nothing if mismatched ids!!!
+    if (old_article.ao3id != new_article.ao3id) {
+        return old_article;
+    }
+
     var currentTime = new Date().getTime() / 1000;
 
     if (new_article.deleted){
@@ -93,9 +98,16 @@ function updateArticle(old_article, new_article){
         old_article.hasupdate__ts = currentTime;
     }
 
+    if (new_article.updated && new_article.updated != "undefined") {
+        if (new_article.updated > old_article.updated){
+            old_article.updated = new_article.updated;
+            old_article.updated__ts = new_article.updated__ts;
+        }
+    }
+
     if ((new_article.title) && (new_article.title != "undefined")){
         if (old_article.title != new_article.title){
-            old_article.title = new_article.title;
+            old_article.title = fixRestrictedHTML(new_article.title);
             old_article.title__ts = new_article.title__ts;
         }
     }
@@ -121,4 +133,18 @@ function updateArticle(old_article, new_article){
 // http://stackoverflow.com/questions/6229197/how-to-know-if-two-arrays-have-the-same-values
 function arrayCompare(array1, array2){
     return JSON.stringify(array1.sort()) === JSON.stringify(array2.sort());
+}
+
+function fixRestrictedHTML(title){
+    // HACK
+    // Fix the problem with the currupted title from old parsing of "restricted"
+    // pages, containing <img alt="(Restricted)" ...
+    var problem_string = '<img alt="(Restricted)" ';
+    if (title.indexOf(problem_string) != -1){
+        title = title.split('>')[1];
+    }
+    // Also a bug around "&amp;" and escaping.
+    var title = title.replace(/&amp;/g, '').replace(/&lt;/g, '').replace(/&gt/g, '');
+
+    return title;
 }

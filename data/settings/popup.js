@@ -38,7 +38,7 @@ function processTopTen(ficdict){
     onlyGood.sort(function (a, b) {
         return (new Date(a.visit)).getTime() - (new Date(b.visit)).getTime();
     });
-    loadTenTable(onlyGood.slice(0,10));
+    loadTenTable(onlyGood.slice(-5));
 
 }
 

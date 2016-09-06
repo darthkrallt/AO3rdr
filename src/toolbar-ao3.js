@@ -2,13 +2,14 @@
 
 */
 
-function processPage(){
+// Not necessarily a user visit, just processing it
+function processPage(raw_html){
     var ids = [];
         // Check if it's a browsing page, or a single article page
-    if (checkIfArticlePage()) {
-        ids = processArticlePage();
+    if (checkIfArticlePage(raw_html)) {
+        ids = processArticlePage(raw_html);
     } else {
-        ids = processBrowsePage();
+        ids = processBrowsePage(raw_html);
     }
     return ids;
 }
@@ -164,20 +165,13 @@ function updateImage(newArticle){
     }
 }
 
+
 // When viewing a page by a user visit
-// NOTE: this function is named the same, but slightly different from the one 
-// in the crawler
 function onPageviewUpdater(){
-    if (checkIfArticlePage()) {
+    if (checkIfArticlePage($("html").html())) {
         var info = parseArticlePage($('#main'));
         // Doesn't have mutable data, we are only checking the immutable
         var visit = new Date().toJSON();
         emitFicData(info, {'visit': visit});
     }
 }
-
-$(document).ready(function() { 
-    onPageviewUpdater();
-    var ids = processPage();
-    toolbar_onload(ids);
-}); 

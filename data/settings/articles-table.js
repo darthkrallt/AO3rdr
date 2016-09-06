@@ -36,7 +36,7 @@ function onTokenSave(token_status, token){
     }
     $('#token-check').children('.icon').attr('src', src);
     $('#token-check').children('p').text(msg);
-    tokenSyncSpinner.stop();
+    // tokenSyncSpinner.stop(); // TODO: fix spinner
 }
 
 
@@ -184,8 +184,29 @@ function lastSyncUpdate(){
     $('#cloud-sync-status').children('p').text(msg);
 
     $('#last-sync').text(msg);
+    // Enable sync again
+    toggleSync(true);
 }
 
+
+function toggleSync(is_enabled){
+    if (is_enabled){
+        $('#sync-now').addClass( 'button-primary' );
+        $('#sync-now').removeClass( 'button' );
+        $('#sync-now').click(
+            function() {
+                syncNow();
+            }
+        );
+    } else {
+        $('#sync-now').addClass( 'button' );
+        $('#sync-now').removeClass( 'button-primary' );
+        $('#sync-now').click(
+            function() {
+            }
+        );
+    }
+}
 
 // Handle the file upload, NOTE only for single file upload
 // Borrowed heavily from 
@@ -210,9 +231,11 @@ function handleFile(){
 function onExportComplete(incomming_data){
     var content = JSON.stringify(incomming_data);
     var link = document.createElement('a');
+    var d = new Date();
+    var d_string = d.toISOString().split('T')[0];
 
     link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(content));
-    link.setAttribute('download', 'AO3rdr-backup.txt');
+    link.setAttribute('download', 'AO3rdr-backup-'+d_string+'.txt');
     link.setAttribute('visibility', 'hidden');
     link.setAttribute('display', 'none');
 
@@ -258,9 +281,14 @@ $(document).ready(function() {
     $('#save-token').click(
         function() {
             // TODO: fix spinner
-            // tokenSyncSpinner = new Spinner({position: 'relative'}).spin();
-            // $('#id-token-box').append(tokenSyncSpinner.el);
+            //tokenSyncSpinner = new Spinner({position: 'relative'}).spin();
+            //$('#id-token-box').append(tokenSyncSpinner.el);
             saveToken();
+        }
+    );
+    $('#sync-now').click(
+        function() {
+            syncNow();
         }
     );
     $('#blacklist').tagsInput({
