@@ -17,5 +17,8 @@
       "https://www.ao3rdr.com/*"
     ]
   },
+  "permissions": {
+    "multiprocess": true
+  },
   "license": "LGPL-2.1"
 }
