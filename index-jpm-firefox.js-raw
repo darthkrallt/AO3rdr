@@ -380,7 +380,7 @@ function syncData(){
                                 do_broadcast = false;
                             if (!(Object.keys(article).length === 0)){
                                 article['ao3id'] = key;
-                                saveArticle(article, true, port, false, do_broadcast)
+                                saveArticle(article, true, null, false, do_broadcast)
                             }
                         }
                     }
