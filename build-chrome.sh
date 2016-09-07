@@ -1,4 +1,17 @@
 #!/usr/bin/env bash
+opera_flag=''
+while getopts 'o' flag; do
+  case "${flag}" in
+    o) opera_flag='true' ;;
+    *) error "Unexpected option ${flag}" ;;
+  esac
+done
+
+MANIFEST_FILE='manifest.json-chrome'
+if [ $opera_flag ];then
+  MANIFEST_FILE='manifest.json-opera'
+fi
+
 
 # Copy the files
 rm -r build
@@ -9,7 +22,7 @@ cp -r data build/ao3rdr/
 cp -r lib build/ao3rdr/
 cp -r src build/ao3rdr/
 
-cp manifest.json-chrome build/ao3rdr/manifest.json
+cp $MANIFEST_FILE build/ao3rdr/manifest.json
 cp README.md build/ao3rdr/
 cp LICENSE.txt build/ao3rdr/
 

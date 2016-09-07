@@ -1,4 +1,4 @@
-var ao3baseLink = 'http://archiveofourown.org/works/';
+var ao3baseLink = 'https://archiveofourown.org/works/';
 
 function safeDecode(encoded){
     return $('<textarea/>').html(encoded).val();
