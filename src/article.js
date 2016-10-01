@@ -5,6 +5,8 @@ function Article(metadata, mutable_data) {
     this.ao3id = metadata.ao3id;
     this.author = unescape(metadata.author);
     this.author__ts = currentTime;
+    this.fandom = unescape(metadata.fandom);
+    this.fandom__ts = currentTime;
     this.title = unescape(metadata.title);
     this.title__ts = currentTime;
     this.crawled = new Date().toJSON();
@@ -113,9 +115,15 @@ function updateArticle(old_article, new_article){
     }
 
     if (new_article.author && (new_article.author != "undefined")){
-        if (old_article.author != new_article.title){
+        if (old_article.author != new_article.author){
             old_article.author = new_article.author;
             old_article.author__ts = new_article.author__ts;
+        }
+    }
+    if (new_article.fandom && (new_article.fandom != "undefined")){
+        if (old_article.fandom != new_article.fandom){
+            old_article.fandom = new_article.fandom;
+            old_article.fandom__ts = new_article.fandom__ts;
         }
     }
     // Important! We need to always update these both together!

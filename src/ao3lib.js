@@ -115,6 +115,15 @@ function parseAuthor(raw_html){
     return authorList;
 }
 
+function parseFandom(raw_html){
+    var fandoms = $(raw_html).find('.fandoms.heading, .fandom.tags').find('a[class="tag"]');
+    var fandomList = [];
+    fandoms.each(function(){
+        fandomList.push($(this).text());
+    });
+    return fandomList;
+}
+
 
 function parseDate(raw_date){
     /* Ensure that regardless of format, we stick to assuming UTC. 
@@ -136,6 +145,7 @@ function parseArticlePage(raw_html){
     // Title, Author are in preface group
 
     out['author'] = parseAuthor(raw_html).join(', ');
+    out['fandom'] = parseFandom(raw_html).join(', ');
 
     var raw = $(raw_html).find("h2[class='title heading']").html();
     // AO3 has weird whitespace around the title on this page, strip it!
@@ -190,6 +200,7 @@ function parseWorkBlurb(raw_html){
     out['title'] = $($(raw_html).find('[class=heading]')).find('a[href^="/works/"]').text();
 
     out['author'] = parseAuthor(raw_html).join(', ');
+    out['fandom'] = parseFandom(raw_html).join(', ');
 
     var raw = $(raw_html).find('p[class=datetime]').html();
     out['updated'] = parseDate(raw);
@@ -305,13 +316,16 @@ function blacklistBrowsePage(prefs){
         var info = parseWorkBlurb(articles[i]);
         var tags = parseTags(articles[i]);
         var authors = parseAuthor(articles[i]);
+        var fandoms = parseFandom(articles[i]);
 
         // if it's a banned tag, hide it!
         var matching_tags = checkTags(tags, blacklist_tags);
         var matching_authors = checkAuthors(authors, blacklist_tags);
+        // Check authors also works for fandoms
+        var matching_fandoms = checkAuthors(fandoms, blacklist_tags);
 
-        if ( (matching_authors || matching_tags) && prefs.autofilter){
-            hideByTag(articles[i], info, matching_tags);
+        if ( (matching_authors || matching_tags || matching_fandoms) && prefs.autofilter){
+            hideByTag(articles[i], info, matching_tags.concat(matching_authors).concat(matching_fandoms));
         }
     }
 }

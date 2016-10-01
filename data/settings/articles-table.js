@@ -56,7 +56,7 @@ function generateRowHtml(data){
     row.appendChild(generateUnreadHtml(data));
 
     // Author, Title, Updated, Last Visit all boring
-    var boring = ['author', 'title', 'updated', 'visit'];
+    var boring = ['author', 'title', 'fandom', 'updated', 'visit'];
     for (var j in boring){
         var html = document.createElement("td");
         // html.innerHTML = data[boring[j]]; // note it is already encoded
@@ -119,9 +119,11 @@ function loadTable(tableData){
             },
             { type: 'alt-string', targets: [1, 2] },
             { type: 'html', targets: 4 },
+            { "visible": false, targets: [2, 6, 7]},
         ],
         "order": [[ 0, "desc" ]],
     });
+
 }
 
 function updateTableRow(rowData){
@@ -147,6 +149,7 @@ function updateTableRow(rowData){
             },
             { type: 'alt-string', targets: [1, 2] },
             { type: 'html', targets: 4 },
+            { "visible": false, targets: [2, 6, 7]},
         ],
     });
     // TODO: THIS IS A TERRIBLE PLACE FOR THIS
@@ -298,4 +301,22 @@ $(document).ready(function() {
         'height': '75px',
         'width': '100%',
     });
+    // Functionality for toggling table columns
+    $('a.toggle-vis').on( 'click', function (e) {
+        e.preventDefault();
+ 
+        // Get the column API object
+        var column = $('#articlesTable').DataTable().column( $(this).attr('data-column') );
+ 
+        // Toggle the visibility
+        column.visible( ! column.visible() );
+        var rel_checkbox = $(this).find('input');
+        console.log(this);
+        console.log(rel_checkbox);
+        if ($(rel_checkbox).prop('checked')) {
+            $(rel_checkbox).prop('checked', false);
+        } else {
+            $(rel_checkbox).prop('checked', true);
+        }
+    } );
 });
