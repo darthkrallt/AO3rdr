@@ -303,20 +303,16 @@ $(document).ready(function() {
     });
     // Functionality for toggling table columns
     $('a.toggle-vis').on( 'click', function (e) {
-        e.preventDefault();
+        if (event.target.type != 'checkbox')
+            e.preventDefault();
  
         // Get the column API object
-        var column = $('#articlesTable').DataTable().column( $(this).attr('data-column') );
+        var col_number = $(this).attr('data-column');
+        var column = $('#articlesTable').DataTable().column( col_number );
  
         // Toggle the visibility
         column.visible( ! column.visible() );
-        var rel_checkbox = $(this).find('input');
-        console.log(this);
-        console.log(rel_checkbox);
-        if ($(rel_checkbox).prop('checked')) {
-            $(rel_checkbox).prop('checked', false);
-        } else {
-            $(rel_checkbox).prop('checked', true);
-        }
+        var rel_checkbox = $('a[data-column='+col_number+']').find('input');
+        $(rel_checkbox).prop('checked', column.visible());
     } );
 });
