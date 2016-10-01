@@ -131,8 +131,6 @@ function loadTable(tableData){
 }
 
 function updateTableRow(rowData){
-    $('#articlesTable').DataTable().destroy();
-
     var tableBody = $("#articlesTable").find('tbody');
     var ele = $('#' + rowData['ao3id']);
     var row = generateRowHtml(rowData);
@@ -143,35 +141,9 @@ function updateTableRow(rowData){
     else{
         tableBody.append(row);
     }
-    $('#articlesTable').dataTable({
-        columnDefs: [
-            {
-                'targets': 0,
-                'searchable': false,
-                'orderable': false,
-                'className': 'dt-body-center',
-            },
-            { type: 'alt-string', targets: [1, 2] },
-            { type: 'html', targets: 4 },
-            { "visible": false, targets: [2, 6, 7]},
-        ],
-    });
-    // TODO: THIS IS A TERRIBLE PLACE FOR THIS
-    addEditDropdown();
+    var table = $('#articlesTable').DataTable();
+    table.row.add($(row));
 
-    // TODO: adding the elements with the API would be better, but I couldn't get it working.
-
-    // var columns = $('#articlesTable').DataTable().columns();
-    // var rowContents = []; 
-    // $(row).find('td').each(function(idx, ele){rowContents.push(JSON.stringify($(this).html()));})
-    // console.log(rowContents);
-
-    // var addMe = {};
-    // for (var i in columns){
-    //     addMe[columns[i]] = rowContents[i];
-    // }
-
-    // $('#articlesTable').DataTable().rows.add(rowContents).draw();
 }
 
 function lastSyncUpdate(){
