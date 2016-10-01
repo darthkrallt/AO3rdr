@@ -57,6 +57,10 @@ function generateRowHtml(data){
 
     // Author, Title, Updated, Last Visit all boring
     var boring = ['author', 'title', 'fandom', 'updated', 'visit'];
+    var fixme_string = 'please click to update';
+    // Shim in place for fandom
+    if (!data['fandom'])
+        data['fandom'] = fixme_string;
     for (var j in boring){
         var html = document.createElement("td");
         // html.innerHTML = data[boring[j]]; // note it is already encoded
@@ -73,10 +77,10 @@ function generateRowHtml(data){
                 text = data[boring[j]].slice(0, 10);
             }
             var text = document.createTextNode(text);
-        } else if (boring[j] == 'title') {
+        } else if (boring[j] == 'title' || data[boring[j]] == fixme_string) {
             var text = document.createElement('a');
             text.setAttribute('href', generateAO3link(data));
-            var text_str = document.createTextNode(safeDecode(data['title']));
+            var text_str = document.createTextNode(safeDecode(data[boring[j]]));
             text.appendChild(text_str);
         } else {
             var text = document.createTextNode(safeDecode(data[boring[j]]));
