@@ -35,3 +35,5 @@ http://thenounproject.com/term/book/10777/
 Hide Icon by Angela Noble from the Noun Project:
 https://thenounproject.com/term/blind/41992/
 
+Bug Icon by Chameleon Design from the Noun Project:
+https://thenounproject.com/term/ladybug/604217/
