@@ -133,7 +133,7 @@ function syncWork(data){
         return function(user_id) {
 
             var xhr = new XMLHttpRequest();
-            var url = backendUrl + 'user/' + user_id + "/work/" + data['ao3id'];
+            var url = backendUrl + 'user/' + user_id + "/work/" + JSON.parse(data)['ao3id'];
             xhr.open("POST", url, true);
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.onreadystatechange = function() {
