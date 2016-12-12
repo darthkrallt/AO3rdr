@@ -247,7 +247,7 @@ function checkTags(taglist, blacklist_tags){
     if (matches.length > 0){
         return matches;
     }
-    return false;
+    return [];
 }
 
 function checkAuthors(authorList, blacklist_tags){
@@ -266,7 +266,7 @@ function checkAuthors(authorList, blacklist_tags){
     if (matches.length > 0){
         return matches;
     }
-    return false;
+    return [];
 }
 
 function checkIfBookmarksPage(raw_html){
@@ -324,7 +324,7 @@ function blacklistBrowsePage(prefs){
         // Check authors also works for fandoms
         var matching_fandoms = checkAuthors(fandoms, blacklist_tags);
 
-        if ( (matching_authors || matching_tags || matching_fandoms) && prefs.autofilter){
+        if ( (matching_authors.length || matching_tags.length || matching_fandoms.length) && prefs.autofilter){
             hideByTag(articles[i], info, matching_tags.concat(matching_authors).concat(matching_fandoms));
         }
     }
