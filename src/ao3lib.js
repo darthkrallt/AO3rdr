@@ -145,6 +145,9 @@ function parseArticlePage(raw_html){
     // Title, Author are in preface group
 
     out['author'] = parseAuthor(raw_html).join(', ');
+    if (out['author'].length == 0){
+        out['author'] = 'Anonymous';
+    }
     out['fandom'] = parseFandom(raw_html).join(', ');
 
     var raw = $(raw_html).find("h2[class='title heading']").html();
@@ -200,6 +203,9 @@ function parseWorkBlurb(raw_html){
     out['title'] = $($(raw_html).find('[class=heading]')).find('a[href^="/works/"]').text();
 
     out['author'] = parseAuthor(raw_html).join(', ');
+    if (out['author'].length == 0){
+        out['author'] = 'Anonymous';
+    }
     out['fandom'] = parseFandom(raw_html).join(', ');
 
     var raw = $(raw_html).find('p[class=datetime]').html();
