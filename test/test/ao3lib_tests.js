@@ -25,7 +25,7 @@ QUnit.test( "Articles Page", function( assert ) {
 QUnit.module( "Page Parsing" );
 QUnit.test( "Parse General one chapter work", function( assert ) {
   var fixture =  $( "#qunit-fixture-workspage-general-one-chapter" );
-  var standardObject = {"url":"/works/123456789101112","ao3id":"123456789101112","title":"Test work - General - One Chapter","author":"testUser","updated":"2016-08-28T00:00:00.000Z","chapters":{"published":"1","total":"1","complete":true},"chapters_read":0};
+  var standardObject = {"url":"/works/123456789101112","ao3id":"123456789101112","title":"Test work - General - One Chapter","author":"testUser","updated":"2016-08-28T00:00:00.000Z","chapters":{"published":"1","total":"1","complete":true},"chapters_read":0, "fandom": "The Avengers (Marvel Movies)",};
 
   var checkMe = parseWorkBlurb(fixture);
   assert.deepEqual( checkMe, standardObject, "parseWorkBlurb" );
@@ -37,7 +37,7 @@ QUnit.test( "Parse General one chapter work", function( assert ) {
 
 QUnit.test( "Parse Mature Warning Page one chapter work logged out", function( assert ) {
   var fixture = $( "#qunit-fixture-workspage-mature-logout-one-chapter" );
-  var standardObject = {"url":"/works/12345678910111213","ao3id":"12345678910111213","title":"Test Work 2 - Mature - One Chapter","author":"testUser2","updated":"2016-08-28T00:00:00.000Z","chapters":{"published":"1","total":"1","complete":true},"chapters_read":0};
+  var standardObject = {"url":"/works/12345678910111213","ao3id":"12345678910111213","title":"Test Work 2 - Mature - One Chapter","author":"testUser2","updated":"2016-08-28T00:00:00.000Z","chapters":{"published":"1","total":"1","complete":true},"chapters_read":0, "fandom": "Star Trek: Alternate Original Series (Movies)"};
   var checkMe = parseWorkBlurb(fixture);
   assert.deepEqual( checkMe, standardObject, "parseWorkBlurb" );
 
@@ -48,7 +48,7 @@ QUnit.test( "Parse Mature Warning Page one chapter work logged out", function( a
 
 QUnit.test( "Parse Mature Warning Page one chapter work logged out warning confirmed", function( assert ) {
   var fixture = $( "#qunit-fixture-workspage-mature-logout-one-chapter-confirmed-warning" );
-  var standardObject = {"ao3id":"12345678910111213","title":"Test Work 2 - Mature - One Chapter","author":"testUser2","updated":"2016-08-28T00:00:00.000Z","chapters":{"published":"1","total":"1","complete":true},"chapters_read":1};
+  var standardObject = {"ao3id":"12345678910111213","title":"Test Work 2 - Mature - One Chapter","author":"testUser2","updated":"2016-08-28T00:00:00.000Z","chapters":{"published":"1","total":"1","complete":true},"chapters_read":1, "fandom": "Star Trek: Alternate Original Series (Movies)"};
   var checkMe = parseArticlePage(fixture);
   assert.deepEqual( checkMe, standardObject, "parseWorksPage" );
 });
@@ -102,7 +102,7 @@ QUnit.test( "checkAuthors & checkTags Mature logged out", function( assert ) {
 QUnit.test( "checkAuthors Mature logged out", function( assert ) {
   var fixture = $( "#qunit-fixture-workspage-mature-logout-one-chapter" );
   var blackList = ['testUser', 'A. Person', 'test'];
-  var standardObject = false; // The desired blacklisted author should be EMPTY
+  var standardObject = []; // The desired blacklisted author should be EMPTY
 
   // Gotta parse Authors first
   var authors = parseAuthor(fixture);
@@ -134,7 +134,7 @@ QUnit.test( "checkAuthors tagspage", function( assert ) {
   var fixture = $( "#qunit-fixture-tagspage-page" );
   var first_work = fixture.find('#work_777777777777');
   var blackList = ['testUser', 'test'];
-  var standardObject = false; // The desired blacklisted author should be EMPTY
+  var standardObject = []; // The desired blacklisted author should be EMPTY
 
   // Gotta parse Authors first
   var authors = parseAuthor(first_work);

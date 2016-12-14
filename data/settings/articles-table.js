@@ -56,7 +56,11 @@ function generateRowHtml(data){
     row.appendChild(generateUnreadHtml(data));
 
     // Author, Title, Updated, Last Visit all boring
-    var boring = ['author', 'title', 'updated', 'visit'];
+    var boring = ['author', 'title', 'fandom', 'updated', 'visit'];
+    var fixme_string = 'please click to update';
+    // Shim in place for fandom
+    if (!data['fandom'])
+        data['fandom'] = fixme_string;
     for (var j in boring){
         var html = document.createElement("td");
         // html.innerHTML = data[boring[j]]; // note it is already encoded
@@ -73,10 +77,10 @@ function generateRowHtml(data){
                 text = data[boring[j]].slice(0, 10);
             }
             var text = document.createTextNode(text);
-        } else if (boring[j] == 'title') {
+        } else if (boring[j] == 'title' || data[boring[j]] == fixme_string) {
             var text = document.createElement('a');
             text.setAttribute('href', generateAO3link(data));
-            var text_str = document.createTextNode(safeDecode(data['title']));
+            var text_str = document.createTextNode(safeDecode(data[boring[j]]));
             text.appendChild(text_str);
         } else {
             var text = document.createTextNode(safeDecode(data[boring[j]]));
@@ -119,14 +123,14 @@ function loadTable(tableData){
             },
             { type: 'alt-string', targets: [1, 2] },
             { type: 'html', targets: 4 },
+            { "visible": false, targets: [2, 6, 7]},
         ],
         "order": [[ 0, "desc" ]],
     });
+
 }
 
 function updateTableRow(rowData){
-    $('#articlesTable').DataTable().destroy();
-
     var tableBody = $("#articlesTable").find('tbody');
     var ele = $('#' + rowData['ao3id']);
     var row = generateRowHtml(rowData);
@@ -137,34 +141,9 @@ function updateTableRow(rowData){
     else{
         tableBody.append(row);
     }
-    $('#articlesTable').dataTable({
-        columnDefs: [
-            {
-                'targets': 0,
-                'searchable': false,
-                'orderable': false,
-                'className': 'dt-body-center',
-            },
-            { type: 'alt-string', targets: [1, 2] },
-            { type: 'html', targets: 4 },
-        ],
-    });
-    // TODO: THIS IS A TERRIBLE PLACE FOR THIS
-    addEditDropdown();
+    var table = $('#articlesTable').DataTable();
+    table.row.add($(row));
 
-    // TODO: adding the elements with the API would be better, but I couldn't get it working.
-
-    // var columns = $('#articlesTable').DataTable().columns();
-    // var rowContents = []; 
-    // $(row).find('td').each(function(idx, ele){rowContents.push(JSON.stringify($(this).html()));})
-    // console.log(rowContents);
-
-    // var addMe = {};
-    // for (var i in columns){
-    //     addMe[columns[i]] = rowContents[i];
-    // }
-
-    // $('#articlesTable').DataTable().rows.add(rowContents).draw();
 }
 
 function lastSyncUpdate(){
@@ -298,4 +277,18 @@ $(document).ready(function() {
         'height': '75px',
         'width': '100%',
     });
+    // Functionality for toggling table columns
+    $('a.toggle-vis').on( 'click', function (e) {
+        if (event.target.type != 'checkbox')
+            e.preventDefault();
+ 
+        // Get the column API object
+        var col_number = $(this).attr('data-column');
+        var column = $('#articlesTable').DataTable().column( col_number );
+ 
+        // Toggle the visibility
+        column.visible( ! column.visible() );
+        var rel_checkbox = $('a[data-column='+col_number+']').find('input');
+        $(rel_checkbox).prop('checked', column.visible());
+    } );
 });
