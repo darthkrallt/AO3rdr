@@ -7,6 +7,7 @@ mkdir build
 cp -r data build/
 cp -r lib build/
 cp -r src build/
+cp -r webextension build/
 
 cp package.json build/package.json
 cp LICENSE.txt build/
@@ -25,6 +26,9 @@ rm build/data/settings/index-chrome.html
 cp index-jpm-firefox.js-raw build/index-jpm-firefox.js
 cat src/background.js >> build/index-jpm-firefox.js
 cat src/article.js >> build/index-jpm-firefox.js
+# For hybrid
+cat src/background-firefox-hybrid.js >> build/index-jpm-firefox.js
+
 
 # Build the firefox add on
-cd build; jpm xpi; cp *.xpi ../ao3rdr-jpm.xpi
+cd build; ~/AO3rdr/node_modules/jpm/bin/jpm xpi; cp *.xpi ../ao3rdr-jpm.xpi
