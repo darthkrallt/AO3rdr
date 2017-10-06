@@ -27,7 +27,7 @@ cp index-jpm-firefox.js-raw build/index-jpm-firefox.js
 cat src/background.js >> build/index-jpm-firefox.js
 cat src/article.js >> build/index-jpm-firefox.js
 # For hybrid
-cat src/background-firefox-hybrid.js >> build/index-jpm-firefox.js
+cat background-firefox-hybrid.js >> build/index-jpm-firefox.js
 
 
 # Build the firefox add on
