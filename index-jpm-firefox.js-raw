@@ -151,7 +151,6 @@ var storage = {
 
 function onAttachFun(worker) {
     /* This function contains logic for handling all incoming messages. */
-    worker.postMessage('test message');
     workerList.push(worker);
     worker.on('detach', function () {
         detachWorker(this, workerList);
@@ -159,10 +158,6 @@ function onAttachFun(worker) {
 
     worker.port.on('settingsclick', function() {
         tabs.open({url: self.data.url('./settings/index.html'),});
-    });
-    worker.port.on('message', function(args) {
-        // You may also pass data as a second argument to 'emit'
-        worker.port.emit('test outgoing message');
     });
     worker.port.on('reveal-token', function() {
         getUser(callbackMessage(worker.port));

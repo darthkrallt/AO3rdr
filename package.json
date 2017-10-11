@@ -7,17 +7,15 @@
   "main": "index-jpm-firefox.js",
   "author": "darthkrallt",
   "engines": {
-    "firefox": ">=38.0a1",
-    "fennec": ">=38.0a1"
+    "firefox": ">=51.0a1",
+    "fennec": ">=51.0a1"
   },
   "permissions": {
     "cross-domain-content": [
       "https://boiling-caverns-2782.herokuapp.com/*",
       "https://ao3rdr.com/*",
       "https://www.ao3rdr.com/*"
-    ]
-  },
-  "permissions": {
+    ],
     "multiprocess": true
   },
   "license": "LGPL-2.1"

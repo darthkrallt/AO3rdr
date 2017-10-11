@@ -22,6 +22,7 @@
       "js": [
         "lib/jquery-2.2.4.min.js", "src/ao3lib.js",
         "src/toolbar-ao3.js", "src/toolbar-chrome.js",
+        "src/articles-table-chrome.js",
         "src/toolbar-content.js",
         "src/article.js", "src/images.js",
         "src/contentscript.js"

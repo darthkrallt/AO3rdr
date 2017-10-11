@@ -15,6 +15,7 @@ cp README.md build/
 # Remove files we don't want in the build
 rm build/src/toolbar-jpm-firefox.js
 rm build/data/settings/articles-table-jpm-firefox.js
+rm build/src/*-firefox-hybrid.js
 
 # File modification
 # index.html

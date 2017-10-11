@@ -2,8 +2,7 @@
 
   "manifest_version": 2,
   "name": "ao3rdr",
-  "version": "1.4.0",
-  "id": "jid1-ayTtY9e4Iz49HA@jetpack",
+  "version": "1.6.0",
 
   "permissions": [
     "activeTab",
@@ -23,21 +22,22 @@
   "applications": {
     "gecko": {
       "id": "jid1-ayTtY9e4Iz49HA@jetpack",
-      "strict_min_version": "46.0"
+      "strict_min_version": "51.0"
     }
   },
 
   "background": {
-    "scripts": ["src/background-chrome.js", "src/background.js", "src/article.js", "src/images.js"]
+    "scripts": ["src/background-chrome.js", "src/background.js", "src/article.js"]
   },
 
   "content_scripts": [
     {
-      "matches": ["http://archiveofourown.org/*", "https://archiveofourown.org/*", "https://boiling-caverns-2782.herokuapp.com/*"],
+      "matches": ["http://archiveofourown.org/*", "https://archiveofourown.org/*", "https://boiling-caverns-2782.herokuapp.com/*", "https://*.ao3rdr.com/*"],
       "css": ["data/style.css"],
       "js": [
         "lib/jquery-2.2.4.min.js", "src/ao3lib.js",
         "src/toolbar-ao3.js", "src/toolbar-chrome.js",
+        "src/articles-table-chrome.js",
         "src/toolbar-content.js",
         "src/article.js", "src/images.js",
         "src/contentscript.js"
@@ -45,12 +45,18 @@
       "all_frames": true
     }
   ],
-  "options_page": "data/settings/index.html",
+
+  "options_ui": {
+    "page": "data/settings/index.html",
+    "open_in_tab": true
+  },
+
 
   "browser_action": {
     "default_title": "AO3rdr",
     "default_popup": "data/settings/popup.html",
-    "default_icon": "data/images/icon_128.png"
+    "default_icon": "data/images/icon_128.png",
+    "browser_style": true
   },
 
   "web_accessible_resources": [
