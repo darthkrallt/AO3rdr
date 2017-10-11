@@ -295,10 +295,8 @@ function checkIfArticlePage(raw_html){
 // Go through the page, look for all the <li class="work blurb group" id="work_2707844" role="article">
 // Processing when running on the "browse tags" or "browse bookmarks"
 function processBrowsePage(raw_html){
-    console.log('processBrowsePage');
     var idsOnPage = [];
     var articles = $(raw_html).find("li[role=article]");
-    console.log(articles);
     for (var i=0; i< articles.length; i++){
         var info = parseWorkBlurb(articles[i]);
 

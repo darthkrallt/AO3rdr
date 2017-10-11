@@ -32,25 +32,24 @@
 
   "content_scripts": [
     {
-      "matches": ["http://archiveofourown.org/*", "https://archiveofourown.org/*", "https://boiling-caverns-2782.herokuapp.com/*", "https://*.ao3rdr.com/*"],
-      "css": ["data/style.css"],
+      "matches": ["*://archiveofourown.org/*", "https://*.ao3rdr.com/*"],
       "js": [
-        "lib/jquery-2.2.4.min.js", "src/ao3lib.js",
-        "src/toolbar-ao3.js", "src/toolbar-chrome.js",
-        "src/articles-table-chrome.js",
+        "hello.js",
+        "lib/jquery-2.2.4.min.js",
+        "src/ao3lib.js",
+        "src/toolbar-ao3.js",
+        "src/toolbar-chrome.js",
         "src/toolbar-content.js",
-        "src/article.js", "src/images.js",
+        "src/article.js",
+        "data/settings/articles-table-chrome.js",
+        "src/images.js",
         "src/contentscript.js"
       ],
-      "all_frames": true
+      "css": ["data/style.css"],
+      "all_frames": true,
+      "run_at": "document_start"
     }
   ],
-
-  "options_ui": {
-    "page": "data/settings/index.html",
-    "open_in_tab": true
-  },
-
 
   "browser_action": {
     "default_title": "AO3rdr",
