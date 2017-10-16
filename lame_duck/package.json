@@ -2,9 +2,9 @@
   "title": "AO3rdr",
   "name": "ao3rdr",
   "id": "jid1-ayTtY9e4Iz49HA@jetpack",
-  "version": "1.4.0",
+  "version": "1.6.0",
   "description": "Rating system and block by tag system for Archive of Our Own.",
-  "main": "index-jpm-firefox.js",
+  "main": "index.js",
   "author": "darthkrallt",
   "engines": {
     "firefox": ">=51.0a1",
@@ -12,11 +12,11 @@
   },
   "permissions": {
     "cross-domain-content": [
-      "https://boiling-caverns-2782.herokuapp.com/*",
       "https://ao3rdr.com/*",
       "https://www.ao3rdr.com/*"
     ],
     "multiprocess": true
   },
+  "hasEmbeddedWebExtension": true,
   "license": "LGPL-2.1"
 }

@@ -1,7 +1,20 @@
 const webext = require("sdk/webextension");
-const {setSyncLegacyDataPort} = require("./src/storage-firefox-hybrid");
+const ss = require("sdk/simple-storage");
 
 console.log("inside hybrid launcher");
+
+setSyncLegacyDataPort = function(port) {
+  // Send the initial data dump.
+  port.postMessage({
+    message: 'ff-legacy-storage-sync',
+    data : {
+      version: 'ff-legacy',
+      prefs: ss.storage.prefs,
+      ficdict: ss.storage.ficdict
+    }
+  });
+};
+
 
 webext.startup().then(({browser}) => {
   browser.runtime.onConnect.addListener(port => {
@@ -12,3 +25,4 @@ webext.startup().then(({browser}) => {
     }
   });
 });
+

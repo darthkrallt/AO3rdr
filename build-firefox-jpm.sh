@@ -1,34 +1,26 @@
 #!/usr/bin/env bash
 
-# Copy the files
+# For hybrid
+# First run the webextensions build
+./build-firefox.sh
+# Then move the built product into a webextension folder
 rm -r build
 mkdir build
+mkdir build/webextension
+unzip ao3rdr.xpi -d build/webextension
 
-cp -r data build/
-cp -r lib build/
-cp -r src build/
-cp -r webextension build/
 
-cp package.json build/package.json
+# Now we make the "lame duck" version of the addon, that is simply memory moving
+
+# For hybrid
 cp LICENSE.txt build/
 cp README.md build/
-
-# Icon in the root of the directory
 cp data/images/icon.png build/
 
-# Remove files we don't want in the build
-rm build/src/background-chrome.js  # WebExtensions main script
-rm build/src/toolbar-chrome.js
-rm build/data/settings/articles-table-chrome.js
-rm build/data/settings/index-chrome.html
-
-# Build the background script
-cp index-jpm-firefox.js-raw build/index-jpm-firefox.js
-cat src/background.js >> build/index-jpm-firefox.js
-cat src/article.js >> build/index-jpm-firefox.js
-# For hybrid
-cat background-firefox-hybrid.js >> build/index-jpm-firefox.js
-
+cat lame_duck/background-firefox-hybrid.js >> build/webextension/background.js
+cp lame_duck/package.json build/package.json
+cp lame_duck/index.js build/
+cp lame_duck/manifest.json build/webextension/manifest.json
 
 # Build the firefox add on
-cd build; ~/AO3rdr/node_modules/jpm/bin/jpm xpi; cp *.xpi ../ao3rdr-jpm.xpi
+cd build; ~/AO3rdr/node_modules/jpm/bin/jpm xpi; cp *.xpi ../ao3rdr-jpm-hybrid.xpi

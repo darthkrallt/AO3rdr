@@ -34,7 +34,6 @@
     {
       "matches": ["*://archiveofourown.org/*", "https://*.ao3rdr.com/*"],
       "js": [
-        "hello.js",
         "lib/jquery-2.2.4.min.js",
         "src/ao3lib.js",
         "src/toolbar-ao3.js",
