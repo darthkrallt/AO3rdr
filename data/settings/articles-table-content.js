@@ -107,6 +107,10 @@ function datadumper(request){
             break;
         case 'ficdict':
             tableData = request.data.ficdict;
+            if (Object.keys(tableData).length === 0 && tableData.constructor === Object){
+                // Reveal the help message box
+                $('#help-message-box').style.display = 'block';;
+            };
             loadTable(tableData);
             addEditDropdown();
             break;

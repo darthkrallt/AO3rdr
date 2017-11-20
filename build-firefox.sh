@@ -12,10 +12,6 @@ cp manifest.json-firefox build/manifest.json
 cp LICENSE.txt build/
 cp README.md build/
 
-# Remove files we don't want in the build
-rm build/src/toolbar-jpm-firefox.js
-rm build/data/settings/articles-table-jpm-firefox.js
-
 # File modification
 # index.html
 index_file='build/data/settings/index.html'

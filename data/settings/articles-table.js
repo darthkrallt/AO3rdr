@@ -279,7 +279,7 @@ $(document).ready(function() {
     });
     // Functionality for toggling table columns
     $('a.toggle-vis').on( 'click', function (e) {
-        if (event.target.type != 'checkbox')
+        if (e.target.type != 'checkbox')
             e.preventDefault();
  
         // Get the column API object

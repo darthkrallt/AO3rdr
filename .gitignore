@@ -1,3 +1,6 @@
 *~
 build/
 manifest.json
+node_modules/
+*.xpi
+watch.sh

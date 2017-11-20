@@ -26,10 +26,6 @@ cp $MANIFEST_FILE build/ao3rdr/manifest.json
 cp README.md build/ao3rdr/
 cp LICENSE.txt build/ao3rdr/
 
-# Remove files we don't want in the build
-rm build/ao3rdr/src/toolbar-jpm-firefox.js
-rm build/ao3rdr/data/settings/articles-table-jpm-firefox.js
-
 # File modification
 # index.html
 index_file='build/ao3rdr/data/settings/index.html'

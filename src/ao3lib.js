@@ -344,6 +344,7 @@ function processArticlePage(raw_html){
         var info = parseArticlePage(raw_html);
         var toolbar = createToolbar(info, true);
         $('ul[class="work navigation actions"]').append(toolbar);
+        $('dl[class="work meta group"]').append(toolbar);
 
         // it's only one id
         return [info['ao3id']];
