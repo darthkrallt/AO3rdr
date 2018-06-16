@@ -14,6 +14,31 @@ storage.get("prefs", function (items){
         storage.set({'prefs': default_prefs});
 });
 
+// Handle storing the cloud sync key in sync'd storage, yay!!
+// This is kind of a one-time deal tho
+chrome.storage.sync.get("user_id", function(result)){
+    if (!result.user_id) {
+        storage.get("prefs", function (items){
+            // No sync without user OR explicit permission
+            if ('user_id' in items.prefs && items.prefs.sync_enabled){
+                chrome.storage.sync.set({'user_id': items.prefs.user_id});
+                console.log("added user_id to sync area");
+            }
+        })
+    }
+
+}
+
+// Making sure that the "sync" user id is in tune with the one in active use
+chrome.storage.onChanged.addListener(function(changes, area_name){
+    if (area_name == "sync"){
+        if (changes.user_id){
+            savePrefs({'user_id': changes.user_id});
+            console.log("updated user_id from sync");
+        }
+    }
+});
+
 function handleNewFic(metadata, mutable_data, port) {
 /* Take in the data and rating, and store or update as necessary. Returns
    the new object.
