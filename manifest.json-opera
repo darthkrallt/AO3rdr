@@ -6,6 +6,8 @@
     "storage",
     "http://archiveofourown.org/*",
     "https://archiveofourown.org/*",
+    "http://www.archiveofourown.org/*",
+    "https://www.archiveofourown.org/*",
     "https://boiling-caverns-2782.herokuapp.com/*",
     "https://*.ao3rdr.com/*",
     "https://ao3rdr.com/*",

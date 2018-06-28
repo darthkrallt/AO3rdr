@@ -48,6 +48,12 @@ var syncNow = (function(artPort){
     }
 })(artPort);
 
+var dismissHello = (function(artPort){
+    return function(){
+        artPort.postMessage({message:'hellobar-dismiss'});
+    }
+})(artPort);
+
 
 
 var emitWorkEdit = (function(artPort){
@@ -109,7 +115,7 @@ function datadumper(request){
             tableData = request.data.ficdict;
             if (Object.keys(tableData).length === 0 && tableData.constructor === Object){
                 // Reveal the help message box
-                $('#help-message-box').style.display = 'block';;
+                $('#help-message-box').css("display", 'block');
             };
             loadTable(tableData);
             addEditDropdown();

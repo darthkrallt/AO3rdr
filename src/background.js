@@ -5,11 +5,13 @@ var default_prefs = {
     'autofilter': true, 
     'tags': [], 
     'last_sync':0, 
-    'sync_enabled':true
+    'sync_enabled':true,
+    'hello_bar': {},
+    'hello_bar_dismissed': 0
 };
 
 
-storage.get("prefs", function (items){
+chrome.storage.local.get("prefs", function (items){
     if (!items.prefs)
         storage.set({'prefs': default_prefs});
 });
@@ -247,6 +249,7 @@ function runSync(){
             }
 
             syncData();
+            getHelloBar();  // Why not...
         }
     });
 
