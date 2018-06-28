@@ -16,7 +16,7 @@ storage.get("prefs", function (items){
 
 // Handle storing the cloud sync key in sync'd storage, yay!!
 // This is kind of a one-time deal tho
-chrome.storage.sync.get("user_id", function(result)){
+chrome.storage.sync.get("user_id", function(result){
     if (!result.user_id) {
         storage.get("prefs", function (items){
             // No sync without user OR explicit permission
@@ -27,7 +27,7 @@ chrome.storage.sync.get("user_id", function(result)){
         })
     }
 
-}
+});
 
 // Making sure that the "sync" user id is in tune with the one in active use
 chrome.storage.onChanged.addListener(function(changes, area_name){
