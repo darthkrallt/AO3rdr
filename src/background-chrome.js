@@ -107,7 +107,9 @@ function validateAndSaveToken(token, port){
                 var resp = JSON.parse(xhr.responseText);
                 if ('user_id' in resp){
                     var user_id = resp['user_id'];
-                    savePrefs({'user_id': user_id });
+                    // savePrefs({'user_id': user_id });
+                    chrome.storage.sync.set({'user_id': user_id});  // Nw we are saving to sync first, which gets
+                    // percolated to local on state change
                     port.postMessage({
                         message: 'token-saved', 
                         data: {'token_status': 'valid', user_id: user_id}

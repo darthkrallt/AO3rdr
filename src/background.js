@@ -1,5 +1,6 @@
 /* The common background process */
 
+// TODO: DO WE JUST WANT PREFS TO GO IN THE SYNC STORAGE???
 // Initialize preferences
 var default_prefs = {
     'autofilter': true, 
@@ -11,32 +12,61 @@ var default_prefs = {
 };
 
 
+// Runs on startup of the add-on
 chrome.storage.local.get("prefs", function (items){
-    if (!items.prefs)
+    if (!items.prefs) {
         storage.set({'prefs': default_prefs});
-});
-
-// Handle storing the cloud sync key in sync'd storage, yay!!
-// This is kind of a one-time deal tho
-chrome.storage.sync.get("user_id", function(result){
-    if (!result.user_id) {
-        storage.get("prefs", function (items){
-            // No sync without user OR explicit permission
-            if ('user_id' in items.prefs && items.prefs.sync_enabled){
-                chrome.storage.sync.set({'user_id': items.prefs.user_id});
-                console.log("added user_id to sync area");
+    } else if (items.prefs.user_id) {
+        // Make sure the user_id matches the one in sync'd storage
+        chrome.storage.sync.get("user_id", function(result){
+            // If there is a cloud user_id...
+            // Ensure that the local copy of the "user_id" matches that of the cloud copy
+            if (result.user_id && items.prefs.sync_enabled  && (result.user_id  != items.prefs.user_id)) {
+                // save token to prefs if it's valid
+                validateAndSaveTokenNoBroadcast(result.user_id, 'local');
             }
-        })
+            // If there was never a cloud user_id set, add it now
+            if (items.prefs.user_id && !result.user_id && items.prefs.sync_enabled) {
+                validateAndSaveTokenNoBroadcast(items.prefs.user_id, 'sync');
+            }
+        });
     }
-
 });
+
+
+function validateAndSaveTokenNoBroadcast(token, dest){
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", backendUrl + "user/" + token, true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200){
+                var resp = JSON.parse(xhr.responseText);
+                if ('user_id' in resp){
+                    var user_id = resp['user_id'];
+                    if (dest == 'local') {
+                        savePrefs({'user_id': user_id });
+                    }
+                    else if (dest == 'sync') {
+                        chrome.storage.sync.set({'user_id': user_id});
+                    }
+                }
+            } else {
+                // Skip invalid token (might be server error)
+                console.log('Failed to save token '+ token +' to ' + dest + ' invalid.');
+            }
+        }
+    }
+    xhr.send();
+
+}
+
 
 // Making sure that the "sync" user id is in tune with the one in active use
 chrome.storage.onChanged.addListener(function(changes, area_name){
     if (area_name == "sync"){
-        if (changes.user_id){
-            savePrefs({'user_id': changes.user_id});
-            console.log("updated user_id from sync");
+        if (changes.user_id.newValue){
+            savePrefs({'user_id': changes.user_id.newValue});
         }
     }
 });
@@ -207,7 +237,7 @@ function getUser(callbk){
 }
 
 
-var backendUrl = 'https://ao3rdr.com/api/v1.0/';
+var backendUrl = 'https://www.ao3rdr.com/api/v1.0/';
 // var backendUrl = 'http://127.0.0.1:5000/api/v1.0/'
 
 function getUserForSync(callbk){
