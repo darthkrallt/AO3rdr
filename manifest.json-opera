@@ -19,7 +19,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://archiveofourown.org/*", "https://archiveofourown.org/*", "https://boiling-caverns-2782.herokuapp.com/*", "https://*.ao3rdr.com/*", "https://www.archiveofourown.org/*"],
+      "matches": ["http://archiveofourown.org/*", "https://archiveofourown.org/*", "https://boiling-caverns-2782.herokuapp.com/*", "https://*.ao3rdr.com/*", "https://*.archiveofourown.org/*", "http://*.archiveofourown.org/*"],
       "css": ["data/style.css"],
       "js": [
         "lib/jquery-3.3.1.min.js", "src/ao3lib.js",
