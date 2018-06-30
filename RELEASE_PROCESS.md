@@ -9,8 +9,8 @@ We are supporting _three_ platforms, so let's have a rundown for each.
 - [ ] Ensure new version number (eg, 1.X.0)
     Update in:
     - [ ] manifest.json-chrome
-    - [ ] manifest.json-firefox (this not yet a release version)
-    - [ ] package.json
+    - [ ] manifest.json-firefox
+    - [ ] manifest.json-opera
 - [ ] Check for dependencies to AO3rdr-backend. Deploy if necessary.
 
 ### Automated Tests:

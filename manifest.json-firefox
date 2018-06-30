@@ -2,7 +2,7 @@
 
   "manifest_version": 2,
   "name": "ao3rdr",
-  "version": "1.6.0",
+  "version": "1.7.0",
 
   "permissions": [
     "activeTab",
@@ -34,7 +34,7 @@
     {
       "matches": ["*://archiveofourown.org/*", "https://*.ao3rdr.com/*"],
       "js": [
-        "lib/jquery-2.2.4.min.js",
+        "lib/jquery-3.3.1.min.js",
         "src/ao3lib.js",
         "src/toolbar-ao3.js",
         "src/toolbar-chrome.js",

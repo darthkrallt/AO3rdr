@@ -6,6 +6,9 @@ function onPrefs(prefs){
     $('#enable-autofilter').attr('checked', prefs['autofilter']);
     $('#enable-cloud-sync').attr('checked', prefs['sync_enabled']);
 
+    // Show the hellobar if necessary
+    helloBarRender(prefs);
+
     // Hide the tags if the blacklist is disabled
     if (!prefs['autofilter'])
         $('#blacklist-wrapper').hide();
@@ -22,7 +25,26 @@ function onPrefs(prefs){
 
     // Unbind, then rebind the onchange so this doesn't trigger it
     $('#blacklist').importTags(tags);
+
 }
+
+function helloBarRender(prefs) {
+    if ($('#hellobar-box').css("display") == 'block')
+        return;  // Noop if already showing
+    var bar = prefs["hello_bar"];
+    // Make sure that the message is still valid
+    timeNow = Date.now() / 1000.0;
+    if (bar['created_at'] < timeNow && bar['expires_at'] > timeNow) {
+        if ((typeof prefs["hello_bar_dismissed"] === 'undefined') || bar['created_at'] > prefs["hello_bar_dismissed"]) {
+            // Add the message contents
+            $('#hellobar-message').append(bar['text']);
+            $('#hellobar-box').css("display", 'block');
+        }
+    }
+    $($('#hellobar-box').children('.boxclose')[0]).click(dismissHello);
+
+}
+
 
 function onTokenSave(token_status, token){
     var src = '';

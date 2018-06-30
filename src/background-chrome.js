@@ -70,6 +70,10 @@ chrome.runtime.onConnect.addListener(function(port) {
         if (request.message == 'runsync'){
             runSync();
         }
+
+        if (request.message == 'hellobar-dismiss'){
+            savePrefs({'hello_bar_dismissed': Date.now() / 1000.0});
+        }
     });
 });
 
@@ -103,7 +107,9 @@ function validateAndSaveToken(token, port){
                 var resp = JSON.parse(xhr.responseText);
                 if ('user_id' in resp){
                     var user_id = resp['user_id'];
-                    savePrefs({'user_id': user_id });
+                    // savePrefs({'user_id': user_id });
+                    chrome.storage.sync.set({'user_id': user_id});  // Nw we are saving to sync first, which gets
+                    // percolated to local on state change
                     port.postMessage({
                         message: 'token-saved', 
                         data: {'token_status': 'valid', user_id: user_id}
@@ -116,6 +122,34 @@ function validateAndSaveToken(token, port){
                     message: 'token-saved', 
                     data: {'token_status': 'invalid'}
                 });
+            }
+        }
+    }
+    xhr.send();
+
+}
+
+
+function getHelloBar(){
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", backendUrl + "hellobar", true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200){
+                var resp = JSON.parse(xhr.responseText);
+                if ('expires_at' in resp){
+                    // Make sure that the message is still valid
+                    timeNow = Date.now() / 1000.0;
+                    if (resp['expires_at'] > timeNow) {
+                        data = {
+                            'text': resp['text'],
+                            'created_at': resp['created_at'],
+                            'expires_at': resp['expires_at']
+                        }
+                        savePrefs({'hello_bar': data});
+                    }
+                }
             }
         }
     }

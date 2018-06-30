@@ -1,11 +1,13 @@
 {
   "name": "AO3rdr",
   "description": "Rating system and block by tag system for Archive of Our Own",
-  "version": "1.4.0",
+  "version": "1.7.0",
   "permissions": [
     "storage",
     "http://archiveofourown.org/*",
     "https://archiveofourown.org/*",
+    "http://www.archiveofourown.org/*",
+    "https://www.archiveofourown.org/*",
     "https://boiling-caverns-2782.herokuapp.com/*",
     "https://*.ao3rdr.com/*",
     "https://ao3rdr.com/*",
@@ -17,12 +19,12 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://archiveofourown.org/*", "https://archiveofourown.org/*", "https://boiling-caverns-2782.herokuapp.com/*", "https://*.ao3rdr.com/*"],
+      "matches": ["http://archiveofourown.org/*", "https://archiveofourown.org/*", "https://boiling-caverns-2782.herokuapp.com/*", "https://*.ao3rdr.com/*", "https://*.archiveofourown.org/*", "http://*.archiveofourown.org/*"],
       "css": ["data/style.css"],
       "js": [
-        "lib/jquery-2.2.4.min.js", "src/ao3lib.js",
+        "lib/jquery-3.3.1.min.js", "src/ao3lib.js",
         "src/toolbar-ao3.js", "src/toolbar-chrome.js",
-        "src/articles-table-chrome.js",
+        "data/settings/articles-table-chrome.js",
         "src/toolbar-content.js",
         "src/article.js", "src/images.js",
         "src/contentscript.js"
