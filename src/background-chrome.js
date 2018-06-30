@@ -138,10 +138,10 @@ function getHelloBar(){
         if (xhr.readyState == 4) {
             if (xhr.status == 200){
                 var resp = JSON.parse(xhr.responseText);
-                if ('created_at' in resp){
+                if ('expires_at' in resp){
                     // Make sure that the message is still valid
                     timeNow = Date.now() / 1000.0;
-                    if (resp['created_at'] < timeNow && resp['expires_at'] > timeNow) {
+                    if (resp['expires_at'] > timeNow) {
                         data = {
                             'text': resp['text'],
                             'created_at': resp['created_at'],
