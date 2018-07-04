@@ -7,8 +7,11 @@ function onPrefs(prefs){
     $('#enable-cloud-sync').attr('checked', prefs['sync_enabled']);
 
     // Show the hellobar if necessary
-    helloBarRender(prefs);
-
+    try {
+        helloBarRender(prefs);
+    } catch(error) {
+      console.error(error);
+    }
     // Hide the tags if the blacklist is disabled
     if (!prefs['autofilter'])
         $('#blacklist-wrapper').hide();
@@ -32,6 +35,8 @@ function helloBarRender(prefs) {
     if ($('#hellobar-box').css("display") == 'block')
         return;  // Noop if already showing
     var bar = prefs["hello_bar"];
+    if (bar === undefined)
+        return; // No valid message
     // Make sure that the message is still valid
     timeNow = Date.now() / 1000.0;
     if (bar['created_at'] < timeNow && bar['expires_at'] > timeNow) {
