@@ -109,3 +109,25 @@ a.toggle-vis {
 a.toggle-vis input{
   margin-left: 0.5em;
 }
+
+input.fandom-button {
+  font-size: 9px;
+  padding: 0 1em 0 1em;
+  height: auto;
+  line-height: auto;
+  font-weight: 400;
+  margin: 0;
+  line-height: unset;
+}
+input.fandom-button:hover {
+  background-color: #e9f4f8;
+}
+
+input.fandom-button.selected {
+  background-color: #7c9ea8;
+  color: #FFF;
+}
+
+input.fandom-button.selected:hover{
+    background-color: #93b9c4;
+}

@@ -67,6 +67,75 @@ function onTokenSave(token_status, token){
 }
 
 
+function topFandoms() {
+    var fandoms = {};
+    for (var i in tableData){
+        try {
+            if (tableData[i].deleted || (tableData[i].rating == 0)){
+                continue;
+            }
+            var fd_list = []
+            if (Array.isArray(tableData[i].fandom))
+                fd_list = tableData[i].fandom;
+            else
+                fd_list = tableData[i].fandom.split(',');
+            for (var j = 0; j < fd_list.length; j++){
+                var fandom = fd_list[j].trim();
+                // For simplicity's sake, strip everything after paranthesis, :, and -
+                fandom = fandom.split(' (')[0];
+                fandom = fandom.split(': ')[0];
+                fandom = fandom.split(' - ')[0];
+                if (!fandoms[fandom])
+                    fandoms[fandom] = 0;
+                fandoms[fandom] += 1
+            }
+
+        }
+        catch (error) {
+            console.log("Bad in top fandoms: ", tableData[i]);
+            console.log(error);
+        }
+    }
+    var items = Object.keys(fandoms).map(function(key) {
+      return [key, fandoms[key]];
+    });
+
+    // Sort the array based on the second element
+    items.sort(function(first, second) {
+      return second[1] - first[1];
+    });
+
+    // Create a new array with only the first 10 items
+    return items.slice(0, 10);
+}
+
+function generateTopFandomButtons() {
+    var fandoms = topFandoms();
+    $('#top-fandoms').text('Filter by fandoms: ');
+    for (var i = 0; i < fandoms.length; i++) {
+        var button = document.createElement('input');
+        button.setAttribute("type", "button");
+        button.setAttribute("value", fandoms[i][0]);
+        button.setAttribute("class", "fandom-button");
+        button.onclick = function() {
+            var table = $('#articlesTable').DataTable();
+            // If we are un-selecting this
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+                table.column(4).search('').draw();
+                return;
+            }
+            $(".fandom-button").each(function(){$(this).removeClass('selected')})
+            $(this).toggleClass('selected');
+
+            table.column(4).search($(this).attr('value')).draw();
+
+        };
+
+        $('#top-fandoms').append(button);
+    }
+}
+
 function generateRowHtml(data){
 /* Generate the HTML of a single row for the table. Also useful
    for updating!
@@ -196,6 +265,9 @@ function loadTable(tableData){
 
     // Add column toggle
     columnToggle(tableZZ);
+
+    // Add fandom filter buttons
+    generateTopFandomButtons();
 
 }
 
