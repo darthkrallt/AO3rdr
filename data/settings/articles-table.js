@@ -105,8 +105,12 @@ function topFandoms() {
       return second[1] - first[1];
     });
 
-    // Create a new array with only the first 10 items
-    return items.slice(0, 10);
+    // Create a new array with only the first N items
+    var wWidth = $(window).width();
+    var maxItems = 7;
+    if  (wWidth > 900) // desktop view 
+        maxItems = 15;
+    return items.slice(0, maxItems);
 }
 
 function generateTopFandomButtons() {

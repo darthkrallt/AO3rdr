@@ -142,7 +142,7 @@ function parseDate(raw_date){
 }
 
 function parseWordCount(raw_html){
-    var str = $($(raw_html).find('dd[class=words]')[0]).text();
+    var str = $($(raw_html).find('dd[class=words]')[0]).text().replace(/,/g, '');
     return parseInt(str);
 }
 
