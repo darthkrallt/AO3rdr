@@ -83,3 +83,29 @@ img.dd-option-image{
     width: auto;
     height: auto;
 }
+
+table {
+  table-layout: fixed;
+}
+
+.s {
+  width: 35px;
+}
+.m {
+  width: 75px;
+}
+.w {
+  width: 150px;
+}
+.xw {
+  width: 200px;
+}
+
+a.toggle-vis {
+  padding-left: 1em;
+  color: #222;
+}
+
+a.toggle-vis input{
+  margin-left: 0.5em;
+}

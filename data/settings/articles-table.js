@@ -73,8 +73,6 @@ function generateRowHtml(data){
 */
     var row = document.createElement('tr');
     row.setAttribute('id', data['ao3id']);
-    // First generate the checkbox
-    row.appendChild(generateTableCheckbox(data));
 
     // Then generate the image
     row.appendChild(generateImageHtml(data));
@@ -83,11 +81,18 @@ function generateRowHtml(data){
     row.appendChild(generateUnreadHtml(data));
 
     // Author, Title, Updated, Last Visit all boring
-    var boring = ['author', 'title', 'fandom', 'updated', 'visit'];
+    var boring = ['author', 'title', 'fandom', 'updated', 'visit', 'word_count'];
     var fixme_string = 'please click to update';
     // Shim in place for fandom
     if (!data['fandom'])
         data['fandom'] = fixme_string;
+    // Shim in place for summary
+    if (!data['summary'])
+        data['summary'] = 'Missing summary; please click title to update.';
+    //Shim in place for word count
+    if (!data['word_count'])
+        data['word_count'] = '?';
+
     for (var j in boring){
         var html = document.createElement("td");
         // html.innerHTML = data[boring[j]]; // note it is already encoded
@@ -116,9 +121,23 @@ function generateRowHtml(data){
         row.appendChild(html);
     }
     row.appendChild(generateChaptersHtml(data));
+
     return row;
 }
 
+function addExtra(data) {
+    var extra = document.createElement('table');
+    var row = document.createElement("tr");
+    var col = document.createElement("td");
+    var text = document.createTextNode(safeDecode(data['summary']));
+    col.appendChild(text);
+    row.appendChild(col);
+    // extra.appendChild(row);
+
+    return $(text);
+}
+
+var tableZZ = null;
 
 function loadTable(tableData){
     // first generate the html
@@ -139,21 +158,83 @@ function loadTable(tableData){
             console.log(error);
         }
     }
-    // Datatables is chrome only because of "dangerous" functions
-    $('#articlesTable').dataTable({
+    // Default columns shown change depending on width of browser
+    var width = $(window).width();
+    var inVisibleCols = [1, 5, 6];
+    if (width < 900)
+        inVisibleCols = [1, 5, 6, 7, 8];
+    if (width < 750)
+        inVisibleCols = [1, 4, 5, 6, 7, 8];
+    if (width < 500)
+        inVisibleCols = [1, 2, 4, 5, 6, 7, 8];
+
+    tableZZ = $('#articlesTable').DataTable({
         columnDefs: [
-            {
-                'targets': 0,
-                'searchable': false,
-                'orderable': false,
-                'className': 'dt-body-center',
-            },
-            { type: 'alt-string', targets: [1, 2] },
-            { type: 'html', targets: 4 },
-            { "visible": false, targets: [2, 6, 7]},
+            { type: 'alt-string', targets: [0, 1] },
+            { type: 'html', targets: 3 },
+            { "visible": false, targets: inVisibleCols},
         ],
         "order": [[ 0, "desc" ]],
     });
+
+    // Add clickability to show extra data
+    $('#articlesTable tbody').on('click', 'td', function () {
+        var tr = $(this).closest('tr');
+        var data = tableData[tr[0].id];
+        var row = tableZZ.row( tr );
+ 
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            // Open this row
+            row.child( addExtra(data) ).show();
+            tr.addClass('shown');
+        }
+    } );
+
+    // Add column toggle
+    columnToggle(tableZZ);
+
+}
+
+function columnToggle(table){
+    var colToggle = $('#column-toggle');
+    colToggle.text('Toggle column:');
+
+    table.columns().every( function () {
+        var label = $(this.header()).text();
+
+        var link = document.createElement("a");
+        link.setAttribute("class", "toggle-vis");
+        link.setAttribute("data-column", this.index());
+        $(link).text(label)
+        var inp = document.createElement("input");
+        inp.setAttribute("type", "checkbox");
+        if (this.visible())
+            inp.setAttribute("checked", "checked");
+
+        link.appendChild(inp);
+        colToggle.append(link);
+
+    } );
+
+    // Functionality for toggling table columns
+    $('a.toggle-vis').on( 'click', function (e) {
+        if (e.target.type != 'checkbox')
+            e.preventDefault();
+ 
+        // Get the column API object
+        var col_number = $(this).attr('data-column');
+        var column = $('#articlesTable').DataTable().column( col_number );
+ 
+        // Toggle the visibility
+        column.visible( ! column.visible() );
+        var rel_checkbox = $('a[data-column='+col_number+']').find('input');
+        $(rel_checkbox).prop('checked', column.visible());
+    } );
 
 }
 
@@ -304,18 +385,4 @@ $(document).ready(function() {
         'height': '75px',
         'width': '100%',
     });
-    // Functionality for toggling table columns
-    $('a.toggle-vis').on( 'click', function (e) {
-        if (e.target.type != 'checkbox')
-            e.preventDefault();
- 
-        // Get the column API object
-        var col_number = $(this).attr('data-column');
-        var column = $('#articlesTable').DataTable().column( col_number );
- 
-        // Toggle the visibility
-        column.visible( ! column.visible() );
-        var rel_checkbox = $('a[data-column='+col_number+']').find('input');
-        $(rel_checkbox).prop('checked', column.visible());
-    } );
 });
