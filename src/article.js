@@ -15,6 +15,10 @@ function Article(metadata, mutable_data) {
     this.updated__ts = currentTime;
     this.chapters = metadata['chapters'];
     this.chapters__ts = currentTime;
+    this.summary = metadata['summary'];
+    this.summary__ts = currentTime;
+    this.word_count = metadata['word_count'];
+    this.word_count__ts = currentTime;
 
     if (mutable_data) {
         this.rating = mutable_data['rating'];
@@ -73,11 +77,6 @@ function updateArticle(old_article, new_article){
     old_article.crawled__ts = new_article.crawled__ts;
 
     if (new_article.rating){
-        // The dislike button is a special case, because it's value 
-        // becomes "0" when we want to undo it (eg, clicked -1 rating again)
-        if ((old_article.rating == -1) && (new_article.rating == -1)){
-            new_article.rating = 0;
-        }
         old_article.rating = new_article.rating;
         old_article.rating__ts = new_article.rating__ts;
     }
@@ -90,6 +89,13 @@ function updateArticle(old_article, new_article){
         }
         old_article.chapters = new_article.chapters;
         old_article.chapters__ts = new_article.chapters__ts;
+    }
+
+    if (new_article.word_count){
+        if (old_article.word_count != new_article.word_count){
+            old_article.word_count = new_article.word_count;
+            old_article.word_count__ts = new_article.word_count__ts;
+        }
     }
 
     if (new_article.visit){
@@ -111,6 +117,13 @@ function updateArticle(old_article, new_article){
         if (old_article.title != new_article.title){
             old_article.title = fixRestrictedHTML(new_article.title);
             old_article.title__ts = new_article.title__ts;
+        }
+    }
+
+    if ((new_article.summary) && (new_article.summary != "undefined")){
+        if (old_article.summary != new_article.summary){
+            old_article.summary = fixRestrictedHTML(new_article.summary);
+            old_article.summary__ts = new_article.summary__ts;
         }
     }
 

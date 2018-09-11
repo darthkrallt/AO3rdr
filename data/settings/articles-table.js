@@ -126,14 +126,7 @@ function generateRowHtml(data){
 }
 
 function addExtra(data) {
-    var extra = document.createElement('table');
-    var row = document.createElement("tr");
-    var col = document.createElement("td");
     var text = document.createTextNode(safeDecode(data['summary']));
-    col.appendChild(text);
-    row.appendChild(col);
-    // extra.appendChild(row);
-
     return $(text);
 }
 
@@ -148,6 +141,12 @@ function loadTable(tableData){
         try {
             var perm_deleted = tableData[i].deleted && ((new Date().getTime() / 1000) - tableData[i].deleted__ts > 60)
             if (perm_deleted){
+                continue;
+            }
+            // Bookmarks with a rating of '0' are a legacy from undoing a '-1' (dislike) rating OR
+            // from loading/unloading a file with 'dislike' rating that would undo it.
+            // So since it's rather muddied, sweep them under the rug.
+            if (tableData[i].rating == 0){
                 continue;
             }
             var row = generateRowHtml(tableData[i]);

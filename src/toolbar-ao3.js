@@ -54,6 +54,9 @@ function createToolbar(metadata, article){
     buttonData.map(function(item){
         var tmpFun = (function(metadata, mutable_data){
             return function() {
+                if ($(this).attr('do-delete')) {
+                    mutable_data['deleted'] = true;
+                }
                 emitFicData(metadata, mutable_data);
             };
         })(metadata, {'rating': item.value});

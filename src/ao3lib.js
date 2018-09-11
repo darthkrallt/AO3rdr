@@ -52,9 +52,11 @@ function setImage(html, stored_data){
     if (level > 0) {
         var ele = $(html).find("img[src*='star-"+level+"']");
         $(ele).attr('src', images['star-'+level+'-fill']);
+        $(ele).attr('do-delete', 1); // This makes it so clicking it again triggers a delete
     } else if (level == -1) {
         var ele = $(html).find("img[src*='dislike.svg']");
         $(ele).attr('src', images['dislike-fill']);
+        $(ele).attr('do-delete', 1); // This makes it so clicking it again triggers a delete
         hide(ele.closest('.ao3rdr-toolbar-outer'));
     }
 
@@ -69,6 +71,7 @@ function setImage(html, stored_data){
         $(ele).attr('src', images['unread']);
         $(ele).attr('alt', 'unread');
     }
+
 }
 
 function hide(parent){
@@ -138,6 +141,11 @@ function parseDate(raw_date){
     
 }
 
+function parseWordCount(raw_html){
+    var str = $($(raw_html).find('dd[class=words]')[0]).text();
+    return parseInt(str);
+}
+
 function parseArticlePage(raw_html){
 /* Extract Information from an article page
 */
@@ -187,6 +195,9 @@ function parseArticlePage(raw_html){
         out['chapters_read'] = 1;
     }
 
+    out['word_count'] = parseWordCount(raw_html);
+    out['summary'] = $($($(raw_html).find('div.summary')).find('.userstuff')).text().trim();
+
 
     return out;
 }
@@ -215,6 +226,10 @@ function parseWorkBlurb(raw_html){
     // Assume we've not read anything if adding from
     // browse tags page.
     out['chapters_read'] = 0;
+
+    out['word_count'] = parseWordCount(raw_html);
+    out['summary'] = $($(raw_html).find('blockquote.userstuff.summary')).text().trim();
+
     return out;
 }
 
