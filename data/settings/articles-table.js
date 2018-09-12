@@ -185,6 +185,7 @@ function generateRowHtml(data){
         } else if (boring[j] == 'title' || data[boring[j]] == fixme_string) {
             var text = document.createElement('a');
             text.setAttribute('href', generateAO3link(data));
+            $(text).click(function(event){event.stopPropagation();}); // Prevent from triggering table clicks
             var text_str = document.createTextNode(safeDecode(data[boring[j]]));
             text.appendChild(text_str);
         } else {
@@ -199,8 +200,11 @@ function generateRowHtml(data){
 }
 
 function addExtra(data) {
+    var div = document.createElement('div');
+    div.setAttribute("class", "child-row");
     var text = document.createTextNode(safeDecode(data['summary']));
-    return $(text);
+    div.appendChild(text);
+    return $(div);
 }
 
 var tableZZ = null;
@@ -264,6 +268,7 @@ function loadTable(tableData){
             // Open this row
             row.child( addExtra(data) ).show();
             tr.addClass('shown');
+            row.child().closest('tr').addClass('child-row');
         }
     } );
 

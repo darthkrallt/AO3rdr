@@ -56,6 +56,9 @@ function createToolbar(metadata, article){
             return function() {
                 if ($(this).attr('do-delete')) {
                     mutable_data['deleted'] = true;
+                } else {
+                    // since you can set and unset to delete, must explicitly set deleted to false
+                    mutable_data['deleted'] = false;
                 }
                 emitFicData(metadata, mutable_data);
             };

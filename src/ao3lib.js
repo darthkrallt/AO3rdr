@@ -35,6 +35,7 @@ function clearImage(html){
             $(clearMe[i]).attr('src', images['dislike']);
             show($(clearMe[i]).closest('.ao3rdr-toolbar-outer'));
         }
+        $(clearMe[i]).removeAttr('do-delete'); // To be able to re-select
     };
 
 }
