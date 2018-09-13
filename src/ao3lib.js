@@ -143,8 +143,12 @@ function parseDate(raw_date){
 }
 
 function parseWordCount(raw_html){
-    var str = $($(raw_html).find('dd[class=words]')[0]).text().replace(/,/g, '');
-    return parseInt(str);
+    try {
+        var str = $($(raw_html).find('dd[class=words]')[0]).text().replace(/,/g, '');
+        return parseInt(str);
+    } catch(err) { // sometimes the word count is missing from the page
+        return 0;
+    }
 }
 
 function parseArticlePage(raw_html){
