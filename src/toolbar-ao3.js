@@ -54,6 +54,12 @@ function createToolbar(metadata, article){
     buttonData.map(function(item){
         var tmpFun = (function(metadata, mutable_data){
             return function() {
+                if ($(this).attr('do-delete')) {
+                    mutable_data['deleted'] = true;
+                } else {
+                    // since you can set and unset to delete, must explicitly set deleted to false
+                    mutable_data['deleted'] = false;
+                }
                 emitFicData(metadata, mutable_data);
             };
         })(metadata, {'rating': item.value});

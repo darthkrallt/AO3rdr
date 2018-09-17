@@ -118,7 +118,6 @@ function datadumper(request){
                 $('#help-message-box').css("display", 'block');
             };
             loadTable(tableData);
-            addEditDropdown();
             break;
         case 'exportdata':
             onExportComplete(request.data);
