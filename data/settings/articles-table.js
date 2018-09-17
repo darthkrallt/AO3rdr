@@ -207,8 +207,6 @@ function addExtra(data) {
     return $(div);
 }
 
-var tableZZ = null;
-
 function loadTable(tableData){
     // first generate the html
     var tableBody = $("#articlesTable").find('tbody');
@@ -244,20 +242,21 @@ function loadTable(tableData){
     if (width < 500)
         inVisibleCols = [1, 2, 4, 5, 6, 7, 8];
 
-    tableZZ = $('#articlesTable').DataTable({
+    var table = $('#articlesTable').DataTable({
         columnDefs: [
             { type: 'alt-string', targets: [0, 1] },
             { type: 'html', targets: 3 },
             { "visible": false, targets: inVisibleCols},
         ],
         "order": [[ 0, "desc" ]],
+        "deferRender": true,
     });
 
     // Add clickability to show extra data
     $('#articlesTable tbody').on('click', 'td', function () {
         var tr = $(this).closest('tr');
         var data = tableData[tr[0].id];
-        var row = tableZZ.row( tr );
+        var row = table.row( tr );
  
         if ( row.child.isShown() ) {
             // This row is already open - close it
@@ -273,7 +272,7 @@ function loadTable(tableData){
     } );
 
     // Add column toggle
-    columnToggle(tableZZ);
+    columnToggle(table);
 
     // Add fandom filter buttons
     generateTopFandomButtons();
