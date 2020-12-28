@@ -214,6 +214,11 @@ function parseWorkBlurb(raw_html){
     var header_div = $($($(raw_html).find('div[class="header module"]')[0]).find('a')[0]);
 
     out['url'] = header_div.attr('href');
+    
+    let worksIndex = out['url'].indexOf('/works/');
+    if (worksIndex != 0) {
+        out['url'] = out['url'].substring(worksIndex);
+    }
     out['ao3id'] = out['url'].slice(7);
 
     out['title'] = $($(raw_html).find('[class=heading]')).find('a[href^="/works/"]').text();
